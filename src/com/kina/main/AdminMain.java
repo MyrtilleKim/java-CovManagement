@@ -4,7 +4,12 @@ import com.kina.component.Header;
 import com.kina.component.AdminMenu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 public class AdminMain extends javax.swing.JFrame {
 
@@ -12,6 +17,7 @@ public class AdminMain extends javax.swing.JFrame {
     private AdminMenu menu;
     private Header header;
     private MainForm main;
+    private Animator animator;
 
     public AdminMain() {
         initComponents();
@@ -29,14 +35,47 @@ public class AdminMain extends javax.swing.JFrame {
             @Override
             public void menuSelected(int menuIndex, int subMenuIndex) {
                 System.out.println("Menu Index : " + menuIndex + " SubMenu Index " + subMenuIndex);
-               
+
             }
         });
         bg.add(menu, "w 230!, spany 2");    // Span Y 2cell
         bg.add(header, "h 50!, wrap");
         bg.add(main, "w 100%, h 100%");
-        
 
+        TimingTarget target = new TimingTargetAdapter() {
+            @Override
+            public void timingEvent(float fraction) {
+                double width;
+                if (menu.isShowMenu()) {
+                    width = 50 + (170 * (1f - fraction));
+                } else {
+                    width = 50 + (170 * fraction);
+                }
+                layout.setComponentConstraints(menu, "w " + width + "!, spany2");
+                menu.revalidate();
+            }
+
+            @Override
+            public void end() {
+                menu.setShowMenu(!menu.isShowMenu());
+                menu.setEnableMenu(true);
+            }
+        };
+        
+        animator = new Animator(500, target);
+        animator.setResolution(0);
+        animator.setDeceleration(0.5f);
+        animator.setAcceleration(0.5f);
+        
+        header.addMenuEvent(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!animator.isRunning()) {
+                    animator.start();
+                }
+                
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +85,8 @@ public class AdminMain extends javax.swing.JFrame {
         bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusableWindowState(false);
+        setUndecorated(true);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));
         bg.setOpaque(true);
