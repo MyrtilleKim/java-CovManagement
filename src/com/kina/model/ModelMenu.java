@@ -23,6 +23,7 @@ public class ModelMenu {
     public ModelMenu(Icon icon, String menuName) {
         this.icon = icon;
         this.menuName = menuName;
+
     }
 
     public ModelMenu() {

@@ -3,6 +3,11 @@ package com.kina.swing;
 import com.kina.event.EventMenu;
 import com.kina.event.EventMenuSelected;
 import com.kina.model.ModelMenu;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import net.miginfocom.swing.MigLayout;
@@ -46,17 +51,24 @@ public class MenuItem extends javax.swing.JPanel {
     public MenuItem(ModelMenu menu, EventMenu event, EventMenuSelected eventSelected, int index) {
         initComponents();
         this.menu = menu;
-        this.eventSelected = eventSelected;
+//        this.eventSelected = eventSelected;
         this.index = index;
         setOpaque(false);
         setLayout(new MigLayout("wrap, fillx, insets 0", "[fill]", "[fill, 40!]0[fill, 20!]"));
         MenuButton firstItem = new MenuButton(menu.getIcon(), "       " + menu.getMenuName());
 
+        firstItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+               
+                eventSelected.menuSelected(index);
+            }
+        });
         add(firstItem);
-        
+   
     }
 
-    @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -71,7 +83,6 @@ public class MenuItem extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

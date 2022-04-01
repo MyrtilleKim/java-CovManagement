@@ -1,25 +1,27 @@
 package com.kina.main;
 
 import com.kina.component.Header;
-import com.kina.component.AdminMenu;
+import com.kina.component.Admin_Menu;
 import com.kina.event.EventMenuSelected;
+import com.kina.form.Admin_HomeForm;
 import com.kina.form.MainForm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-public class AdminMain extends javax.swing.JFrame {
+public class Admin_Main extends javax.swing.JFrame {
 
     private MigLayout layout;
-    private AdminMenu menu;
+    private Admin_Menu menu;
     private Header header;
     private MainForm main;
     private Animator animator;
 
-    public AdminMain() {
+    public Admin_Main() {
         initComponents();
         init();
     }
@@ -28,16 +30,10 @@ public class AdminMain extends javax.swing.JFrame {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         bg.setLayout(layout);
 
-        menu = new AdminMenu();
+        menu = new Admin_Menu();
         header = new Header();
         main = new MainForm();
-        menu.addEvent(new EventMenuSelected() {
-            @Override
-            public void menuSelected(int menuIndex, int subMenuIndex) {
-                System.out.println("Menu Index : " + menuIndex + " SubMenu Index " + subMenuIndex);
 
-            }
-        });
         bg.add(menu, "w 230!, spany 2");    // Span Y 2cell
         bg.add(header, "h 50!, wrap");
         bg.add(main, "w 100%, h 100%");
@@ -61,21 +57,37 @@ public class AdminMain extends javax.swing.JFrame {
                 menu.setEnableMenu(true);
             }
         };
-        
+
         animator = new Animator(500, target);
         animator.setResolution(0);
         animator.setDeceleration(0.5f);
         animator.setAcceleration(0.5f);
-        
+//
+//        menu.addEvent(new EventMenuSelected() {
+//            @Override
+//            public void getEventMenuItem() {
+//                System.out.println("Menu index : " + menuIndex);
+//                if (menuIndex == 0) {               
+//                        main.showForm(new Admin_HomeForm());                 
+//                }
+//            }
+//        });
+
         header.addMenuEvent(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (!animator.isRunning()) {
                     animator.start();
                 }
-                
+                menu.setEnableMenu(false);
             }
         });
+//        main.showForm(new Admin_HomeForm());
+    }
+
+    public void showMainForm(int menuIndex) {
+        System.out.println("Menu index :: " + menuIndex);
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -95,18 +107,18 @@ public class AdminMain extends javax.swing.JFrame {
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 701, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 413, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bg)
+            .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +132,7 @@ public class AdminMain extends javax.swing.JFrame {
     public static void main() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminMain().setVisible(true);
+                new Admin_Main().setVisible(true);
             }
         });
     }

@@ -11,8 +11,8 @@ public class ManagementCovid {
 //        a.getConnection();
 
 //        LoginForm.main();
-
-        AdminMain.main();
+    
+        Admin_Main.main();
         
     }
     
