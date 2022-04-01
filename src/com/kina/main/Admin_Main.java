@@ -5,6 +5,7 @@ import com.kina.component.Admin_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.Admin_HomeForm;
 import com.kina.form.MainForm;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -62,16 +63,6 @@ public class Admin_Main extends javax.swing.JFrame {
         animator.setResolution(0);
         animator.setDeceleration(0.5f);
         animator.setAcceleration(0.5f);
-//
-//        menu.addEvent(new EventMenuSelected() {
-//            @Override
-//            public void getEventMenuItem() {
-//                System.out.println("Menu index : " + menuIndex);
-//                if (menuIndex == 0) {               
-//                        main.showForm(new Admin_HomeForm());                 
-//                }
-//            }
-//        });
 
         header.addMenuEvent(new ActionListener() {
             @Override
@@ -82,12 +73,27 @@ public class Admin_Main extends javax.swing.JFrame {
                 menu.setEnableMenu(false);
             }
         });
-//        main.showForm(new Admin_HomeForm());
+
+        menu.addEvent(new EventMenuSelected() {
+            @Override
+            public void menuSelected(int menuIndex) {
+                System.out.println("Menu Index : " + menuIndex);
+                if (menuIndex == 0) {
+                    main.showForm(new Admin_HomeForm());
+                }
+            }
+        }
+        );
+        menu.initMenuItem();
+
+        //        main.showForm(new Admin_HomeForm());
     }
 
-    public void showMainForm(int menuIndex) {
+    public void addMainForm(Component comp, int menuIndex) {
         System.out.println("Menu index :: " + menuIndex);
-        
+
+        main.showForm(comp);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -140,4 +146,5 @@ public class Admin_Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;
     // End of variables declaration//GEN-END:variables
+
 }
