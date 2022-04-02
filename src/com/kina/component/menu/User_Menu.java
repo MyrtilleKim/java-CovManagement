@@ -1,7 +1,8 @@
-package com.kina.component;
+package com.kina.component.menu;
 
 import com.kina.event.EventMenu;
 import com.kina.event.EventMenuSelected;
+import com.kina.form.admin.Admin_HomeForm;
 import com.kina.main.Admin_Main;
 import com.kina.model.ModelMenu;
 import com.kina.swing.MenuAnimation;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 
-public class Admin_Menu extends javax.swing.JPanel {
+public class User_Menu extends javax.swing.JPanel {
 
     public boolean isShowMenu() {
         return showMenu;
@@ -39,9 +40,8 @@ public class Admin_Menu extends javax.swing.JPanel {
     private boolean enableMenu = true;
     private boolean showMenu = true;
 
-    public Admin_Menu() {
+    public User_Menu() {
         initComponents();
-        initMenuItem();
         setOpaque(false);
         panel.setOpaque(false);
         layout = new MigLayout("wrap, fillx, insets 0", "[fill]", "[]0[]");
@@ -49,13 +49,14 @@ public class Admin_Menu extends javax.swing.JPanel {
     }
 
     public void initMenuItem() {
-        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\1.png"), "Dashboard"));
-        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\6.png"), "Manager"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\6.png"), "User"));
         addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\3.png"), "Treament Location"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\3.png"), "Treament"));
+
     }
 
     private void addMenu(ModelMenu menu) {
-        panel.add(new MenuItem(menu, getEventMenu(), getEventMenuItem(), panel.getComponentCount()), "h 40!");
+        panel.add(new MenuItem(menu, getEventMenu(), event, panel.getComponentCount()), "h 50!");
     }
 
     private EventMenu getEventMenu() {
@@ -78,17 +79,6 @@ public class Admin_Menu extends javax.swing.JPanel {
         };
     }
 
-    private EventMenuSelected getEventMenuItem() {
-        return new EventMenuSelected() {
-            @Override
-            public void menuSelected(int menuIndex) {
-                System.out.println("Menu index : " + menuIndex);
-                Admin_Main main = new Admin_Main();
-                main.showMainForm(menuIndex);
-            }
-        };
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -98,12 +88,14 @@ public class Admin_Menu extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setDoubleBuffered(false);
+        setFocusable(false);
+
         panel.setToolTipText("");
         panel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        panel.setFocusable(false);
         panel.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        panel.setRequestFocusEnabled(false);
-        panel.setVerifyInputWhenFocusTarget(false);
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);

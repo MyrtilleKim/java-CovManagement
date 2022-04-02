@@ -1,4 +1,3 @@
-
 package com.kina.main;
 
 import com.kina.login.LoginForm;
@@ -11,9 +10,9 @@ public class ManagementCovid {
 //        a.getConnection();
 
 //        LoginForm.main();
-    
-        Admin_Main.main();
-        
+//        Admin_Main.main();
+
+        User_Main.main();
     }
-    
+
 }

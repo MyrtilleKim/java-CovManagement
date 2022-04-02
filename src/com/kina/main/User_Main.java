@@ -1,38 +1,36 @@
 package com.kina.main;
 
 import com.kina.component.Header;
-import com.kina.component.menu.Admin_Menu;
+import com.kina.component.menu.User_Menu;
 import com.kina.event.EventMenuSelected;
-import com.kina.form.admin.Admin_HomeForm;
 import com.kina.form.MainForm;
+import com.kina.form.admin.Admin_HomeForm;
 import com.kina.form.admin.Admin_TreamentForm;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-public class Admin_Main extends javax.swing.JFrame {
-
+public class User_Main extends javax.swing.JFrame {
+    
     private MigLayout layout;
-    private Admin_Menu menu;
+    private User_Menu menu;
     private Header header;
     private MainForm main;
     private Animator animator;
-
-    public Admin_Main() {
+    
+    public User_Main() {
         initComponents();
         init();
     }
-
-    private void init() {
+    
+     private void init() {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         bg.setLayout(layout);
 
-        menu = new Admin_Menu();
+        menu = new User_Menu();
         header = new Header();
         main = new MainForm();
 
@@ -92,15 +90,6 @@ public class Admin_Main extends javax.swing.JFrame {
         //        main.showForm(new Admin_HomeForm());
     }
 
-//    public void addMainForm(Component comp, int menuIndex) {
-//        System.out.println("Menu index :: " + menuIndex);
-//        if (menuIndex == 0) {
-//            main.showForm(comp);
-//        }
-//        
-//
-//    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,7 +97,6 @@ public class Admin_Main extends javax.swing.JFrame {
         bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setFocusable(false);
         setFocusableWindowState(false);
         setUndecorated(true);
 
@@ -131,11 +119,15 @@ public class Admin_Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bg)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(bg)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(bg)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -143,9 +135,10 @@ public class Admin_Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main() {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_Main().setVisible(true);
+                new User_Main().setVisible(true);
             }
         });
     }
@@ -153,5 +146,4 @@ public class Admin_Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;
     // End of variables declaration//GEN-END:variables
-
 }
