@@ -36,6 +36,19 @@ public class Admin_Main extends javax.swing.JFrame {
         header = new Header();
         main = new MainForm();
 
+        menu.addEvent(new EventMenuSelected() {
+            @Override
+            public void menuSelected(int menuIndex) {
+                System.out.println("Menu Index : " + menuIndex);
+                if (menuIndex == 0) {
+                    main.showForm(new Admin_HomeForm());
+                } else {
+                    main.showForm(new Admin_TreamentForm());
+                }
+            }
+        }
+        );
+
         bg.add(menu, "w 230!, spany 2");    // Span Y 2cell
         bg.add(header, "h 50!, wrap");
         bg.add(main, "w 100%, h 100%");
@@ -75,18 +88,6 @@ public class Admin_Main extends javax.swing.JFrame {
             }
         });
 
-        menu.addEvent(new EventMenuSelected() {
-            @Override
-            public void menuSelected(int menuIndex) {
-                System.out.println("Menu Index : " + menuIndex);
-                if (menuIndex == 0) {
-                    main.showForm(new Admin_HomeForm());
-                } else {
-                    main.showForm(new Admin_TreamentForm());
-                }
-            }
-        }
-        );
         menu.initMenuItem();
 
         //        main.showForm(new Admin_HomeForm());
@@ -100,7 +101,6 @@ public class Admin_Main extends javax.swing.JFrame {
 //        
 //
 //    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,7 +108,6 @@ public class Admin_Main extends javax.swing.JFrame {
         bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setFocusable(false);
         setFocusableWindowState(false);
         setUndecorated(true);
 
