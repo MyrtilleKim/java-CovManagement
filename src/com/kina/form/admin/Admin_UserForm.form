@@ -88,8 +88,6 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="showGrid" type="boolean" value="false"/>
-            <Property name="showHorizontalLines" type="boolean" value="false"/>
-            <Property name="showVerticalLines" type="boolean" value="false"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
             </Property>
@@ -128,7 +126,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="14" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Treament Location Management"/>
+            <Property name="text" type="java.lang.String" value="User Account Management"/>
           </Properties>
         </Component>
       </SubComponents>

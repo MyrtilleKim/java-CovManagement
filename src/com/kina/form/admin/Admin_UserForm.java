@@ -25,9 +25,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-public class Admin_TreatmentForm extends javax.swing.JPanel {
+public class Admin_UserForm extends javax.swing.JPanel {
 
-    public Admin_TreatmentForm() {
+    public Admin_UserForm() {
         initComponents();
         setOpaque(false);
         initTable();
@@ -123,8 +123,6 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
         jTable1.setOpaque(false);
         jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jTable1.setShowGrid(false);
-        jTable1.setShowHorizontalLines(false);
-        jTable1.setShowVerticalLines(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -137,7 +135,7 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
         }
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel1.setText("Treament Location Management");
+        jLabel1.setText("User Account Management");
 
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
