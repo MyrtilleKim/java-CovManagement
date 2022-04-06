@@ -23,10 +23,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
-public class Admin_TreamentForm extends javax.swing.JPanel {
+public class Admin_TreatmentForm extends javax.swing.JPanel {
 
-    public Admin_TreamentForm() {
+    public Admin_TreatmentForm() {
         initComponents();
         setOpaque(false);
         initTable();
@@ -42,9 +43,7 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
         jTable1.setCellSelectionEnabled(false);
         jTable1.getColumn("").setCellRenderer(new ButtonRenderer());
         jTable1.getColumn("").setCellEditor(new ButtonEditor(new JCheckBox()));
-        
-         jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
-        
+        jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
     }
 
     public ArrayList<TreatmentLocation> treatmentList() {
@@ -77,13 +76,12 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
 //        System.out.println(treatmentLocationList.size());
 //        System.out.println(treatmentLocationList.get(1));
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Object[] row = new Object[5];
+        Object[] row = new Object[4];
 
         for (int i = 0; i < treatmentLocationList.size(); i++) {
             row[0] = treatmentLocationList.get(i).getName();
-            row[1] = treatmentLocationList.get(i).getAddress();
-            row[2] = treatmentLocationList.get(i).getCapacity();
-            row[3] = treatmentLocationList.get(i).getOccupancy();
+            row[1] = treatmentLocationList.get(i).getCapacity();
+            row[2] = treatmentLocationList.get(i).getOccupancy();
             model.addRow(row);
         }
     }
@@ -97,19 +95,27 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Name", "Address", "Capacity", "Occupancy", ""
+                "Name", "Capacity", "Occupancy", ""
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -118,6 +124,9 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
         jTable1.setFocusable(false);
         jTable1.setOpaque(false);
         jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        jTable1.setShowGrid(false);
+        jTable1.setShowHorizontalLines(false);
+        jTable1.setShowVerticalLines(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -125,6 +134,9 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(250);
+        }
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel1.setText("Treament Location Management");
@@ -167,7 +179,12 @@ public class Admin_TreamentForm extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
+        int index = jTable1.getSelectedRow();
+        TableModel model = jTable1.getModel();
+        String name = model.getValueAt(index, 0).toString();
+        System.out.println(name);
+        
+        Admin_TreatmentLocation_Detail.main();
     }//GEN-LAST:event_jTable1MouseClicked
 
 
@@ -238,6 +255,8 @@ class ButtonEditor extends DefaultCellEditor {
             // 
 //            JOptionPane.showMessageDialog(button, label + ": Ouch!");
 //            // System.out.println(label + ": Ouch!");
+            Admin_TreatmentLocation_Detail.main();
+              
         }
         isPushed = false;
         return new String(label);

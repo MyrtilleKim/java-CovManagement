@@ -5,11 +5,12 @@ import com.kina.component.menu.Admin_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.admin.Admin_HomeForm;
 import com.kina.form.MainForm;
-import com.kina.form.admin.Admin_TreamentForm;
+import com.kina.form.admin.Admin_TreatmentForm;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
@@ -29,6 +30,7 @@ public class Admin_Main extends javax.swing.JFrame {
     }
 
     private void init() {
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         bg.setLayout(layout);
 
@@ -43,7 +45,7 @@ public class Admin_Main extends javax.swing.JFrame {
                 if (menuIndex == 0) {
                     main.showForm(new Admin_HomeForm());
                 } else {
-                    main.showForm(new Admin_TreamentForm());
+                    main.showForm(new Admin_TreatmentForm());
                 }
             }
         }
@@ -93,21 +95,13 @@ public class Admin_Main extends javax.swing.JFrame {
         //        main.showForm(new Admin_HomeForm());
     }
 
-//    public void addMainForm(Component comp, int menuIndex) {
-//        System.out.println("Menu index :: " + menuIndex);
-//        if (menuIndex == 0) {
-//            main.showForm(comp);
-//        }
-//        
-//
-//    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         bg = new javax.swing.JLayeredPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setFocusableWindowState(false);
         setUndecorated(true);
 

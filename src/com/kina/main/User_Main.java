@@ -5,7 +5,7 @@ import com.kina.component.menu.User_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_HomeForm;
-import com.kina.form.admin.Admin_TreamentForm;
+import com.kina.form.admin.Admin_TreatmentForm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import net.miginfocom.swing.MigLayout;
@@ -80,7 +80,7 @@ public class User_Main extends javax.swing.JFrame {
                 if (menuIndex == 0) {
                     main.showForm(new Admin_HomeForm());
                 } else {
-                    main.showForm(new Admin_TreamentForm());
+                    main.showForm(new Admin_TreatmentForm());
                 }
             }
         }
