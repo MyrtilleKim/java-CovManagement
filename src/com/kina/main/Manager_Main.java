@@ -1,11 +1,14 @@
 package com.kina.main;
 
 import com.kina.component.Header;
-import com.kina.component.menu.User_Menu;
+import com.kina.component.menu.Manager_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_TreatmentForm;
-import com.kina.form.admin.Admin_UserForm;
+import com.kina.form.admin.Admin_ManagerForm;
+import com.kina.form.manager.Manager_PackForm;
+import com.kina.form.manager.Manager_ProductForm;
+import com.kina.form.manager.Manager_UserForm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import net.miginfocom.swing.MigLayout;
@@ -13,24 +16,24 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-public class User_Main extends javax.swing.JFrame {
-    
+public class Manager_Main extends javax.swing.JFrame {
+
     private MigLayout layout;
-    private User_Menu menu;
+    private Manager_Menu menu;
     private Header header;
     private MainForm main;
     private Animator animator;
-    
-    public User_Main() {
+
+    public Manager_Main() {
         initComponents();
         init();
     }
-    
-     private void init() {
+
+    private void init() {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         bg.setLayout(layout);
 
-        menu = new User_Menu();
+        menu = new Manager_Menu();
         header = new Header();
         main = new MainForm();
 
@@ -77,10 +80,21 @@ public class User_Main extends javax.swing.JFrame {
             @Override
             public void menuSelected(int menuIndex) {
                 System.out.println("Menu Index : " + menuIndex);
-                if (menuIndex == 0) {
-                    main.showForm(new Admin_UserForm());
-                } else {
-                    main.showForm(new Admin_TreatmentForm());
+                switch (menuIndex) {
+                    case 0:
+                        main.showForm(new Admin_ManagerForm());
+                        break;
+                    case 1:
+                        main.showForm(new Manager_UserForm());
+                        break;
+
+                    case 2:
+                        main.showForm(new Manager_ProductForm());
+                        break;
+
+                    case 3:
+                        main.showForm(new Manager_PackForm());
+                        break;
                 }
             }
         }
@@ -138,7 +152,7 @@ public class User_Main extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new User_Main().setVisible(true);
+                new Manager_Main().setVisible(true);
             }
         });
     }

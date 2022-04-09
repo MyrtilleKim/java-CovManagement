@@ -1,8 +1,11 @@
-package com.kina.form.admin;
+package com.kina.form.manager;
 
+import com.kina.form.admin.*;
 import com.kina.model.Location;
+import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
 import com.kina.service.LocationService;
+import com.kina.service.ProductService;
 import com.kina.service.TreatmentLocationService;
 import com.kina.sql.connectDB;
 import java.awt.Color;
@@ -15,9 +18,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-public class Admin_TreatmentForm extends javax.swing.JPanel {
+public class Manager_PackForm extends javax.swing.JPanel {
 
-    public Admin_TreatmentForm() {
+    public Manager_PackForm() {
         initComponents();
         setOpaque(false);
         initTable();
@@ -36,18 +39,18 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
 
     public void initTableData() {
         
-        List<TreatmentLocation> treatmentLocationList = TreatmentLocationService.getAll();
+        List<Product> productList = ProductService.getAllProduct();
 
-//        System.out.println(treatmentLocationList.size());
-//        System.out.println(treatmentLocationList.get(1));
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Object[] row = new Object[4];
+        Object[] row = new Object[5];
 
-        for (int i = 0; i < treatmentLocationList.size(); i++) {
-            row[0] = treatmentLocationList.get(i).getId();
-            row[1] = treatmentLocationList.get(i).getName();
-            row[2] = treatmentLocationList.get(i).getCapacity();
-            row[3] = treatmentLocationList.get(i).getOccupancy();
+        for (int i = 0; i < productList.size(); i++) {
+            row[0] = productList.get(i).getId();
+            row[1] = productList.get(i).getName();
+            row[2] = productList.get(i).getUnit();
+            row[3] = productList.get(i).getPrice();
+            row[4] = productList.get(i).getImage();
+
             model.addRow(row);
         }
     }
@@ -70,14 +73,14 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Name", "Capacity", "Occupancy"
+                "Pack ID", "Name", "Limited Quantity", "Price", "Deadline"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false
+                true, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -100,11 +103,12 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
         }
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel1.setText("Treament Location Management");
+        jLabel1.setText("Pack Management");
 
         btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/refresh.png"))); // NOI18N
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -128,9 +132,9 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(btnRefresh))
+                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRefresh)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
@@ -138,18 +142,17 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -159,10 +162,12 @@ public class Admin_TreatmentForm extends javax.swing.JPanel {
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
         String name = model.getValueAt(index, 1).toString();
-        int occupancy = Integer.parseInt(model.getValueAt(index, 2).toString());
-        int capacity = Integer.parseInt(model.getValueAt(index, 3).toString());
+        String unit = model.getValueAt(index, 2).toString();
+        int price = Integer.parseInt(model.getValueAt(index, 3).toString());
+        String image = "";
         
-        Admin_Treatment_Detail.main(id, name, occupancy, capacity);
+        
+        Manager_Product_Detail.main(id, name, unit, price, image);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed

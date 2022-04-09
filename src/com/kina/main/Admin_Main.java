@@ -5,7 +5,7 @@ import com.kina.component.menu.Admin_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_TreatmentForm;
-import com.kina.form.admin.Admin_UserForm;
+import com.kina.form.admin.Admin_ManagerForm;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +43,7 @@ public class Admin_Main extends javax.swing.JFrame {
             public void menuSelected(int menuIndex) {
                 System.out.println("Menu Index : " + menuIndex);
                 if (menuIndex == 0) {
-                    main.showForm(new Admin_UserForm());
+                    main.showForm(new Admin_ManagerForm());
                 } else {
                     main.showForm(new Admin_TreatmentForm());
                 }
@@ -92,7 +92,7 @@ public class Admin_Main extends javax.swing.JFrame {
 
         menu.initMenuItem();
 
-        main.showForm(new Admin_UserForm());
+        main.showForm(new Admin_ManagerForm());
     }
 
     @SuppressWarnings("unchecked")
@@ -103,7 +103,6 @@ public class Admin_Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setFocusableWindowState(false);
-        setUndecorated(true);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));
         bg.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N

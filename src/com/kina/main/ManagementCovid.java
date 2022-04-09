@@ -2,7 +2,6 @@ package com.kina.main;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.kina.login.LoginForm;
-import com.kina.sql.connectDB;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -13,14 +12,17 @@ public class ManagementCovid {
 //        a.getConnection();
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
+//            LoginForm.main();
+//            Admin_Main.main();
+            Manager_Main.main();
 
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        LoginForm.main();
-        Admin_Main.main();
 
-//        User_Main.main();
+
     }
 
 }

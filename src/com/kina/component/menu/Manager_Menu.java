@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 
-public class User_Menu extends javax.swing.JPanel {
+public class Manager_Menu extends javax.swing.JPanel {
 
     public boolean isShowMenu() {
         return showMenu;
@@ -39,7 +39,7 @@ public class User_Menu extends javax.swing.JPanel {
     private boolean enableMenu = true;
     private boolean showMenu = true;
 
-    public User_Menu() {
+    public Manager_Menu() {
         initComponents();
         setOpaque(false);
         panel.setOpaque(false);
@@ -48,9 +48,10 @@ public class User_Menu extends javax.swing.JPanel {
     }
 
     public void initMenuItem() {
-        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\6.png"), "User"));
-        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\3.png"), "Treament Location"));
-        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\3.png"), "Treament"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\dashboard.png"), "Dashboard"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\user.png"), "User Management"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\product.png"), "Product Management"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\pack.png"), "Pack Management"));
 
     }
 
@@ -104,7 +105,7 @@ public class User_Menu extends javax.swing.JPanel {
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
+            .addGap(0, 365, Short.MAX_VALUE)
         );
 
         footer.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -120,7 +121,7 @@ public class User_Menu extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 13)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/covid-36x36.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/covid.png"))); // NOI18N
         jLabel1.setText("COVID MANAGEMENT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -129,7 +130,7 @@ public class User_Menu extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

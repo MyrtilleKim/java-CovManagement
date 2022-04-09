@@ -15,18 +15,18 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
+public class Admin_Treatment_Detail extends javax.swing.JFrame {
     String id;
     String name;
     int occupancy;
     int capacity;
 
-    public Admin_TreatmentLocation_Detail() {
+    public Admin_Treatment_Detail() {
         init();
         initComponents();
     }
 
-    public Admin_TreatmentLocation_Detail(String id, String name, int occupancy, int capacity) {
+    public Admin_Treatment_Detail(String id, String name, int occupancy, int capacity) {
         init();
         initComponents();
         initData(id, name, occupancy, capacity);
@@ -249,7 +249,7 @@ public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
     public static void main(String id, String name, int occupancy, int capacity) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_TreatmentLocation_Detail(id, name, occupancy, capacity).setVisible(true);
+                new Admin_Treatment_Detail(id, name, occupancy, capacity).setVisible(true);
             }
         });
     }
