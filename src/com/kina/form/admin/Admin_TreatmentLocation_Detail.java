@@ -1,5 +1,8 @@
 package com.kina.form.admin;
 
+import com.kina.model.Location;
+import com.kina.model.TreatmentLocation;
+import com.kina.service.TreatmentLocationService;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -13,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
+    String id;
     String name;
     int occupancy;
     int capacity;
@@ -22,10 +26,10 @@ public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
         initComponents();
     }
 
-    public Admin_TreatmentLocation_Detail(String name, int occupancy, int capacity) {
+    public Admin_TreatmentLocation_Detail(String id, String name, int occupancy, int capacity) {
         init();
         initComponents();
-        initData(name, occupancy, capacity);
+        initData(id, name, occupancy, capacity);
     }
 
     public void init() {
@@ -42,10 +46,11 @@ public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
         setContentPane(panel);
     }
 
-    public void initData(String name, int occupancy, int capacity) {
+    public void initData(String id, String name, int occupancy, int capacity) {
         txtTreamentName.setText(name);
         boxOccupancy.setValue(occupancy);
         boxCapacity.setValue(capacity);
+        this.id = id;
         this.name = name;
         this.occupancy = occupancy;
         this.capacity = capacity;
@@ -176,7 +181,14 @@ public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         //if has unsave data: save
         if (hasUnsaveData()) {
-            
+            int ca = (int) boxCapacity.getValue();
+            int oc = (int) boxOccupancy.getValue();
+            String na = txtTreamentName.getText();
+        
+            String addressId = "DC0005";
+            Location location = new Location(addressId, "a", "a", "a", "a");
+            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
+            TreatmentLocationService.updOne(treatmentLocation);
         }
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -234,10 +246,10 @@ public class Admin_TreatmentLocation_Detail extends javax.swing.JFrame {
         return false;
     }
 
-    public static void main(String name, int occupancy, int capacity) {
+    public static void main(String id, String name, int occupancy, int capacity) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_TreatmentLocation_Detail(name, occupancy, capacity).setVisible(true);
+                new Admin_TreatmentLocation_Detail(id, name, occupancy, capacity).setVisible(true);
             }
         });
     }

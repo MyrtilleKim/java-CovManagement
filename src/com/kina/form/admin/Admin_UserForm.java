@@ -181,7 +181,7 @@ public class Admin_UserForm extends javax.swing.JPanel {
         int occupancy = Integer.parseInt(model.getValueAt(index, 1).toString());
         int capacity = Integer.parseInt(model.getValueAt(index, 2).toString());
         
-        Admin_TreatmentLocation_Detail.main(name, occupancy, capacity);
+//        Admin_TreatmentLocation_Detail.main(name, occupancy, capacity);
     }//GEN-LAST:event_jTable1MouseClicked
 
 

@@ -19,6 +19,12 @@ public class TreatmentLocation {
         this.occupancy = occupancy;
     }
 
+    public TreatmentLocation(String id, String name, int occupancy, int capacity) {
+        this.id = id;
+        this.name = name;
+        this.capacity = capacity;
+        this.occupancy = occupancy;    }
+
     public String getId() {
         return this.id;
     }
