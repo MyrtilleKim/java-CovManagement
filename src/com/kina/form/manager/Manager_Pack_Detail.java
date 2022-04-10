@@ -19,20 +19,16 @@ import javax.swing.JPanel;
 public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     String id;
-    String name;
-    String unit;
-    int price;
-    String image;
 
     public Manager_Pack_Detail() {
         init();
         initComponents();
     }
 
-    public Manager_Pack_Detail(String id, String name, String unit, int price, String image) {
+    public Manager_Pack_Detail(String id) {
         init();
         initComponents();
-        initData(id, name, unit, price, image);
+        initData(id);
     }
 
     public void init() {
@@ -49,31 +45,50 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         setContentPane(panel);
     }
 
-    public void initData(String id, String name, String unit, int price, String image) {
-        txtProduct.setText(name);
-        txtUnit.setText(unit);
-        boxOccupancy.setValue(price);
+    public void initData(String id) {
+//        txtProduct.setText(name);
+//        txtUnit.setText(unit);
+//        boxOccupancy.setValue(price);
         this.id = id;
-        this.name = name;
-        this.unit = unit;
-        this.price = price;
-        this.image = image;
+//        this.name = name;
+//        this.unit = unit;
+//        this.price = price;
+//        this.image = image;
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         lblCapacity = new javax.swing.JLabel();
-        lblOccupancy = new javax.swing.JLabel();
-        boxOccupancy = new javax.swing.JSpinner();
         btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
         txtProduct = new javax.swing.JTextField();
-        txtUnit = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        lblCapacity1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        lblCapacity2 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        lblCapacity3 = new javax.swing.JLabel();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -89,19 +104,12 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EDIT PRODUCT DETAIL");
+        jLabel1.setText("EDIT PACK DETAIL");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblCapacity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity.setForeground(new java.awt.Color(255, 255, 255));
-        lblCapacity.setText("Unit:");
-
-        lblOccupancy.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        lblOccupancy.setForeground(new java.awt.Color(255, 255, 255));
-        lblOccupancy.setText("Price:");
-
-        boxOccupancy.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        boxOccupancy.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        lblCapacity.setText("Limited Quantity:");
 
         btnSave.setBackground(new java.awt.Color(0, 255, 51));
         btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -121,32 +129,56 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
-
         txtProduct.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         txtProduct.setForeground(new java.awt.Color(255, 255, 255));
         txtProduct.setText("Product Name");
-        txtProduct.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(12, 91, 160)));
+        txtProduct.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtProduct.setOpaque(false);
-
-        txtUnit.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtUnit.setForeground(new java.awt.Color(255, 255, 255));
-        txtUnit.setText("jTextField2");
-        txtUnit.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(12, 91, 160)));
-        txtUnit.setOpaque(false);
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Product Name:");
+        jLabel2.setText("Pack Name:");
+
+        jSpinner1.setOpaque(false);
+
+        lblCapacity1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        lblCapacity1.setForeground(new java.awt.Color(255, 255, 255));
+        lblCapacity1.setText("Price");
+
+        jTextField1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jTextField1.setText("jTextField1");
+
+        lblCapacity2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        lblCapacity2.setForeground(new java.awt.Color(255, 255, 255));
+        lblCapacity2.setText("Date Expired:");
+
+        jTable2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Product Name", "Quantity"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(1).setPreferredWidth(100);
+            jTable2.getColumnModel().getColumn(1).setMaxWidth(100);
+        }
+
+        lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        lblCapacity3.setForeground(new java.awt.Color(255, 255, 255));
+        lblCapacity3.setText("Product List:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,53 +187,66 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 74, Short.MAX_VALUE)
-                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(230, 230, 230))
+                            .addComponent(txtProduct, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(230, 424, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtProduct, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtUnit)
-                                    .addComponent(boxOccupancy))))))
+                                    .addComponent(lblCapacity)
+                                    .addComponent(lblCapacity1)
+                                    .addComponent(lblCapacity3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(36, 36, 36)
+                                        .addComponent(lblCapacity2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTextField1)))
+                            .addComponent(jScrollPane2))))
                 .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(217, 217, 217)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                        .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtUnit, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                            .addComponent(lblCapacity))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblOccupancy)
-                            .addComponent(boxOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblCapacity)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCapacity2)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCapacity1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCapacity3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -286,24 +331,30 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         return false;
     }
 
-    public static void main(String id, String name, String unit, int price, String image) {
+    public static void main(String id) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Manager_Pack_Detail(id, name, unit, price, image).setVisible(true);
+                new Manager_Pack_Detail(id).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSpinner boxOccupancy;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblCapacity;
-    private javax.swing.JLabel lblOccupancy;
+    private javax.swing.JLabel lblCapacity1;
+    private javax.swing.JLabel lblCapacity2;
+    private javax.swing.JLabel lblCapacity3;
     private javax.swing.JTextField txtProduct;
-    private javax.swing.JTextField txtUnit;
     // End of variables declaration//GEN-END:variables
 }

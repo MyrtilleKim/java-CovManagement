@@ -2,9 +2,11 @@ package com.kina.form.manager;
 
 import com.kina.form.admin.*;
 import com.kina.model.Location;
+import com.kina.model.Pack;
 import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
 import com.kina.service.LocationService;
+import com.kina.service.PackService;
 import com.kina.service.ProductService;
 import com.kina.service.TreatmentLocationService;
 import com.kina.sql.connectDB;
@@ -39,17 +41,17 @@ public class Manager_PackForm extends javax.swing.JPanel {
 
     public void initTableData() {
         
-        List<Product> productList = ProductService.getAllProduct();
+        List<Pack> packList = PackService.getAllPack();
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object[] row = new Object[5];
 
-        for (int i = 0; i < productList.size(); i++) {
-            row[0] = productList.get(i).getId();
-            row[1] = productList.get(i).getName();
-            row[2] = productList.get(i).getUnit();
-            row[3] = productList.get(i).getPrice();
-            row[4] = productList.get(i).getImage();
+        for (int i = 0; i < packList.size(); i++) {
+            row[0] = packList.get(i).getId();
+            row[1] = packList.get(i).getName();
+            row[2] = packList.get(i).getLimitQuantity();
+            row[3] = packList.get(i).getPrice();
+            row[4] = packList.get(i).getDateExp();
 
             model.addRow(row);
         }
@@ -143,9 +145,7 @@ public class Manager_PackForm extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +167,7 @@ public class Manager_PackForm extends javax.swing.JPanel {
         String image = "";
         
         
-        Manager_Product_Detail.main(id, name, unit, price, image);
+        Manager_Pack_Detail.main(id);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed

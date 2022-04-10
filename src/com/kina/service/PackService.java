@@ -22,7 +22,7 @@ public class PackService {
 
         try {
             ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Pack rec = new Pack();
 
@@ -30,11 +30,11 @@ public class PackService {
                 rec.setName(rs.getString("PackName"));
                 rec.setPrice(rs.getInt("Price"));
                 rec.setLimitQuantity(rs.getInt("LimitedQuantity"));
-                rec.setDateExp(rs.getDate("columnIndex"));
+                rec.setDateExp(rs.getDate("Deadline"));
 
                 // private List<PackDetail> proList;
-                List<PackDetail> packDetailList = getAllPackDetail(rec.getId());
-                rec.setProList(packDetailList);
+//                List<PackDetail> packDetailList = getAllPackDetail(rec.getId());
+//                rec.setProList(packDetailList);
 
                 res.add(rec);
             }

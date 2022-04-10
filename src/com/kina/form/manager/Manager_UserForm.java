@@ -3,8 +3,10 @@ package com.kina.form.manager;
 import com.kina.form.admin.*;
 import com.kina.model.Location;
 import com.kina.model.TreatmentLocation;
+import com.kina.model.User;
 import com.kina.service.LocationService;
 import com.kina.service.TreatmentLocationService;
+import com.kina.service.UserService;
 import com.kina.sql.connectDB;
 import java.awt.Color;
 import java.sql.Connection;
@@ -31,24 +33,27 @@ public class Manager_UserForm extends javax.swing.JPanel {
         jTable1.getTableHeader().setForeground(new Color(255, 255, 255));
         jTable1.setForeground(Color.BLUE);
         jTable1.setAutoCreateRowSorter(true);
-        jTable1.setCellSelectionEnabled(false);     
+        jTable1.setCellSelectionEnabled(false);
         jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
     }
 
     public void initTableData() {
-        
-        List<TreatmentLocation> treatmentLocationList = TreatmentLocationService.getAll();
+
+        List<User> userList = UserService.getAllUser();
 
 //        System.out.println(treatmentLocationList.size());
 //        System.out.println(treatmentLocationList.get(1));
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Object[] row = new Object[4];
+        Object[] row = new Object[5];
 
-        for (int i = 0; i < treatmentLocationList.size(); i++) {
-            row[0] = treatmentLocationList.get(i).getId();
-            row[1] = treatmentLocationList.get(i).getName();
-            row[2] = treatmentLocationList.get(i).getCapacity();
-            row[3] = treatmentLocationList.get(i).getOccupancy();
+        for (int i = 0; i < userList.size(); i++) {
+            row[0] = userList.get(i).getId();
+            row[1] = userList.get(i).getName();
+            row[2] = userList.get(i).getNoID();
+            row[3] = userList.get(i).getBirthYear();
+            String status = String.valueOf(userList.get(i).getStatus());
+            row[4] = "F" + status;
+
             model.addRow(row);
         }
     }
@@ -59,6 +64,8 @@ public class Manager_UserForm extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnRefresh = new javax.swing.JButton();
@@ -71,14 +78,14 @@ public class Manager_UserForm extends javax.swing.JPanel {
 
             },
             new String [] {
-                "User ID", "Fullname", "NoID", "Birth Year", "Address", "Status"
+                "User ID", "Fullname", "NoID", "Birth Year", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, true, true
+                true, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -102,7 +109,31 @@ public class Manager_UserForm extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(180);
         }
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setFocusable(false);
+        jPanel1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+
+        jButton1.setBackground(new java.awt.Color(0, 102, 255));
+        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/add-user.png"))); // NOI18N
+        jButton1.setText("Add User");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+        );
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel1.setText("User Management");
@@ -118,10 +149,10 @@ public class Manager_UserForm extends javax.swing.JPanel {
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
                 .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -139,19 +170,22 @@ public class Manager_UserForm extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 22, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -162,7 +196,7 @@ public class Manager_UserForm extends javax.swing.JPanel {
         String name = model.getValueAt(index, 1).toString();
         int occupancy = Integer.parseInt(model.getValueAt(index, 2).toString());
         int capacity = Integer.parseInt(model.getValueAt(index, 3).toString());
-        
+
         Manager_User_Detail.main(id, name, occupancy, capacity);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -176,7 +210,9 @@ public class Manager_UserForm extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel header;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
