@@ -111,7 +111,6 @@ public class Manager_Main extends javax.swing.JFrame {
         bg = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setFocusableWindowState(false);
         setUndecorated(true);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));

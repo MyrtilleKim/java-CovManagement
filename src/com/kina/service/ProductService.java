@@ -2,12 +2,18 @@ package com.kina.service;
 
 import com.kina.model.Product;
 import com.kina.sql.connectDB;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 public class ProductService {
 
@@ -40,7 +46,6 @@ public class ProductService {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
-        
 
         try {
             String sql = "SELECT * FROM PRODUCT";
@@ -78,19 +83,69 @@ public class ProductService {
         return res;
     }
 
+    public static Image getImage(String id) {
+        Image res = null;
+
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query = "SELECT ProductImage FROM PRODUCT WHERE ProductID = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                InputStream is = rs.getBinaryStream("ProductImage");
+                BufferedImage imag = ImageIO.read(is);
+                res = imag;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
     public static Boolean addOne(Product ele) {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
-        String query = "insert into Product values(?, ?, ?, ?, ?)";
+
         try {
+            String query = "insert into Product values(?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(query);
             ps.setString(1, ele.getId());
             ps.setString(2, ele.getName());
             ps.setString(3, ele.getUnit());
             ps.setInt(4, ele.getPrice());
             // ps.setImage(5, );
-            ps.executeQuery();
+            if (ele.getImage() != null) {
+
+                FileInputStream fin = new FileInputStream(ele.getImage());
+                ps.setBinaryStream(5, fin, fin.available());
+            }
+
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static Boolean updOneNoImg(Product ele) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query = "update PRODUCT set ProductName = ?,Unit = ?, Price = ? where ProductID = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, ele.getName());
+            ps.setString(2, ele.getUnit());
+            ps.setInt(3, ele.getPrice());
+
+            ps.setString(4, ele.getId());
+            ps.execute();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,14 +157,20 @@ public class ProductService {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
+
         try {
-            String query = "update Product set ";
+            String query = "update PRODUCT set ProductName = ?,Unit = ?, Price = ?, ProductImage = ? where ProductID = ?";
             ps = connection.prepareStatement(query);
-            ps.setString(1, ele.getId());
-            ps.setString(2, ele.getName());
-            ps.setString(3, ele.getUnit());
-            ps.setInt(4, ele.getPrice());
+            ps.setString(1, ele.getName());
+            ps.setString(2, ele.getUnit());
+            ps.setInt(3, ele.getPrice());
             // ps.setImage(5, );
+            if (ele.getImage() != null) {
+
+                FileInputStream fin = new FileInputStream(ele.getImage());
+                ps.setBinaryStream(4, fin, fin.available());
+            }
+            ps.setString(5, ele.getId());
             ps.execute();
             return true;
         } catch (Exception e) {
@@ -118,14 +179,14 @@ public class ProductService {
         return false;
     }
 
-    public static Boolean delOne(Product ele) {
+    public static Boolean delOne(String id) {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
         String query = "delete from Product where ProductID = ?";
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, ele.getId());
+            ps.setString(1, id);
             ps.execute();
             return true;
         } catch (Exception e) {

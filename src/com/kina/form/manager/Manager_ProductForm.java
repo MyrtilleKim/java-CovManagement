@@ -1,22 +1,23 @@
 package com.kina.form.manager;
 
-import com.kina.form.admin.*;
-import com.kina.model.Location;
+import com.formdev.flatlaf.util.StringUtils;
 import com.kina.model.Product;
-import com.kina.model.TreatmentLocation;
-import com.kina.service.LocationService;
 import com.kina.service.ProductService;
-import com.kina.service.TreatmentLocationService;
-import com.kina.sql.connectDB;
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import net.coderazzi.filters.gui.AutoChoices;
+import net.coderazzi.filters.gui.TableFilterHeader;
 
 public class Manager_ProductForm extends javax.swing.JPanel {
 
@@ -25,6 +26,64 @@ public class Manager_ProductForm extends javax.swing.JPanel {
         setOpaque(false);
         initTable();
         initTableData();
+        TableFilterHeader filterHeader = new TableFilterHeader(jTable1, AutoChoices.ENABLED);
+
+    }
+
+    private TableRowSorter<TableModel> rowSorter;
+
+    public void initSearch() {
+        this.rowSorter = new TableRowSorter<>(jTable1.getModel());
+        jTable1.setRowSorter(rowSorter);
+        
+        //sorts the 2nd column (at 1-index) into ascending order
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+//        int columnIndexToSort = 0;
+//        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+//        int columnIndexForUnit = 2;
+//        sortKeys.add(new RowSorter.SortKey(columnIndexForUnit, SortOrder.ASCENDING));
+//        int columnIndexForName = 1;
+//        sortKeys.add(new RowSorter.SortKey(columnIndexForName, SortOrder.ASCENDING));
+
+        rowSorter.addRowSorterListener(new RowSorterListener() {
+            @Override
+            public void sorterChanged(RowSorterEvent evt) {
+                
+            }
+        });
+        
+        rowSorter.setSortKeys(sortKeys);
+        rowSorter.sort();
+//        rowSorter.setSortable(0, false);
+        
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String text = txtSearch.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = txtSearch.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
     }
 
     public void initTable() {
@@ -33,12 +92,13 @@ public class Manager_ProductForm extends javax.swing.JPanel {
         jTable1.getTableHeader().setForeground(new Color(255, 255, 255));
         jTable1.setForeground(Color.BLUE);
         jTable1.setAutoCreateRowSorter(true);
-        jTable1.setCellSelectionEnabled(false);     
+        jTable1.setCellSelectionEnabled(false);
         jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
+        initSearch();
     }
 
     public void initTableData() {
-        
+
         List<Product> productList = ProductService.getAllProduct();
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -53,6 +113,8 @@ public class Manager_ProductForm extends javax.swing.JPanel {
 
             model.addRow(row);
         }
+
+//        TableRowFilterSupport.forTable(jTable1).searchable(true).apply();
     }
 
     @SuppressWarnings("unchecked")
@@ -64,6 +126,9 @@ public class Manager_ProductForm extends javax.swing.JPanel {
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnRefresh = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        btnAdd = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
 
         jTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -73,14 +138,14 @@ public class Manager_ProductForm extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Product ID", "Name", "Unit", "Price", "Image"
+                "Product ID", "Name", "Unit", "Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, true
+                true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -137,19 +202,74 @@ public class Manager_ProductForm extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jPanel1.setOpaque(false);
+
+        btnAdd.setBackground(new java.awt.Color(0, 102, 255));
+        btnAdd.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/add.png"))); // NOI18N
+        btnAdd.setText("Add Product");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtSearch.setText("Search");
+        txtSearch.setSelectedTextColor(new java.awt.Color(153, 153, 255));
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdd))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -162,8 +282,7 @@ public class Manager_ProductForm extends javax.swing.JPanel {
         String unit = model.getValueAt(index, 2).toString();
         int price = Integer.parseInt(model.getValueAt(index, 3).toString());
         String image = "";
-        
-        
+
         Manager_Product_Detail.main(id, name, unit, price, image);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -173,12 +292,33 @@ public class Manager_ProductForm extends javax.swing.JPanel {
         initTableData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchFocusGained
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        int tableSize = jTable1.getRowCount() + 1;
+        String id = "SP" + String.format("%04d", tableSize);
+//        System.out.println(id);
+        Manager_Product_Add.main(id);
+    }//GEN-LAST:event_btnAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

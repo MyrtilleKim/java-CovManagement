@@ -15,6 +15,7 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -24,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Manager_Product_Detail extends javax.swing.JFrame {
+public class Manager_Product_Add extends javax.swing.JFrame {
 
     String id;
     String name;
@@ -33,15 +34,15 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
     String image;
     String imgPath = null;
 
-    public Manager_Product_Detail() {
+    public Manager_Product_Add() {
         init();
         initComponents();
     }
 
-    public Manager_Product_Detail(String id, String name, String unit, int price, String image) {
+    public Manager_Product_Add(String id) {
         init();
         initComponents();
-        initData(id, name, unit, price, image);
+        initData(id);
     }
 
     public void init() {
@@ -58,27 +59,9 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         setContentPane(panel);
     }
 
-    public void initData(String id, String name, String unit, int price, String image) {
+    public void initData(String id) {
         txtID.setText(id);
-        txtName.setText(name);
-        txtUnit.setText(unit);
-        boxOccupancy.setValue(price);
-        System.out.println(image);
-        //Image
-        Image img = ProductService.getImage(id);
-//        System.out.println(img);
-
-//        if (!img.toString()) {
-            Image newImg = img.getScaledInstance(fieldImage.getWidth(), fieldImage.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon icon = new ImageIcon(newImg);
-
-            fieldImage.setIcon(icon);
-//        }
         this.id = id;
-        this.name = name;
-        this.unit = unit;
-        this.price = price;
-        this.image = image;
     }
 
     @SuppressWarnings("unchecked")
@@ -98,9 +81,8 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         txtName = new javax.swing.JTextField();
         btnChoose = new javax.swing.JButton();
         fieldImage = new javax.swing.JLabel();
-        btnDel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusCycleRoot(false);
         setFocusTraversalPolicyProvider(true);
@@ -114,7 +96,7 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         lblTitle.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitle.setText("EDIT PRODUCT DETAIL");
+        lblTitle.setText("ADD PRODUCT");
         lblTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblCapacity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -127,6 +109,19 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
 
         boxOccupancy.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         boxOccupancy.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        boxOccupancy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                boxOccupancyMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                boxOccupancyMousePressed(evt);
+            }
+        });
+        boxOccupancy.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                boxOccupancyKeyPressed(evt);
+            }
+        });
 
         btnSave.setBackground(new java.awt.Color(0, 255, 51));
         btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -159,9 +154,18 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
 
         txtUnit.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtUnit.setForeground(new java.awt.Color(255, 255, 255));
-        txtUnit.setText("jTextField2");
         txtUnit.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(12, 91, 160)));
         txtUnit.setOpaque(false);
+        txtUnit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtUnitMouseClicked(evt);
+            }
+        });
+        txtUnit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUnitActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -173,11 +177,25 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
 
         txtName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtName.setForeground(new java.awt.Color(255, 255, 255));
-        txtName.setText("Product Name");
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(12, 91, 160)));
         txtName.setOpaque(false);
+        txtName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtNameMouseClicked(evt);
+            }
+        });
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
 
         btnChoose.setText("Chose image...");
+        btnChoose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnChooseMouseClicked(evt);
+            }
+        });
         btnChoose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChooseActionPerformed(evt);
@@ -186,16 +204,6 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
 
         fieldImage.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         fieldImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        btnDel.setBackground(new java.awt.Color(255, 0, 0));
-        btnDel.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnDel.setForeground(new java.awt.Color(255, 255, 255));
-        btnDel.setText("DELETE");
-        btnDel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDelActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,23 +220,20 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnChoose, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                             .addComponent(fieldImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtID, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtUnit)
                             .addComponent(boxOccupancy)
-                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 133, Short.MAX_VALUE)))
+                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -248,11 +253,9 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
                             .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblCapacity)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(2, 2, 2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCapacity))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(fieldImage, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,11 +265,9 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblOccupancy)
                     .addComponent(boxOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 23, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDel))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(35, 35, 35))
         );
 
         pack();
@@ -282,25 +283,35 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         //if has unsave data: save
-//        if (hasUnsaveData()) {
         int price = (int) boxOccupancy.getValue();
         String na = txtName.getText();
         String unit = txtUnit.getText();
-     
+
+        System.out.println(na);
+        System.out.println(unit);
+        System.out.println(price);
 
         Product prod = new Product(this.id, na, price, unit, imgPath);
-//        ProductService.updOne(prod);
-//        }
-        
-        if (hasUnsaveData()) {
-            if (imgPath != null) {
-                ProductService.updOne(prod);
-            } else {
-                ProductService.updOneNoImg(prod);
+        if (!hasUnsaveData()) {
+
+            ProductService.addOne(prod);
+            dispose();
+        } else {
+            if (na.isBlank()) {
+                txtName.setBorder(BorderFactory.createLineBorder(Color.red));
             }
+            if (unit.isBlank()) {
+                txtUnit.setBorder(BorderFactory.createLineBorder(Color.red));
+            }
+            if (price == 0) {
+                boxOccupancy.setBorder(BorderFactory.createLineBorder(Color.red));
+            }
+            if (imgPath == null) {
+                fieldImage.setBorder(BorderFactory.createLineBorder(Color.red));
+            }
+
         }
 
-        dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed
@@ -322,11 +333,39 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnChooseActionPerformed
 
-    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        ProductService.delOne(this.id);
-        JOptionPane.showMessageDialog(new JFrame(), "Product deleted successfully");
-        dispose();
-    }//GEN-LAST:event_btnDelActionPerformed
+    private void txtNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNameMouseClicked
+        txtName.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(12,91,160)));
+    }//GEN-LAST:event_txtNameMouseClicked
+
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameActionPerformed
+
+    private void txtUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUnitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUnitActionPerformed
+
+    private void txtUnitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUnitMouseClicked
+        txtUnit.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(12,91,160)));
+
+    }//GEN-LAST:event_txtUnitMouseClicked
+
+    private void boxOccupancyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boxOccupancyMouseClicked
+        boxOccupancy.setBorder(BorderFactory.createEmptyBorder());
+
+    }//GEN-LAST:event_boxOccupancyMouseClicked
+
+    private void btnChooseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseMouseClicked
+        fieldImage.setBorder(BorderFactory.createEmptyBorder());
+    }//GEN-LAST:event_btnChooseMouseClicked
+
+    private void boxOccupancyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boxOccupancyMousePressed
+        boxOccupancy.setBorder(BorderFactory.createEmptyBorder());
+    }//GEN-LAST:event_boxOccupancyMousePressed
+
+    private void boxOccupancyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boxOccupancyKeyPressed
+//        boxOccupancy.setBorder(BorderFactory.());
+    }//GEN-LAST:event_boxOccupancyKeyPressed
 
     public ImageIcon ResizeImage(String imagePath, byte[] pic) {
         ImageIcon myImage = null;
@@ -344,7 +383,7 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
     }
 
     private void handleClosing() {
-        if (hasUnsaveData()) {
+        if (!hasUnsaveData()) {
             int answer = showWarningMessage();
 
             switch (answer) {
@@ -388,17 +427,16 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         String na = txtName.getText();
         String unit = txtUnit.getText();
 
-        if (price != this.price || !unit.equals(this.unit) || !na.equals(this.name) || imgPath != null) {
-//                    System.out.println(ca);
+        if (price == 0 || unit.isBlank() || na.isBlank() || imgPath == null) {
             return true;
         }
         return false;
     }
 
-    public static void main(String id, String name, String unit, int price, String image) {
+    public static void main(String id) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Manager_Product_Detail(id, name, unit, price, image).setVisible(true);
+                new Manager_Product_Add(id).setVisible(true);
             }
         });
     }
@@ -407,7 +445,6 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
     private javax.swing.JSpinner boxOccupancy;
     private javax.swing.JButton btnChoose;
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnDel;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel fieldImage;
     private javax.swing.JLabel jLabel2;
