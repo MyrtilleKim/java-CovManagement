@@ -40,7 +40,7 @@ public class Manager_Main extends javax.swing.JFrame {
         bg.add(menu, "w 230!, spany 2");    // Span Y 2cell
         bg.add(header, "h 50!, wrap");
         bg.add(main, "w 100%, h 100%");
-
+   
         TimingTarget target = new TimingTargetAdapter() {
             @Override
             public void timingEvent(float fraction) {
@@ -75,6 +75,8 @@ public class Manager_Main extends javax.swing.JFrame {
                 menu.setEnableMenu(false);
             }
         });
+        
+        header.changeWelcome("Welcome, Manager");
 
         menu.addEvent(new EventMenuSelected() {
             @Override
