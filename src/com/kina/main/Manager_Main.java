@@ -103,7 +103,7 @@ public class Manager_Main extends javax.swing.JFrame {
         );
         menu.initMenuItem();
 
-        //        main.showForm(new Admin_HomeForm());
+//        main.showForm(new Admin_HomeForm());
     }
 
     @SuppressWarnings("unchecked")

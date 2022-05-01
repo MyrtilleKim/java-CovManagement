@@ -22,16 +22,16 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-public class Manager_Pack_Detail extends javax.swing.JFrame {
+public class Manager_Pack_Add extends javax.swing.JFrame {
 
     String id;
 
-    public Manager_Pack_Detail() {
+    public Manager_Pack_Add() {
         init();
         initComponents();
     }
 
-    public Manager_Pack_Detail(String id) {
+    public Manager_Pack_Add(String id) {
         init();
         initComponents();
         initData(id);
@@ -52,26 +52,6 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
     }
     
     public void initData(String id) {
-        Pack pack = PackService.getPackById(id);
-        System.out.println(pack.toString());
-//        txtProduct.setText(name);
-//        txtUnit.setText(unit);
-//        boxOccupancy.setValue(price);
-
-        txtPack.setText(pack.getName());
-        txtQuantity.setValue(pack.getLimitQuantity());
-        txtDeadline.setDate(pack.getDateExp());
-        txtPrice.setText(Integer.toString(pack.getPrice()));
-        
-        List<PackDetail> packList = pack.getProList();
-        DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
-        Object[] row = new Object[5];
-
-        for (int i = 0; i < packList.size(); i++) {
-            row[0] = packList.get(i).getProduct().getName();
-            row[1] = packList.get(i).getQuantity();
-            model.addRow(row);
-        }
 
                 
         this.id = id;
@@ -101,8 +81,6 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProd = new javax.swing.JTable();
         lblCapacity3 = new javax.swing.JLabel();
-        btnSave1 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -131,17 +109,17 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EDIT PACK DETAIL");
+        jLabel1.setText("ADD PACK DETAIL");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txt.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt.setForeground(new java.awt.Color(255, 255, 255));
         txt.setText("Limited Quantity:");
 
-        btnSave.setBackground(new java.awt.Color(255, 0, 0));
+        btnSave.setBackground(new java.awt.Color(0, 255, 51));
         btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("DELETE");
+        btnSave.setText("SAVE");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -206,19 +184,6 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         lblCapacity3.setForeground(new java.awt.Color(255, 255, 255));
         lblCapacity3.setText("Product List:");
 
-        btnSave1.setBackground(new java.awt.Color(0, 255, 51));
-        btnSave1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave1.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave1.setText("SAVE");
-        btnSave1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSave1ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
-        jButton1.setText("Add Product");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -242,27 +207,20 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                                     .addComponent(txt)
                                     .addComponent(lblCapacity1)
                                     .addComponent(lblCapacity3))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(36, 36, 36)
+                                        .addComponent(lblCapacity2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(36, 36, 36)
-                                                .addComponent(lblCapacity2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(txtDeadline, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(txtPrice)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton1))))
+                                        .addComponent(txtDeadline, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtPrice)))
                             .addComponent(jScrollPane2))))
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(151, 151, 151)
+                .addGap(217, 217, 217)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -271,7 +229,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 13, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,16 +248,12 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                     .addComponent(lblCapacity1)
                     .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCapacity3)
-                    .addComponent(jButton1))
+                .addComponent(lblCapacity3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -327,10 +281,6 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 //        }
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSave1ActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -388,18 +338,14 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
     public static void main(String id) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Manager_Pack_Detail(id).setVisible(true);
+                new Manager_Pack_Add(id).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnDel;
-    private javax.swing.JButton btnDel1;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSave1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

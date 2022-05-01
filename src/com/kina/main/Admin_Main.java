@@ -38,6 +38,8 @@ public class Admin_Main extends javax.swing.JFrame {
         header = new Header();
         main = new MainForm();
 
+        header.changeWelcome("Welcome, Admin");
+        
         menu.addEvent(new EventMenuSelected() {
             @Override
             public void menuSelected(int menuIndex) {
@@ -103,6 +105,7 @@ public class Admin_Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setFocusableWindowState(false);
+        setUndecorated(true);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));
         bg.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N

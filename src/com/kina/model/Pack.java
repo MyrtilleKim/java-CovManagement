@@ -10,10 +10,10 @@ public class Pack {
     private int price;
     private int limitQuantity;
     private Date dateExp;
-    private List<PackDetail> proList;
+    private List<PackDetail> packList;
 
     public Pack(){
-        proList = new ArrayList<PackDetail>();
+        packList = new ArrayList<PackDetail>();
     }
 
     public Pack(String id, String name, int price, int limitQuantity, Date dateExp, List<PackDetail> proList) {
@@ -22,7 +22,7 @@ public class Pack {
         this.price = price;
         this.limitQuantity = limitQuantity;
         this.dateExp = dateExp;
-        this.proList = proList;
+        this.packList = proList;
     }
 
     public String getId() {
@@ -66,14 +66,14 @@ public class Pack {
     }
 
     public List<PackDetail> getProList() {
-        return this.proList;
+        return this.packList;
     }
 
-    public void setProList(List<PackDetail> proList) {
-        this.proList = proList;
+    public void setPackList(List<PackDetail> proList) {
+        this.packList = proList;
     }
     public void addPackage(PackDetail product){
-        proList.add(product);
+        packList.add(product);
     }
 
     @Override
