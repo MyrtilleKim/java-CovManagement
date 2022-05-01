@@ -145,7 +145,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EDIT PACK DETAIL");
+        jLabel1.setText("ADD PACK DETAIL");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txt.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
