@@ -8,19 +8,33 @@ import com.kina.model.TreatmentLocation;
 import com.kina.service.PackService;
 import com.kina.service.TreatmentLocationService;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.EventObject;
 import java.util.List;
+import javax.swing.AbstractCellEditor;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 public class Manager_Pack_Detail extends javax.swing.JFrame {
 
@@ -50,7 +64,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
         setContentPane(panel);
     }
-    
+
     public void initData(String id) {
         Pack pack = PackService.getPackById(id);
         System.out.println(pack.toString());
@@ -58,22 +72,28 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 //        txtUnit.setText(unit);
 //        boxOccupancy.setValue(price);
 
+        txtID.setText(pack.getId());
         txtPack.setText(pack.getName());
         txtQuantity.setValue(pack.getLimitQuantity());
         txtDeadline.setDate(pack.getDateExp());
         txtPrice.setText(Integer.toString(pack.getPrice()));
-        
+
         List<PackDetail> packList = pack.getProList();
         DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
+        
+        tblProd.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
+        tblProd.getColumn("Delete").setCellEditor(new ButtonCellEditor());
+        
         Object[] row = new Object[5];
 
         for (int i = 0; i < packList.size(); i++) {
             row[0] = packList.get(i).getProduct().getName();
             row[1] = packList.get(i).getQuantity();
+            Icon icon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
+            row[2] = icon;
             model.addRow(row);
         }
 
-                
         this.id = id;
 //        this.name = name;
 //        this.unit = unit;
@@ -103,6 +123,8 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         lblCapacity3 = new javax.swing.JLabel();
         btnSave1 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -185,11 +207,11 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Product Name", "Quantity"
+                "Product Name", "Quantity", "Delete"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -199,7 +221,9 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblProd);
         if (tblProd.getColumnModel().getColumnCount() > 0) {
             tblProd.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tblProd.getColumnModel().getColumn(1).setMaxWidth(100);
+            tblProd.getColumnModel().getColumn(2).setMinWidth(80);
+            tblProd.getColumnModel().getColumn(2).setPreferredWidth(80);
+            tblProd.getColumnModel().getColumn(2).setMaxWidth(80);
         }
 
         lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -218,6 +242,22 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton1.setText("Add Product");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Pack ID:");
+
+        txtID.setEditable(false);
+        txtID.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        txtID.setForeground(new java.awt.Color(255, 255, 255));
+        txtID.setText("jTextField1");
+        txtID.setBorder(null);
+        txtID.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -233,6 +273,10 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtID))
                             .addComponent(txtPack, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,9 +315,13 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtPack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,7 +343,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -331,6 +379,14 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSave1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
+        JLabel del = new JLabel();
+        ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
+        del.setIcon(delIcon);
+        model.addRow(new Object[]{"Column 2", "Column 2", del});
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -395,13 +451,12 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnDel;
-    private javax.swing.JButton btnDel1;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSave1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -411,8 +466,88 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
     private javax.swing.JTable tblProd;
     private javax.swing.JLabel txt;
     private com.toedter.calendar.JDateChooser txtDeadline;
+    private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtPack;
     private javax.swing.JTextField txtPrice;
     private javax.swing.JSpinner txtQuantity;
     // End of variables declaration//GEN-END:variables
+
+    public static class ButtonCellRenderer extends JButton implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//            if (value != null) {
+//                setText("Delete");
+//            } else {
+//                setText("Delete Me");
+//            }
+//            if (isSelected) {
+//                setForeground(table.getSelectionForeground());
+//                setBackground(table.getSelectionBackground());
+//            } else {
+//                setForeground(table.getForeground());
+//                setBackground(UIManager.getColor("Button.background"));
+//            }
+            setText("Delete");
+            setForeground(Color.white);
+            setBackground(Color.red);
+
+            return this;
+        }
+    }
+    
+    public static class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+        private JButton editor;
+        private Object value;
+        private int row;
+        private JTable table;
+
+        public ButtonCellEditor() {
+            editor = new JButton();
+            editor.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (table != null) {
+                        fireEditingStopped();
+                        TableModel model = table.getModel();
+                        if (model instanceof DefaultTableModel) {
+                            ((DefaultTableModel) model).removeRow(row);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean isCellEditable(EventObject e) {
+            return true;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return value;
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            this.table = table;
+            this.row = row;
+            this.value = value;
+//            editor.setBackground(Color.red);
+//            if (value != null) {
+//                editor.setText("Delete row " + value.toString());
+//            } else {
+//                editor.setText("Delete Me");
+//            }
+            if (isSelected) {
+                editor.setForeground(table.getSelectionForeground());
+                editor.setBackground(table.getSelectionBackground());
+            } else {
+                editor.setForeground(table.getForeground());
+                editor.setBackground(UIManager.getColor("Button.background"));
+            }
+            
+            return editor;
+        }
+    }
 }
