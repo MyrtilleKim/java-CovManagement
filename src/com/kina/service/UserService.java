@@ -102,7 +102,7 @@ public class UserService {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User rec = new User();
-                rec.setId(rs.getString("UserID_2"));
+                rec = getUserById(rs.getString("UserID_2"));
                 res.add(rec);
             }
         } catch (Exception e) {

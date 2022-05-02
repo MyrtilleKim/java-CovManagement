@@ -82,13 +82,7 @@ public class TreatmentLocation {
 
     @Override
     public String toString() {
-        return "{"
-                + " id='" + getId() + "'"
-                + ", name='" + getName() + "'"
-                + ", address='" + getAddress() + "'"
-                + ", capacity='" + getCapacity() + "'"
-                + ", occupancy='" + getOccupancy() + "'"
-                + "}";
+        return getName();
     }
 
 }

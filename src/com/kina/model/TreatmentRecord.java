@@ -42,11 +42,10 @@ public class TreatmentRecord {
 
     @Override
     public String toString() {
-        return "{" +
-            " trmtLoca='" + getTrmtLoca() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", recTimestamp='" + getRecTimestamp() + "'" +
-            "}";
+        return 
+            "Timestamp: " + getRecTimestamp() + ": " +
+            "TreatmentLocation: " + getTrmtLoca() +
+            ", Status: F" + getStatus();
     }
 
 }

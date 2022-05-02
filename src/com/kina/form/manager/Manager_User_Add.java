@@ -2,17 +2,13 @@ package com.kina.form.manager;
 
 import com.kina.form.admin.*;
 import com.kina.model.Location;
-import com.kina.model.LogIn;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
 import com.kina.model.TreatmentLocation;
-import com.kina.model.TreatmentRecord;
 import com.kina.model.User;
 import com.kina.service.LocationService;
-import com.kina.service.LogInService;
 import com.kina.service.PackService;
 import com.kina.service.TreatmentLocationService;
-import com.kina.service.TreatmentRecordService;
 import com.kina.service.UserService;
 import java.awt.Color;
 import java.awt.Component;
@@ -50,16 +46,16 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-public class Manager_User_Detail extends javax.swing.JFrame {
+public class Manager_User_Add extends javax.swing.JFrame {
 
     String id;
 
-    public Manager_User_Detail() {
+    public Manager_User_Add() {
         init();
         initComponents();
     }
 
-    public Manager_User_Detail(String id) {
+    public Manager_User_Add(String id) {
         init();
         initComponents();
         initComboBox();
@@ -118,10 +114,10 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         treatmentName.add(0, "--Treament Location--");
         txtTreatment.setModel(new DefaultComboBoxModel<String>(treatmentName.toArray(new String[0])));
 
-        treatmentList.removeAll();
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.addElement("There is no treatment record.");
-        treatmentList.setModel(listModel);
+//        treatmentList.removeAll();
+//        DefaultListModel listModel = new DefaultListModel();
+//        listModel.addElement("There is no treatment record.");
+//        treatmentList.setModel(listModel);
 
     }
 
@@ -173,15 +169,32 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         }
         
 
-         treatmentList.removeAll();
-        List<TreatmentRecord> logList = new ArrayList<TreatmentRecord>();
-        logList = TreatmentRecordService.getAll(id);
-        DefaultListModel listModel = new DefaultListModel();
         
-        for(int i = 0; i < logList.size(); i++) {
-            listModel.addElement(logList.get(i).toString());
-        }
-        treatmentList.setModel(listModel);
+
+//        txtProduct.setText(name);
+//        txtUnit.setText(unit);
+//        boxOccupancy.setValue(price);
+//        txtID.setText(pack.getId());
+//        txtPack.setText(pack.getName());
+//        txtQuantity.setValue(pack.getLimitQuantity());
+//        txtDeadline.setDate(pack.getDateExp());
+//        txtPrice.setText(Integer.toString(pack.getPrice()));
+//        List<PackDetail> packList = pack.getProList();
+//        DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
+//        
+//        tblProd.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
+//        tblProd.getColumn("Delete").setCellEditor(new ButtonCellEditor());
+//        
+//        Object[] row = new Object[5];
+//
+//        for (int i = 0; i < packList.size(); i++) {
+//            row[0] = packList.get(i).getProduct().getName();
+//            row[1] = packList.get(i).getQuantity();
+//            Icon icon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
+//            row[2] = icon;
+//            model.addRow(row);
+//        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -211,9 +224,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         txtTreatment = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        lblCapacity4 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        treatmentList = new javax.swing.JList<>();
         jLabel9 = new javax.swing.JLabel();
         radio1 = new javax.swing.JRadioButton();
         radio2 = new javax.swing.JRadioButton();
@@ -233,7 +243,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EDIT USER DETAIL");
+        jLabel1.setText("ADD USER");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txt.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -380,17 +390,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("No ID:");
 
-        lblCapacity4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        lblCapacity4.setForeground(new java.awt.Color(255, 255, 255));
-        lblCapacity4.setText("Treament Record");
-
-        treatmentList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(treatmentList);
-
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Status:");
@@ -433,20 +432,14 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(122, 122, 122)
-                                        .addComponent(lblCapacity4)
-                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -464,22 +457,20 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(txtID)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane3))
                             .addComponent(txtTreatment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(radio1)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio2)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio3)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(radio1)
+                                        .addGap(14, 14, 14)
+                                        .addComponent(radio2)
+                                        .addGap(14, 14, 14)
+                                        .addComponent(radio3)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2))
                         .addGap(20, 20, 20))))
         );
 
@@ -513,31 +504,25 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblCapacity4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(radio1)
-                            .addComponent(radio2)
-                            .addComponent(radio3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblCapacity3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(radio1)
+                    .addComponent(radio2)
+                    .addComponent(radio3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCapacity3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -711,7 +696,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     public static void main(String id) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Manager_User_Detail(id).setVisible(true);
+                new Manager_User_Add(id).setVisible(true);
             }
         });
     }
@@ -730,14 +715,11 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCapacity3;
-    private javax.swing.JLabel lblCapacity4;
     private javax.swing.JRadioButton radio1;
     private javax.swing.JRadioButton radio2;
     private javax.swing.JRadioButton radio3;
     private javax.swing.JTable relatedList;
-    private javax.swing.JList<String> treatmentList;
     private javax.swing.JLabel txt;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JComboBox<String> txtCity;
