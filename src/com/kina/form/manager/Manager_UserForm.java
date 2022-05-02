@@ -281,11 +281,8 @@ public class Manager_UserForm extends javax.swing.JPanel {
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
-        String name = model.getValueAt(index, 1).toString();
-        int occupancy = Integer.parseInt(model.getValueAt(index, 2).toString());
-        int capacity = Integer.parseInt(model.getValueAt(index, 3).toString());
 
-        Manager_User_Detail.main(id, name, occupancy, capacity);
+        Manager_User_Detail.main(id);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
