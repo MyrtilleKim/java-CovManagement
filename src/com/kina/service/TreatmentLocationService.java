@@ -25,7 +25,7 @@ public class TreatmentLocationService {
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Location location = null;
+                Location location = LocationService.getByID(rs.getString("AddressID"));
                 res
                         = new TreatmentLocation(
                                 rs.getString("TrmtLocaID"),
@@ -54,8 +54,10 @@ public class TreatmentLocationService {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TreatmentLocation rec = new TreatmentLocation();
+                Location location = LocationService.getByID(rs.getString("AddressID"));
                 rec.setId(rs.getString("TrmtLocaID"));
                 rec.setName(rs.getString("TrmtLocaName"));
+                rec.setAddress(location);
                 rec.setCapacity(rs.getInt("Capacity"));
                 rec.setOccupancy(rs.getInt("Occupancy"));
                 res.add(rec);
@@ -86,13 +88,14 @@ public class TreatmentLocationService {
         Connection connection = null;
         connection = cn.getConnection();
         PreparedStatement ps = null;
-        String query = "insert into TREATMENTLOCATION values(?, ?, ?, ?)";
+        String query = "insert into TREATMENTLOCATION values(?, ?, ?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, ele.getId());
             ps.setString(2, ele.getName());
-            ps.setInt(3, ele.getCapacity());
-            ps.setInt(4, ele.getOccupancy());
+            ps.setString(3, ele.getAddress().getId());
+            ps.setInt(4, ele.getCapacity());
+            ps.setInt(5, ele.getOccupancy());
             ps.executeQuery();
             return true;
         } catch (Exception e) {
@@ -108,12 +111,13 @@ public class TreatmentLocationService {
         PreparedStatement ps = null;
         try {
             String query
-                    = "update TREATMENTLOCATION set TrmtLocaName = ?, Capacity = ?, Occupancy = ? where TrmtLocaID = ?";
+                    = "update TREATMENTLOCATION set TrmtLocaName = ?,AddressID = ?, Capacity = ?, Occupancy = ? where TrmtLocaID = ?";
             ps = connection.prepareStatement(query);
             ps.setString(1, ele.getName());
-            ps.setInt(2, ele.getCapacity());
-            ps.setInt(3, ele.getOccupancy());
-            ps.setString(4, ele.getId());
+            ps.setString(2, ele.getAddress().getId());
+            ps.setInt(3, ele.getCapacity());
+            ps.setInt(4, ele.getOccupancy());
+            ps.setString(5, ele.getId());
             ps.execute();
             return true;
         } catch (Exception e) {

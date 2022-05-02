@@ -39,9 +39,6 @@ import javax.swing.table.TableModel;
 public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     String id;
-    String name;
-    String quantity;
-   
 
     public Manager_Pack_Detail() {
         init();
@@ -366,16 +363,16 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         //if has unsave data: save
-
-//        int ca = (int) boxCapacity.getValue();
-//        int oc = (int) boxOccupancy.getValue();
-//        String na = txtTreamentName.getText();
-
-//        String addressId = "DC0005";
-//        Location location = new Location(addressId, "a", "a", "a", "a");
-//        TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
-//        TreatmentLocationService.updOne(treatmentLocation);
-
+//        if (hasUnsaveData()) {
+//            int ca = (int) boxCapacity.getValue();
+//            int oc = (int) boxOccupancy.getValue();
+//            String na = txtTreamentName.getText();
+//        
+//            String addressId = "DC0005";
+//            Location location = new Location(addressId, "a", "a", "a", "a");
+//            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
+//            TreatmentLocationService.updOne(treatmentLocation);
+//        }
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -388,7 +385,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         JLabel del = new JLabel();
         ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
         del.setIcon(delIcon);
-        model.addRow(new Object[]{"", "", del});
+        model.addRow(new Object[]{"Column 2", "Column 2", del});
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void handleClosing() {
