@@ -43,7 +43,7 @@ public class TreatmentRecord {
     @Override
     public String toString() {
         return 
-            "Timestamp: " + getRecTimestamp() + ": " +
+            "- " + getRecTimestamp() + ": " +
             "TreatmentLocation: " + getTrmtLoca() +
             ", Status: F" + getStatus();
     }

@@ -40,6 +40,35 @@ public class TreatmentLocationService {
         }
         return res;
     }
+    
+    public static TreatmentLocation getByName(String name) {
+        TreatmentLocation res = null;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String query = "SELECT * FROM TREATMENTLOCATION WHERE TrmtLocaName = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Location location = null;
+                res
+                        = new TreatmentLocation(
+                                rs.getString("TrmtLocaID"),
+                                rs.getString("TrmtLocaName"),
+                                location,
+                                rs.getInt("Capacity"),
+                                rs.getInt("Occupancy")
+                        );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 
     public static List<TreatmentLocation> getAll() {
         List<TreatmentLocation> res = new ArrayList<TreatmentLocation>();
@@ -144,4 +173,6 @@ public class TreatmentLocationService {
         }
         return false;
     }
+    
+    
 }
