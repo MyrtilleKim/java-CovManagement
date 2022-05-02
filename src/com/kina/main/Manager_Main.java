@@ -6,6 +6,7 @@ import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_TreatmentForm;
 import com.kina.form.admin.Admin_ManagerForm;
+import com.kina.form.manager.Manager_Dashboard;
 import com.kina.form.manager.Manager_PackForm;
 import com.kina.form.manager.Manager_ProductForm;
 import com.kina.form.manager.Manager_UserForm;
@@ -84,7 +85,7 @@ public class Manager_Main extends javax.swing.JFrame {
                 System.out.println("Menu Index : " + menuIndex);
                 switch (menuIndex) {
                     case 0:
-                        main.showForm(new Admin_ManagerForm());
+                        main.showForm(new Manager_Dashboard());
                         break;
                     case 1:
                         main.showForm(new Manager_UserForm());
@@ -103,7 +104,7 @@ public class Manager_Main extends javax.swing.JFrame {
         );
         menu.initMenuItem();
 
-//        main.showForm(new Admin_HomeForm());
+        main.showForm(new Manager_Dashboard());
     }
 
     @SuppressWarnings("unchecked")
