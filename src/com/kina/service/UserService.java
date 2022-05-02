@@ -18,7 +18,7 @@ public class UserService {
         PreparedStatement ps = null;
         try {
             connection = cn.getConnection();
-            String query = "update STUDENT set UserStatus = ? where UserID = ?";
+            String query = "update USERS set UserStatus = ? where UserID = ?";
             ps = connection.prepareStatement(query);
             ps.setInt(1, user.getStatus());
             ps.setString(2, user.getId());
@@ -177,6 +177,42 @@ public class UserService {
         return res;
     }
 
+    public static String getUserID(String id) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        String result = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM USERS where NoID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getString("UserID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+    
     public static Boolean addOne(User user) {
         connectDB cn = new connectDB();
         Connection connection = null;

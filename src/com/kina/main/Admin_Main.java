@@ -5,7 +5,7 @@ import com.kina.component.menu.Admin_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_TreatmentForm;
-import com.kina.form.admin.Admin_ManagerForm;
+import com.kina.form.admin.Admin_AccountForm;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,7 +45,7 @@ public class Admin_Main extends javax.swing.JFrame {
             public void menuSelected(int menuIndex) {
                 System.out.println("Menu Index : " + menuIndex);
                 if (menuIndex == 0) {
-                    main.showForm(new Admin_ManagerForm());
+                    main.showForm(new Admin_AccountForm());
                 } else {
                     main.showForm(new Admin_TreatmentForm());
                 }
@@ -94,7 +94,7 @@ public class Admin_Main extends javax.swing.JFrame {
 
         menu.initMenuItem();
 
-        main.showForm(new Admin_ManagerForm());
+        main.showForm(new Admin_AccountForm());
     }
 
     @SuppressWarnings("unchecked")

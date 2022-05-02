@@ -5,7 +5,7 @@ import com.kina.component.menu.Manager_Menu;
 import com.kina.event.EventMenuSelected;
 import com.kina.form.MainForm;
 import com.kina.form.admin.Admin_TreatmentForm;
-import com.kina.form.admin.Admin_ManagerForm;
+import com.kina.form.admin.Admin_AccountForm;
 import com.kina.form.manager.Manager_Dashboard;
 import com.kina.form.manager.Manager_PackForm;
 import com.kina.form.manager.Manager_ProductForm;
