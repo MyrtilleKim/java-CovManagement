@@ -377,7 +377,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         JLabel del = new JLabel();
         ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
         del.setIcon(delIcon);
-        model.addRow(new Object[]{"Column 2", "Column 2", del});
+        model.addRow(new Object[]{"", "", del});
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void handleClosing() {
