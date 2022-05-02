@@ -36,7 +36,7 @@ public class UserService {
         PreparedStatement ps = null;
         try {
             connection = cn.getConnection();
-            String query = "update STUDENT set TrmtLocaID = ? where UserID = ?";
+            String query = "update USERS set TrmtLocaID = ? where UserID = ?";
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getTrmtLoca().getId());
             ps.setString(2, user.getId());

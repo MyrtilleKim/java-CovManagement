@@ -53,6 +53,8 @@ import javax.swing.table.TableModel;
 public class Manager_User_Detail extends javax.swing.JFrame {
 
     String id;
+    String treatment;
+    User user;
 
     public Manager_User_Detail() {
         init();
@@ -126,9 +128,9 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     }
 
     public void initData(String id) {
-
+        this.id = id;
         //Init data
-        User user = UserService.getUserById(id);
+        user = UserService.getUserById(id);
         System.out.println(user.toString());
         txtID.setText(user.getNoID());
         txtName.setText(user.getName());
@@ -141,7 +143,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             int available = location.getCapacity() - location.getOccupancy();
             txtAvailable.setText(Integer.toString(available));
         }
-              
+
         List<User> userList = new ArrayList<User>();
         userList = UserService.getAllRelatedUser(id);
         DefaultTableModel model = (DefaultTableModel) relatedList.getModel();
@@ -173,7 +175,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         }
         
 
-         treatmentList.removeAll();
+        treatmentList.removeAll();
         List<TreatmentRecord> logList = new ArrayList<TreatmentRecord>();
         logList = TreatmentRecordService.getAll(id);
         DefaultListModel listModel = new DefaultListModel();
@@ -429,7 +431,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(246, 246, 246)
+                .addGap(242, 242, 242)
                 .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -497,16 +499,38 @@ public class Manager_User_Detail extends javax.swing.JFrame {
 
     private void txtTreatmentItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_txtTreatmentItemStateChanged
         String location = txtTreatment.getSelectedItem().toString();
-        
+
         TreatmentLocation treatmentlocation = new TreatmentLocation();
         treatmentlocation = TreatmentLocationService.getByName(location);
-        
+
         int available = treatmentlocation.getCapacity() - treatmentlocation.getOccupancy();
         txtAvailable.setText(Integer.toString(available));
     }//GEN-LAST:event_txtTreatmentItemStateChanged
 
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        // TODO add your handling code here:
+
+//        String treatmentID = "DC0005";
+//        Location location = new Location(addressId, "a", "a", "a", "a");
+//        TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
+        String treatmentName = txtTreatment.getSelectedItem().toString();
+        TreatmentLocation location = TreatmentLocationService.getByName(treatmentName);
+        int available = location.getCapacity() - location.getOccupancy();
+        if (available == 0) {
+            JOptionPane.showMessageDialog(null, "This treament location is full! Please try another");
+        }
+        else {
+            //update user
+        user.setTrmtLoca(location);
+        if (UserService.UpdTreatmentLocation(user)) {
+            System.out.println("Update treament location id");
+        }
+        
+        //update location
+
+        dispose();
+        }
+
+        
     }//GEN-LAST:event_btnSave1ActionPerformed
 
     private void handleClosing() {
@@ -552,7 +576,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     private boolean hasUnsaveData() {
 ////        int ca = (int) boxCapacity.getValue();
 ////        int oc = (int) boxOccupancy.getValue();
-////        String na = txtTreamentName.getText();
+//        String na = txtTreatment.getSelectedItem().toString();
 //
 //        if (ca != this.capacity || oc != this.occupancy || !na.equals(this.name)) {
 //                    System.out.println(ca);

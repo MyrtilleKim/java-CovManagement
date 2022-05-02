@@ -21,6 +21,7 @@ public class Manager_Dashboard extends javax.swing.JPanel {
     
     private void init() {
         //Status
+        prgF0.setValue(100);
         prgF0.start();
         prgF1.start();
         prgF2.start();
