@@ -30,7 +30,7 @@ public class Admin_Main extends javax.swing.JFrame {
     }
 
     private void init() {
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         bg.setLayout(layout);
 

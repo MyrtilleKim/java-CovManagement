@@ -15,21 +15,18 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Admin_Treatment_Detail extends javax.swing.JFrame {
+public class Admin_Treatment_Add extends javax.swing.JFrame {
     String id;
-    String name;
-    int occupancy;
-    int capacity;
 
-    public Admin_Treatment_Detail() {
+    public Admin_Treatment_Add() {
         init();
         initComponents();
     }
 
-    public Admin_Treatment_Detail(String id, String name, int occupancy, int capacity) {
+    public Admin_Treatment_Add(String id) {
         init();
         initComponents();
-        initData(id, name, occupancy, capacity);
+        initData(id);
     }
 
     public void init() {
@@ -46,14 +43,8 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         setContentPane(panel);
     }
 
-    public void initData(String id, String name, int occupancy, int capacity) {
-        txtTreamentName.setText(name);
-        boxOccupancy.setValue(occupancy);
-        boxCapacity.setValue(capacity);
+    public void initData(String id) {
         this.id = id;
-        this.name = name;
-        this.occupancy = occupancy;
-        this.capacity = capacity;
     }
 
     @SuppressWarnings("unchecked")
@@ -83,7 +74,7 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EDIT TREAMENT LOCATION");
+        jLabel1.setText("ADD TREAMENT LOCATION");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblCapacity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -126,27 +117,26 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTreamentName, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(boxCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)
+                        .addComponent(lblOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(boxOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(183, 183, 183))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTreamentName, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(boxCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56)
-                                .addComponent(lblOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(boxOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,7 +155,7 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
                         .addComponent(boxOccupancy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -188,8 +178,8 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         
             String addressId = "DC0005";
             Location location = new Location(addressId, "a", "a", "a", "a");
-            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
-            TreatmentLocationService.updOne(treatmentLocation);
+            TreatmentLocation treatmentLocation = new TreatmentLocation(this.id, na, location, oc, ca);
+            TreatmentLocationService.addOne(treatmentLocation);
         }
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -239,7 +229,7 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         int oc = (int) boxOccupancy.getValue();
         String na = txtTreamentName.getText();
 
-        if (ca != this.capacity || oc != this.occupancy || !na.equals(this.name)) {
+        if (ca != 0 || oc != 0 || !na.isBlank()) {
                     System.out.println(ca);
 
             return true;
@@ -247,10 +237,10 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
         return false;
     }
 
-    public static void main(String id, String name, int occupancy, int capacity) {
+    public static void main(String id) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_Treatment_Detail(id, name, occupancy, capacity).setVisible(true);
+                new Admin_Treatment_Add(id).setVisible(true);
             }
         });
     }

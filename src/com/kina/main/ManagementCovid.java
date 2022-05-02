@@ -13,8 +13,8 @@ public class ManagementCovid {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
 //            LoginForm.main();
-//            Admin_Main.main();
-            Manager_Main.main();
+            Admin_Main.main();
+//            Manager_Main.main();
 
             
             
