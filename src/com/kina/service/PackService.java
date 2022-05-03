@@ -59,14 +59,30 @@ public class PackService {
         return res;
     }
 
-    public static Boolean delOne(Pack ele) {
+    public static Boolean delPackDetail(String id) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String query = "delete from Pack_detail where PackID = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static Boolean delOne(String id) {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
         String query = "delete from Pack where PackID = ?";
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, ele.getId());
+            ps.setString(1, id);
             ps.execute();
             return true;
         } catch (Exception e) {
@@ -159,10 +175,14 @@ public class PackService {
         PreparedStatement ps = null;
         try {
             String query
-                    = "update PACK set LimitedQuantity = ? where PackID = ?";
+                    = "update PACK set PackName = ?, Price = ?, LimitedQuantity = ?, Deadline = ? where PackID = ?";
             ps = connection.prepareStatement(query);
-            ps.setInt(1, pack.getLimitQuantity());
-            ps.setString(2, pack.getId());
+            
+            ps.setString(1, pack.getName());
+            ps.setInt(2, pack.getPrice());
+            ps.setInt(3, pack.getLimitQuantity());
+            ps.setDate(4, pack.getDateExp());
+            ps.setString(5, pack.getId());
             ps.execute();
             return true;
         } catch (Exception e) {
@@ -204,11 +224,6 @@ public class PackService {
             ps.setInt(4, pack.getLimitQuantity());
             ps.setDate(5, pack.getDateExp());
 
-            //Update pack detail
-            List<PackDetail> packDetail = pack.getProList();
-            for (int i = 0; i < packDetail.size(); i++) {
-                PackService.addPackDetail(packDetail.get(i));
-            }
             ps.execute();
             return true;
         } catch (Exception e) {

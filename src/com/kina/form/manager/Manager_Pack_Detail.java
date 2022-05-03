@@ -4,8 +4,10 @@ import com.kina.form.admin.*;
 import com.kina.model.Location;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
+import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
 import com.kina.service.PackService;
+import com.kina.service.ProductService;
 import com.kina.service.TreatmentLocationService;
 import java.awt.Color;
 import java.awt.Component;
@@ -16,12 +18,16 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,7 +73,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     public void initData(String id) {
         Pack pack = PackService.getPackById(id);
-        System.out.println(pack.toString());
+//        System.out.println(pack.toString());
 //        txtProduct.setText(name);
 //        txtUnit.setText(unit);
 //        boxOccupancy.setValue(price);
@@ -80,10 +86,19 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
         List<PackDetail> packList = pack.getProList();
         DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
-        
+        List<Product> productList = ProductService.getAllProduct();
+        String[] prodName = new String[productList.size()];
+        for (int i = 0; i < productList.size(); i++) {
+            prodName[i] = (productList.get(i).getName());
+        }
+        JComboBox c = new JComboBox(prodName);
+
         tblProd.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
         tblProd.getColumn("Delete").setCellEditor(new ButtonCellEditor());
-        
+        tblProd.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(c));
+
+        //Add jspinner in table cell
+        tblProd.getColumnModel().getColumn(1).setCellEditor(new Manager_Pack_Add.MySpinnerEditor());
         Object[] row = new Object[5];
 
         for (int i = 0; i < packList.size(); i++) {
@@ -109,7 +124,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txt = new javax.swing.JLabel();
-        btnSave = new javax.swing.JButton();
+        btnDel = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         txtPack = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -160,13 +175,13 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         txt.setForeground(new java.awt.Color(255, 255, 255));
         txt.setText("Limited Quantity:");
 
-        btnSave.setBackground(new java.awt.Color(255, 0, 0));
-        btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("DELETE");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnDel.setBackground(new java.awt.Color(255, 0, 0));
+        btnDel.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        btnDel.setForeground(new java.awt.Color(255, 255, 255));
+        btnDel.setText("DELETE");
+        btnDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnDelActionPerformed(evt);
             }
         });
 
@@ -194,8 +209,12 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         lblCapacity1.setForeground(new java.awt.Color(255, 255, 255));
         lblCapacity1.setText("Price");
 
+        txtPrice.setEditable(false);
         txtPrice.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtPrice.setText("jTextField1");
+        txtPrice.setForeground(new java.awt.Color(255, 255, 255));
+        txtPrice.setText("0");
+        txtPrice.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        txtPrice.setOpaque(false);
 
         lblCapacity2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity2.setForeground(new java.awt.Color(255, 255, 255));
@@ -304,11 +323,14 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGap(151, 151, 151)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(94, 94, 94)
                 .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDel, btnSave1});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -345,10 +367,12 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnDel, btnSave1});
 
         pack();
         setLocationRelativeTo(null);
@@ -361,23 +385,72 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         handleClosing();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //if has unsave data: save
-//        if (hasUnsaveData()) {
-//            int ca = (int) boxCapacity.getValue();
-//            int oc = (int) boxOccupancy.getValue();
-//            String na = txtTreamentName.getText();
-//        
-//            String addressId = "DC0005";
-//            Location location = new Location(addressId, "a", "a", "a", "a");
-//            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
-//            TreatmentLocationService.updOne(treatmentLocation);
-//        }
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
+        PackService.delPackDetail(txtID.getText());
+        PackService.delOne(txtID.getText());
+        JOptionPane.showMessageDialog(new JFrame(), "Pack deleted successfully");
         dispose();
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        // TODO add your handling code here:
+        //Create pack 
+        int price = 0;
+        Pack pack = new Pack();
+        pack.setId(txtID.getText());
+        pack.setName(txtPack.getText());
+        pack.setLimitQuantity((int) txtQuantity.getValue());
+        Date deadline = txtDeadline.getDate();
+        java.sql.Date sqlPackageDate
+                = new java.sql.Date(deadline.getTime());
+        pack.setDateExp(sqlPackageDate);
+//        pack.setPrice(Integer.parseInt(txtPrice.getText()));
+
+        //Get prod list 
+        List<PackDetail> packList = new ArrayList<PackDetail>();
+
+        for (int i = 0; i < tblProd.getRowCount(); i++) {
+            PackDetail packDetail = new PackDetail();
+            packDetail.setPackId(txtID.getText());
+
+            Object prodObj = tblProd.getModel().getValueAt(i, 0);
+            String prodName = prodObj.toString();
+            if (prodName.equals("Click to choose product")) {
+                JOptionPane.showConfirmDialog(null, "Please choose product name", "Warning", JOptionPane.CANCEL_OPTION);
+            } else {
+                //Find id product
+                Product product = ProductService.getProductByName(prodName);
+                Product prod = new Product();
+                prod.setId(product.getId());
+                packDetail.setProduct(prod);
+
+                //Add quantity
+                Object prodQuantity = tblProd.getModel().getValueAt(i, 1);
+                int quantityProd = Integer.parseInt(prodQuantity.toString());
+                price += product.getPrice() * quantityProd;
+                packDetail.setQuantity(quantityProd);
+            }
+            packList.add(packDetail);
+        }
+
+        pack.setPackList(packList);
+        pack.setPrice(price);
+
+//        System.out.println(pack.toString());
+
+        if (PackService.updatePack(pack)) {
+            //Delete old pack detail
+            PackService.delPackDetail(txtID.getText());
+            //Update pack detail
+            List<PackDetail> packDetail = pack.getProList();
+            for (int i = 0; i < packDetail.size(); i++) {
+                PackService.addPackDetail(packDetail.get(i));
+            }
+
+            JOptionPane.showConfirmDialog(null, "Pack is updated succesfull", "Successful", JOptionPane.OK_OPTION);
+            dispose();
+        } else {
+            JOptionPane.showConfirmDialog(null, "Please confirm there is no empty field", "Warning", JOptionPane.CANCEL_OPTION);
+        }
     }//GEN-LAST:event_btnSave1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -385,7 +458,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
         JLabel del = new JLabel();
         ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
         del.setIcon(delIcon);
-        model.addRow(new Object[]{"Column 2", "Column 2", del});
+        model.addRow(new Object[]{"Click to choose product", 1, del});
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void handleClosing() {
@@ -451,7 +524,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnDel;
     private javax.swing.JButton btnSave1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -473,6 +546,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public static class ButtonCellRenderer extends JButton implements TableCellRenderer {
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 //            if (value != null) {
@@ -494,7 +568,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
             return this;
         }
     }
-    
+
     public static class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
 
         private JButton editor;
@@ -546,7 +620,7 @@ public class Manager_Pack_Detail extends javax.swing.JFrame {
                 editor.setForeground(table.getForeground());
                 editor.setBackground(UIManager.getColor("Button.background"));
             }
-            
+
             return editor;
         }
     }

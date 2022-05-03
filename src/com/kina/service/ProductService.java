@@ -41,26 +41,30 @@ public class ProductService {
         return res;
     }
 
-    public static String getByName(String name) {
-    String res = null;
-    connectDB cn = new connectDB();
-    Connection connection = cn.getConnection();
-    PreparedStatement ps = null;
-    try {
-        String query = "SELECT * FROM PRODUCT WHERE ProductName = ?";
-        ps = connection.prepareStatement(query);
-        ps.setString(1, name);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            res = rs.getString("ProductID");
+    public static Product getProductByName(String name) {
+        Product res = null;
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query = "SELECT * FROM PRODUCT WHERE ProductName = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res = new Product();
+                res.setId(rs.getString("ProductID"));
+                res.setName(rs.getString("ProductName"));
+                res.setUnit(rs.getString("Unit"));
+                res.setPrice(rs.getInt("Price"));
+                res.setImage(rs.getString("ProductImage"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return res;
     }
-    return res;
-}
 
-    
     public static List<Product> getAllProduct() {
         List<Product> res = new ArrayList<Product>();
         connectDB cn = new connectDB();
@@ -111,7 +115,7 @@ public class ProductService {
 
         try {
             String sql = "SELECT * FROM PACK_DETAIL WHERE PackID = ?";
-             ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -139,7 +143,7 @@ public class ProductService {
         }
         return res;
     }
-    
+
     public static Image getImage(String id) {
         Image res = null;
 
