@@ -122,7 +122,7 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProd = new javax.swing.JTable();
-        btnSave1 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -195,13 +195,13 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
             tblProd.getColumnModel().getColumn(2).setMaxWidth(80);
         }
 
-        btnSave1.setBackground(new java.awt.Color(0, 255, 51));
-        btnSave1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave1.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave1.setText("ADD");
-        btnSave1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setBackground(new java.awt.Color(0, 255, 51));
+        btnAdd.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSave1ActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -253,7 +253,7 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGap(223, 223, 223)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -277,7 +277,7 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 24, Short.MAX_VALUE)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -292,18 +292,18 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
         handleClosing();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Pack pack = new Pack();
         pack.setId(this.id);
         int buy = (Integer) jSpinner1.getValue();
-        pack.setLimitQuantity(Integer.parseInt(this.quantity) - buy);        
+        pack.setLimitQuantity(buy);        
         pack.setName(txtPack.getText());
         pack.setPrice(Integer.parseInt(txtID.getText()));
         
         //add to cart 
         cartItem.add(pack);       
         dispose();
-    }//GEN-LAST:event_btnSave1ActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -367,8 +367,8 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnSave1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

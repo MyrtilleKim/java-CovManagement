@@ -50,6 +50,7 @@ public class User_Menu extends javax.swing.JPanel {
     public void initMenuItem() {
         addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\user.png"), "Personal Information"));
         addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\pack.png"), "Shopping"));
+        addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\pack.png"), "Cart Detail"));
         addMenu(new ModelMenu(new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\user.png"), "Receipt Management"));
     }
 

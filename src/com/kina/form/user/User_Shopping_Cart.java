@@ -116,13 +116,19 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object[] row = new Object[5];
 
+        int totalMoney = 0;
         for (int i = 0; i < packList.size(); i++) {
             row[0] = packList.get(i).getId();
             row[1] = packList.get(i).getName();
             row[2] = packList.get(i).getLimitQuantity();
             row[3] = packList.get(i).getPrice();
+            
+            int total = packList.get(i).getLimitQuantity() * packList.get(i).getPrice();
+            row[4] = total;
+            totalMoney += total;
             model.addRow(row);
         }
+        txtTotal.setText("Total = " + totalMoney);
 //        TableRowFilterSupport.forTable(jTable1).searchable(true).apply();
     }
 
@@ -134,11 +140,10 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         jTable1 = new javax.swing.JTable();
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnRefresh = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        txtTotal = new javax.swing.JLabel();
 
         jTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -184,13 +189,6 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel1.setText("Cart Information");
 
-        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/kina/icon/refresh.png"))); // NOI18N
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
@@ -198,18 +196,14 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             .addGroup(headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(455, Short.MAX_VALUE))
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRefresh)
-                    .addComponent(jLabel1))
-                .addContainerGap())
+                .addComponent(jLabel1)
+                .addGap(17, 17, 17))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -238,8 +232,8 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(397, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +252,8 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setText("Total:");
+        txtTotal.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        txtTotal.setText("Total:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -270,9 +265,11 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(244, 244, 244)
                 .addComponent(btnAdd)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(70, 70, 70))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtTotal)
+                .addGap(95, 95, 95))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,11 +278,11 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)))
+                .addComponent(txtTotal)
+                .addGap(9, 9, 9)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -300,23 +297,6 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         User_Shopping_Detail.main(id, name, quanti, price);
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        initTableData();
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
-
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
-        txtSearch.setText("");
-    }//GEN-LAST:event_txtSearchFocusGained
-
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
-    }//GEN-LAST:event_txtSearchFocusLost
-
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         int tableSize = jTable1.getRowCount() + 1;
         String id = "SP" + String.format("%04d", tableSize);
@@ -324,17 +304,28 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         Manager_Product_Add.main(id);
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JLabel txtTotal;
     // End of variables declaration//GEN-END:variables
 
     public static class ButtonCellRenderer extends JButton implements TableCellRenderer {
