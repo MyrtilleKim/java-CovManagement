@@ -182,24 +182,20 @@ public class LoginForm extends javax.swing.JFrame {
             Connection conn = null;
         try {
             conn = cn.getConnection();
-            String sql = "SELECT * FROM ACCOUNT WHERE NoID= '" + txtUser.getText() + "'";
+            String sql = "SELECT * FROM ACCOUNT WHERE NoID= ?";
             PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString (1, username);
             ResultSet rs = pst.executeQuery();
-            
             if (rs.next()) {
-//                Main m = new Main();
-//                m.show();
-//                    String password = rs.getString("Pass");
-                    String hash = BCrypt.hashpw(pwdUser.getText(), BCrypt.gensalt(13));
-                    System.out.println("BCrypt hash: " + hash);
-                    boolean valuate = BCrypt.checkpw(password, hash);
-                    System.out.println(pwdUser.getText());
-
+                Boolean valuate = BCrypt.checkpw(password, rs.getString("Pass"));
+                if (valuate){
                     System.out.println(rs.getString("Roles"));
-                this.hide();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Wrong password !!!");
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Sai");
-            }
+                JOptionPane.showMessageDialog(this, "ID number is not exist !!!");
+            }            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.toString());
         }
