@@ -8,7 +8,7 @@ package com.kina.model;
  *
  * @author Admin
  */
-class ReceiptDetail {
+public class ReceiptDetail {
 
     public ReceiptDetail() {
     }

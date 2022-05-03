@@ -15,7 +15,7 @@ public class ManagementCovid {
 //            LoginForm.main();
 //            Admin_Main.main();
 //            Manager_Main.main();
-              User_Main.main("010285900121");
+              User_Main.main("BN0001");
 
             
             

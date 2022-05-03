@@ -2,10 +2,15 @@ package com.kina.form.user;
 
 import com.kina.form.manager.*;
 import com.formdev.flatlaf.util.StringUtils;
+import com.kina.main.User_Main;
 import com.kina.model.Pack;
+import com.kina.model.PackDetail;
 import com.kina.model.Product;
+import com.kina.model.Receipt;
+import com.kina.model.ReceiptDetail;
 import com.kina.service.PackService;
 import com.kina.service.ProductService;
+import com.kina.service.ReceiptService;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -15,6 +20,7 @@ import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
@@ -221,7 +227,56 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
         //newCart
         
         //create recepit
+        Receipt receipt = new Receipt();
+        int countReceipt = ReceiptService.countRecepit() + 1;
+        String idReceipt = "RC" + String.format("%04d", countReceipt);
+
+        receipt.setId(idReceipt);
+        receipt.setUserID(User_Main.userID);
+        java.sql.Date date=new java.sql.Date(System.currentTimeMillis());  
+        receipt.setOrderDate(date);
         
+        String money = txtTotal.getText().substring(8);
+        receipt.setTotalAmount(Integer.parseInt(money));
+        receipt.setStatus(Boolean.FALSE);
+        
+        List<ReceiptDetail> rcList = new ArrayList<ReceiptDetail>();
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            ReceiptDetail rcDetail = new ReceiptDetail();
+            Pack pack = new Pack();
+            Object packObj = jTable1.getModel().getValueAt(i, 0);
+            String packID = packObj.toString();
+            pack.setId(packID);
+            rcDetail.setPack(pack);
+            
+            Object quanObj = jTable1.getModel().getValueAt(i, 2);
+            String quan = quanObj.toString();
+            rcDetail.setQuantity(Integer.parseInt(quan));
+
+            rcList.add(rcDetail);
+        }
+
+        receipt.setPackList(rcList);
+
+        //add new receipt
+        if (ReceiptService.addReceipt(receipt)) {
+            //update receipt detail
+            for (int i = 0; i < rcList.size(); i++) {
+                ReceiptService.addReceiptDetail(receipt.getId(), rcList.get(i));
+            }
+            
+            //update pack quantity
+            
+
+        } else {
+            JOptionPane.showConfirmDialog(null, "Please confirm there is no empty field", "Warning", JOptionPane.CANCEL_OPTION);
+
+        }
+        
+        JOptionPane.showConfirmDialog(null, "Your order is success. Thank you for shopping with us", "Successful", JOptionPane.CANCEL_OPTION);
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        User_Shopping_Detail.cartItem.clear();       
     }//GEN-LAST:event_btnBuyActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
