@@ -45,6 +45,7 @@ import javax.swing.table.TableModel;
 public class User_Shopping_Detail extends javax.swing.JFrame {
 
     String id;
+    String quantity;
     public static ArrayList<Pack> cartItem = new ArrayList();
     
     public User_Shopping_Detail() {
@@ -105,6 +106,7 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
         }
 
         this.id = id;
+        this.quantity = quantity;
         
         SpinnerNumberModel m_numberSpinnerModel = new SpinnerNumberModel(0, 0, Integer.parseInt(quantity), 1);
         jSpinner1.setModel(m_numberSpinnerModel);      
@@ -291,8 +293,15 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
+        Pack pack = new Pack();
+        pack.setId(this.id);
+        int buy = (Integer) jSpinner1.getValue();
+        pack.setLimitQuantity(Integer.parseInt(this.quantity) - buy);        
+        pack.setName(txtPack.getText());
+        pack.setPrice(Integer.parseInt(txtID.getText()));
         
-        
+        //add to cart 
+        cartItem.add(pack);       
         dispose();
     }//GEN-LAST:event_btnSave1ActionPerformed
 

@@ -152,4 +152,22 @@ public class PackService {
         return res;
     }
    
+    public static boolean updatePack(Pack pack) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query
+                    = "update PACK set LimitedQuantity = ? where PackID = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, pack.getLimitQuantity());
+            ps.setString(2, pack.getId());
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+     }
 }

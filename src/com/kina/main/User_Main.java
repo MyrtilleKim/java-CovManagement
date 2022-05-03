@@ -26,8 +26,11 @@ public class User_Main extends javax.swing.JFrame {
     private Header header;
     private MainForm main;
     private Animator animator;
+    
+    public static String userID;
 
-    public User_Main() {
+    public User_Main(String id) {
+        this.userID = id;
         initComponents();
         init();
     }
@@ -149,11 +152,11 @@ public class User_Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main() {
+    public static void main(String id) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new User_Main().setVisible(true);
+                new User_Main(id).setVisible(true);
             }
         });
     }
