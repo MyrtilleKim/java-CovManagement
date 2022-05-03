@@ -1,7 +1,7 @@
 package com.kina.model;
 
 public class PackDetail {
-    private int packId;
+    private String packId;
     private Product product;
     private int quantity;
 
@@ -9,18 +9,18 @@ public class PackDetail {
     public PackDetail() {
     }
 
-    public PackDetail(int packId, Product product, int quantity) {
+    public PackDetail(String packId, Product product, int quantity) {
         this.packId = packId;
         this.product = product;
         this.quantity = quantity;
     }
 
 
-    public int getPackId() {
+    public String getPackId() {
         return packId;
     }
 
-    public void setPackId(int packId) {
+    public void setPackId(String packId) {
         this.packId = packId;
     }
 

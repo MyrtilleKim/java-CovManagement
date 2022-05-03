@@ -4,6 +4,7 @@ import com.kina.model.Pack;
 import com.kina.model.PackDetail;
 import com.kina.model.Product;
 import com.kina.sql.connectDB;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +36,6 @@ public class PackService {
                 // private List<PackDetail> proList;
 //                List<PackDetail> packDetailList = getAllPackDetail(rec.getId());
 //                rec.setProList(packDetailList);
-
                 res.add(rec);
             }
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class PackService {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
-        
+
         try {
             String query = "SELECT * FROM PACK_DETAIL WHERE PackID = ?";
             ps = connection.prepareStatement(query);
@@ -98,13 +98,13 @@ public class PackService {
         }
         return res;
     }
-    
+
     public static Pack getPackById(String id) {
         Pack res = null;
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
         PreparedStatement ps = null;
-        
+
         try {
             String query = "SELECT * FROM PACK WHERE PackID = ?";
             ps = connection.prepareStatement(query);
@@ -112,13 +112,13 @@ public class PackService {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 res = new Pack();
-                                
+
                 res.setId(rs.getString("PackID"));
                 res.setName(rs.getString("PackName"));
                 res.setPrice(rs.getInt("Price"));
                 res.setLimitQuantity(rs.getInt("LimitedQuantity"));
                 res.setDateExp(rs.getDate("Deadline"));
-                
+
                 List<PackDetail> packList = PackService.getAllPackDetail(id);
                 res.setPackList(packList);
             }
@@ -140,7 +140,7 @@ public class PackService {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                PackDetail rec = new PackDetail();                
+                PackDetail rec = new PackDetail();
                 Product prod = ProductService.getByID(rs.getString("ProductID"));
                 rec.setProduct(prod);
                 rec.setQuantity(rs.getInt("Quantity"));
@@ -151,7 +151,7 @@ public class PackService {
         }
         return res;
     }
-   
+
     public static boolean updatePack(Pack pack) {
         connectDB cn = new connectDB();
         Connection connection = null;
@@ -169,5 +169,51 @@ public class PackService {
             e.printStackTrace();
         }
         return false;
-     }
+    }
+
+    public static void addPackDetail(PackDetail packDetail) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "insert into pack_detail values(?, ?, ?)";
+            ps = connection.prepareStatement(query);
+
+            ps.setString(1, packDetail.getPackId());
+            ps.setString(2, packDetail.getProduct().getId());
+            ps.setInt(3, packDetail.getQuantity());
+
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean addPack(Pack pack) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "insert into Pack values(?, ?, ?, ?, ?)";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, pack.getId());
+            ps.setString(2, pack.getName());
+            ps.setInt(3, pack.getPrice());
+            ps.setInt(4, pack.getLimitQuantity());
+            ps.setDate(5, pack.getDateExp());
+
+            //Update pack detail
+            List<PackDetail> packDetail = pack.getProList();
+            for (int i = 0; i < packDetail.size(); i++) {
+                PackService.addPackDetail(packDetail.get(i));
+            }
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

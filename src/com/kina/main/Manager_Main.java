@@ -104,7 +104,7 @@ public class Manager_Main extends javax.swing.JFrame {
         );
         menu.initMenuItem();
 
-        main.showForm(new Manager_Dashboard());
+        main.showForm(new Manager_PackForm());
     }
 
     @SuppressWarnings("unchecked")

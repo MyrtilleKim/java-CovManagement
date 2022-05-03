@@ -1,14 +1,10 @@
 package com.kina.form.manager;
 
-import com.kina.form.admin.*;
-import com.kina.model.Location;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
 import com.kina.model.Product;
-import com.kina.model.TreatmentLocation;
 import com.kina.service.PackService;
 import com.kina.service.ProductService;
-import com.kina.service.TreatmentLocationService;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -17,27 +13,30 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 public class Manager_Pack_Add extends javax.swing.JFrame {
@@ -70,22 +69,27 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
     }
 
     public void initData(String id) {
-//        txtProduct.setText(name);
+        txtID.setText(id);
 //        txtUnit.setText(unit);
 //        boxOccupancy.setValue(price);
-    
+
         DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
         List<Product> productList = ProductService.getAllProduct();
         String[] prodName = new String[productList.size()];
-        for(int i = 0; i < productList.size(); i++) {
+        for (int i = 0; i < productList.size(); i++) {
             prodName[i] = (productList.get(i).getName());
         }
         JComboBox c = new JComboBox(prodName);
-        
+
         tblProd.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
         tblProd.getColumn("Delete").setCellEditor(new ButtonCellEditor());
         tblProd.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(c));
 
+        
+        //Add jspinner in table cell
+        tblProd.getColumnModel().getColumn(1).setCellEditor(new MySpinnerEditor());
+
+        
         this.id = id;
 //        this.name = name;
 //        this.unit = unit;
@@ -101,7 +105,6 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txt = new javax.swing.JLabel();
-        btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         txtPack = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -152,16 +155,6 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         txt.setForeground(new java.awt.Color(255, 255, 255));
         txt.setText("Limited Quantity:");
 
-        btnSave.setBackground(new java.awt.Color(255, 0, 0));
-        btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("DELETE");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
         btnClose.setFont(new java.awt.Font("Century Gothic", 0, 10)); // NOI18N
         btnClose.setText("X");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
@@ -172,9 +165,19 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
 
         txtPack.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         txtPack.setForeground(new java.awt.Color(255, 255, 255));
-        txtPack.setText("Product Name");
+        txtPack.setText("Pack Name");
         txtPack.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtPack.setOpaque(false);
+        txtPack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPackMouseClicked(evt);
+            }
+        });
+        txtPack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPackActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -187,7 +190,22 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         lblCapacity1.setText("Price");
 
         txtPrice.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtPrice.setText("jTextField1");
+        txtPrice.setText("0");
+        txtPrice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPriceMouseClicked(evt);
+            }
+        });
+        txtPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPriceActionPerformed(evt);
+            }
+        });
+        txtPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPriceKeyTyped(evt);
+            }
+        });
 
         lblCapacity2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity2.setForeground(new java.awt.Color(255, 255, 255));
@@ -250,6 +268,11 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         txtID.setText("jTextField1");
         txtID.setBorder(null);
         txtID.setOpaque(false);
+        txtID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtIDMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -295,9 +318,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
                             .addComponent(jScrollPane2))))
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(151, 151, 151)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
+                .addGap(237, 237, 237)
                 .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -335,11 +356,9 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -353,23 +372,54 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         handleClosing();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //if has unsave data: save
-//        if (hasUnsaveData()) {
-//            int ca = (int) boxCapacity.getValue();
-//            int oc = (int) boxOccupancy.getValue();
-//            String na = txtTreamentName.getText();
-//        
-//            String addressId = "DC0005";
-//            Location location = new Location(addressId, "a", "a", "a", "a");
-//            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
-//            TreatmentLocationService.updOne(treatmentLocation);
-//        }
-        dispose();
-    }//GEN-LAST:event_btnSaveActionPerformed
-
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        // TODO add your handling code here:
+        //Create pack 
+        Pack pack = new Pack();
+        pack.setId(txtID.getText());
+        pack.setName(txtPack.getText());
+        pack.setLimitQuantity((int) txtQuantity.getValue());
+        Date deadline = txtDeadline.getDate();
+         java.sql.Date sqlPackageDate
+            = new java.sql.Date(deadline.getTime());
+        pack.setDateExp(sqlPackageDate);
+        pack.setPrice(Integer.parseInt(txtPrice.getText()));
+        
+        //Get prod list 
+        List<PackDetail> packList= new ArrayList<PackDetail>();
+        
+        for (int i = 0; i < tblProd.getRowCount(); i++) {
+            PackDetail packDetail = new PackDetail();
+            packDetail.setPackId(txtID.getText());
+            
+            Object prodObj = tblProd.getModel().getValueAt(i, 0);
+            String prodName = prodObj.toString();
+            if (prodName.equals("Click to choose product")) {
+                JOptionPane.showConfirmDialog(null, "Please choose product name", "Warning", JOptionPane.CANCEL_OPTION);
+            } else {
+                //Find id product
+                String prodID = ProductService.getByName(prodName);
+                Product prod = new Product();
+                prod.setId(prodID);
+                packDetail.setProduct(prod);
+                //Add quantity
+               Object prodQuantity = tblProd.getModel().getValueAt(i, 1);
+               int quantityProd = Integer.parseInt(prodQuantity.toString());
+               packDetail.setQuantity(quantityProd);
+            }
+            packList.add(packDetail);
+        }
+      
+        pack.setPackList(packList);
+        System.out.println(pack.toString());
+
+        if (PackService.addPack(pack)) {
+            JOptionPane.showConfirmDialog(null, "Pack is added succesfull", "Successful", JOptionPane.OK_OPTION);
+            dispose();
+        }
+        else {
+            JOptionPane.showConfirmDialog(null, "Please confirm there is no empty field", "Warning", JOptionPane.CANCEL_OPTION);
+        }
+        
     }//GEN-LAST:event_btnSave1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -377,8 +427,37 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         JLabel del = new JLabel();
         ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
         del.setIcon(delIcon);
-        model.addRow(new Object[]{"Column 2", "Column 2", del});
+        model.addRow(new Object[]{"Click to choose product", 1, del});
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtIDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIDMouseClicked
+    }//GEN-LAST:event_txtIDMouseClicked
+
+    private void txtPackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPackMouseClicked
+        txtPack.setText("");
+    }//GEN-LAST:event_txtPackMouseClicked
+
+    private void txtPackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPackActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPackActionPerformed
+
+    private void txtPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceMouseClicked
+        txtPrice.setText("");
+    }//GEN-LAST:event_txtPriceMouseClicked
+
+    private void txtPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPriceActionPerformed
+        float price;
+        try {
+            Integer.parseInt(txtPrice.getText());
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showConfirmDialog(null, "Please enter numbers only", "Warning", JOptionPane.CANCEL_OPTION);
+        }
+    }//GEN-LAST:event_txtPriceActionPerformed
+
+    private void txtPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceKeyTyped
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -443,7 +522,6 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSave1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -465,6 +543,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public static class ButtonCellRenderer extends JButton implements TableCellRenderer {
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 //            if (value != null) {
@@ -486,7 +565,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
             return this;
         }
     }
-    
+
     public static class ButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
 
         private JButton editor;
@@ -538,8 +617,37 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
                 editor.setForeground(table.getForeground());
                 editor.setBackground(UIManager.getColor("Button.background"));
             }
-            
+
             return editor;
         }
     }
+    
+    public static class MySpinnerEditor extends DefaultCellEditor
+    {
+        JSpinner sp;
+        DefaultEditor defaultEditor;
+        JTextField text;
+        // Initialize the spinner
+        public MySpinnerEditor() {
+            super(new JTextField());
+            SpinnerModel model = new SpinnerNumberModel(1, 1, 100, 1);
+
+            sp = new JSpinner(model);
+            
+            defaultEditor = ((DefaultEditor)sp.getEditor());
+            text = defaultEditor.getTextField();
+        }
+        // Prepare the spinner component and return it
+        public Component getTableCellEditorComponent(JTable table, Object 
+        value, boolean isSelected, int row, int column) 
+        {
+            sp.setValue(value);
+            return sp;
+        }
+        // Returns the current value of the spinners
+        public Object getCellEditorValue() {
+            return sp.getValue();
+        }
+    }
+    
 }

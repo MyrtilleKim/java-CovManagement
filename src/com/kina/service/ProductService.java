@@ -41,6 +41,26 @@ public class ProductService {
         return res;
     }
 
+    public static String getByName(String name) {
+    String res = null;
+    connectDB cn = new connectDB();
+    Connection connection = cn.getConnection();
+    PreparedStatement ps = null;
+    try {
+        String query = "SELECT * FROM PRODUCT WHERE ProductName = ?";
+        ps = connection.prepareStatement(query);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            res = rs.getString("ProductID");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return res;
+}
+
+    
     public static List<Product> getAllProduct() {
         List<Product> res = new ArrayList<Product>();
         connectDB cn = new connectDB();
