@@ -83,6 +83,43 @@ public class ProductService {
         return res;
     }
 
+    public static List<Product> getAllProductByPackId(String id) {
+        List<Product> res = new ArrayList<Product>();
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "SELECT * FROM PACK_DETAIL WHERE PackID = ?";
+             ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product rec = new Product();
+                rec = getByID(rs.getString("ProductID"));
+                res.add(rec);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+    
     public static Image getImage(String id) {
         Image res = null;
 

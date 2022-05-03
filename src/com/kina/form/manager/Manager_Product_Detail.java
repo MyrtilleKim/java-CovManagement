@@ -66,14 +66,11 @@ public class Manager_Product_Detail extends javax.swing.JFrame {
         System.out.println(image);
         //Image
         Image img = ProductService.getImage(id);
-//        System.out.println(img);
 
-//        if (!img.toString()) {
-            Image newImg = img.getScaledInstance(fieldImage.getWidth(), fieldImage.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon icon = new ImageIcon(newImg);
+        Image newImg = img.getScaledInstance(fieldImage.getWidth(), fieldImage.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon icon = new ImageIcon(newImg);
 
-            fieldImage.setIcon(icon);
-//        }
+        fieldImage.setIcon(icon);
         this.id = id;
         this.name = name;
         this.unit = unit;
