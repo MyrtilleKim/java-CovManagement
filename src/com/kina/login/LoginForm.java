@@ -2,6 +2,9 @@
 package com.kina.login;
 
 //import com.kina.main.Main;
+import com.kina.main.Admin_Main;
+import com.kina.main.Manager_Main;
+import com.kina.main.User_Main;
 import com.kina.sql.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -176,7 +179,7 @@ public class LoginForm extends javax.swing.JFrame {
         String username = txtUser.getText();
         String password = String.valueOf(pwdUser.getPassword());
         if (username.equals("") || password.equals("")) {
-            JOptionPane.showMessageDialog(this, "Please Enter your Email & Password", "Error", 1);
+            JOptionPane.showMessageDialog(this, "Please enter your NoID & Password", "Error", 1);
         } else {
             connectDB cn = new connectDB();
             Connection conn = null;
@@ -190,11 +193,27 @@ public class LoginForm extends javax.swing.JFrame {
                 Boolean valuate = BCrypt.checkpw(password, rs.getString("Pass"));
                 if (valuate){
                     System.out.println(rs.getString("Roles"));
+                    switch(rs.getString("Roles")) {
+                        case "1":                     
+                            this.setVisible(false);
+                            Admin_Main.main();
+                            break;
+                        case "2":
+                            this.setVisible(false);
+                            Manager_Main.main();
+                            break;
+                        case "3":
+                            this.setVisible(false);
+                            User_Main.main(username);
+                            break;
+                        default:
+                          JOptionPane.showMessageDialog(this, "Your account has been disabled. Please contact admin to reactivate !", "Error", 1);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Wrong password !!!");
+                    JOptionPane.showMessageDialog(this, "Wrong password", "Error", 1);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "ID number is not exist !!!");
+                JOptionPane.showMessageDialog(this, "ID number is not exist", "Error", 1);
             }            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.toString());
