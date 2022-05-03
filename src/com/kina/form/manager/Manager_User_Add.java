@@ -4,11 +4,15 @@ import com.kina.form.admin.*;
 import com.kina.model.Location;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
+import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
+import com.kina.model.TreatmentRecord;
 import com.kina.model.User;
 import com.kina.service.LocationService;
 import com.kina.service.PackService;
+import com.kina.service.ProductService;
 import com.kina.service.TreatmentLocationService;
+import com.kina.service.TreatmentRecordService;
 import com.kina.service.UserService;
 import java.awt.Color;
 import java.awt.Component;
@@ -23,14 +27,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -114,86 +121,31 @@ public class Manager_User_Add extends javax.swing.JFrame {
         treatmentName.add(0, "--Treament Location--");
         txtTreatment.setModel(new DefaultComboBoxModel<String>(treatmentName.toArray(new String[0])));
 
-//        treatmentList.removeAll();
-//        DefaultListModel listModel = new DefaultListModel();
-//        listModel.addElement("There is no treatment record.");
-//        treatmentList.setModel(listModel);
-
-    }
-
-    public void initData(String id) {
-
-        //Init data
-        User user = UserService.getUserById(id);
-        System.out.println(user.toString());
-        txtID.setText(user.getNoID());
-        txtName.setText(user.getName());
-        txtYear.setSelectedItem(Integer.toString(user.getBirthYear()));
-        txtAddress.setText(user.getAddress().getAddress());
-        txtCity.setSelectedItem(user.getAddress().getCity());
-        txtDistrict.setSelectedItem(user.getAddress().getDistrict());
-        txtWard.setSelectedItem(user.getAddress().getWard());
-        if (user.getTrmtLoca() != null) {
-            txtTreatment.setSelectedItem(user.getTrmtLoca().getName());
-
-        }
-              
-        List<User> userList = new ArrayList<User>();
-        userList = UserService.getAllRelatedUser(id);
-        DefaultTableModel model = (DefaultTableModel) relatedList.getModel();
-        Object[] row = new Object[2];
-
-        for (int i = 0; i < userList.size(); i++) {
-            row[0] = userList.get(i).getName();
-            String status = String.valueOf(userList.get(i).getStatus());
-            row[1] = "F" + status;
-            model.addRow(row);
-        }
-        
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(radio1);
         buttonGroup.add(radio2);
         buttonGroup.add(radio3);
-        
-        int status = user.getStatus();
-        switch(status){
-            case 0:
-                radio1.setSelected(true);
-                break;
-            case 1:
-                radio2.setSelected(true);
-                break;
-            case 2:
-                radio3.setSelected(true);
-                break;
+
+    }
+
+    public void initData(String id) {
+        //Init list user
+        List<User> userList = UserService.getAllUser();
+        DefaultTableModel model = (DefaultTableModel) relatedList.getModel();
+        String[] userName = new String[userList.size()];
+        for (int i = 0; i < userList.size(); i++) {
+            userName[i] = (userList.get(i).getName());
         }
-        
+        JComboBox c = new JComboBox(userName);
+        relatedList.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(c));
 
-        
+        String[] status = {"F0", "F1", "F2"};
+        JComboBox c1 = new JComboBox(status);
+        relatedList.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(c1));
 
-//        txtProduct.setText(name);
-//        txtUnit.setText(unit);
-//        boxOccupancy.setValue(price);
-//        txtID.setText(pack.getId());
-//        txtPack.setText(pack.getName());
-//        txtQuantity.setValue(pack.getLimitQuantity());
-//        txtDeadline.setDate(pack.getDateExp());
-//        txtPrice.setText(Integer.toString(pack.getPrice()));
-//        List<PackDetail> packList = pack.getProList();
-//        DefaultTableModel model = (DefaultTableModel) tblProd.getModel();
-//        
-//        tblProd.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
-//        tblProd.getColumn("Delete").setCellEditor(new ButtonCellEditor());
-//        
-//        Object[] row = new Object[5];
-//
-//        for (int i = 0; i < packList.size(); i++) {
-//            row[0] = packList.get(i).getProduct().getName();
-//            row[1] = packList.get(i).getQuantity();
-//            Icon icon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
-//            row[2] = icon;
-//            model.addRow(row);
-//        }
+        relatedList.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
+        relatedList.getColumn("Delete").setCellEditor(new ButtonCellEditor());
+        this.id = id;
 
     }
 
@@ -203,13 +155,12 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         txt = new javax.swing.JLabel();
-        btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         relatedList = new javax.swing.JTable();
         lblCapacity3 = new javax.swing.JLabel();
-        btnSave1 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -221,13 +172,16 @@ public class Manager_User_Add extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtWard = new javax.swing.JComboBox<>();
         txtAddress = new javax.swing.JTextField();
-        txtTreatment = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        txtTreatment = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        txtAvailable = new javax.swing.JLabel();
         radio1 = new javax.swing.JRadioButton();
         radio2 = new javax.swing.JRadioButton();
         radio3 = new javax.swing.JRadioButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -243,22 +197,12 @@ public class Manager_User_Add extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ADD USER");
+        jLabel1.setText("ADD NEW USER");
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txt.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txt.setForeground(new java.awt.Color(255, 255, 255));
         txt.setText("Birth Year");
-
-        btnSave.setBackground(new java.awt.Color(255, 0, 0));
-        btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("DELETE");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
 
         btnClose.setFont(new java.awt.Font("Century Gothic", 0, 10)); // NOI18N
         btnClose.setText("X");
@@ -278,43 +222,38 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
             },
             new String [] {
-                "User Name", "Status"
+                "User Name", "Status", "Delete"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
         });
-        relatedList.setEnabled(false);
         jScrollPane2.setViewportView(relatedList);
         if (relatedList.getColumnModel().getColumnCount() > 0) {
             relatedList.getColumnModel().getColumn(1).setMinWidth(80);
             relatedList.getColumnModel().getColumn(1).setPreferredWidth(80);
             relatedList.getColumnModel().getColumn(1).setMaxWidth(80);
+            relatedList.getColumnModel().getColumn(2).setMinWidth(80);
+            relatedList.getColumnModel().getColumn(2).setPreferredWidth(80);
+            relatedList.getColumnModel().getColumn(2).setMaxWidth(80);
         }
 
         lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity3.setForeground(new java.awt.Color(255, 255, 255));
-        lblCapacity3.setText("Related List");
+        lblCapacity3.setText("Related User");
 
-        btnSave1.setBackground(new java.awt.Color(0, 255, 51));
-        btnSave1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        btnSave1.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave1.setText("SAVE");
-        btnSave1.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setBackground(new java.awt.Color(0, 255, 51));
+        btnSave.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("SAVE");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSave1ActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
@@ -324,9 +263,14 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
         txtID.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtID.setForeground(new java.awt.Color(255, 255, 255));
-        txtID.setText("jTextField1");
+        txtID.setText("No ID");
         txtID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtID.setOpaque(false);
+        txtID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtIDMouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -336,9 +280,14 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
         txtName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtName.setForeground(new java.awt.Color(255, 255, 255));
-        txtName.setText("txtName");
+        txtName.setText("Full Name");
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtName.setOpaque(false);
+        txtName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtNameMouseClicked(evt);
+            }
+        });
 
         txtCity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         txtCity.addItemListener(new java.awt.event.ItemListener() {
@@ -376,11 +325,14 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
         txtAddress.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtAddress.setForeground(new java.awt.Color(255, 255, 255));
-        txtAddress.setText("txtAddress");
+        txtAddress.setText("Address");
         txtAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtAddress.setOpaque(false);
-
-        txtTreatment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtAddress.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtAddressMouseClicked(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -394,6 +346,22 @@ public class Manager_User_Add extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Status:");
 
+        txtTreatment.setEditable(true);
+        txtTreatment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtTreatment.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                txtTreatmentItemStateChanged(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Slot available:");
+
+        txtAvailable.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        txtAvailable.setForeground(new java.awt.Color(255, 255, 255));
+        txtAvailable.setText("0");
+
         radio1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         radio1.setForeground(new java.awt.Color(255, 255, 255));
         radio1.setText("F0");
@@ -406,6 +374,14 @@ public class Manager_User_Add extends javax.swing.JFrame {
         radio3.setForeground(new java.awt.Color(255, 255, 255));
         radio3.setText("F2");
 
+        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
+        jButton1.setText("Add People");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -413,70 +389,72 @@ public class Manager_User_Add extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(148, 148, 148)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(88, 88, 88)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAddress))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtName)
+                                .addGap(18, 18, 18)
+                                .addComponent(txt)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtID)))
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCapacity3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAddress))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtName)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txt)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtID)))
-                            .addComponent(txtTreatment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(27, 27, 27)
-                                        .addComponent(radio1)
-                                        .addGap(14, 14, 14)
-                                        .addComponent(radio2)
-                                        .addGap(14, 14, 14)
-                                        .addComponent(radio3)))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane2))
-                        .addGap(20, 20, 20))))
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(radio1)
+                                .addGap(14, 14, 14)
+                                .addComponent(radio2)
+                                .addGap(14, 14, 14)
+                                .addComponent(radio3)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCapacity3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
+                .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(239, 239, 239)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {radio1, radio2, radio3});
-
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtCity, txtDistrict, txtWard});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {radio1, radio2, radio3});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -511,28 +489,34 @@ public class Manager_User_Add extends javax.swing.JFrame {
                         .addComponent(txtWard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radio1)
-                    .addComponent(radio2)
-                    .addComponent(radio3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblCapacity3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAvailable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radio1)
+                            .addComponent(radio2)
+                            .addComponent(radio3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblCapacity3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {radio1, radio2, radio3});
-
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtCity, txtDistrict, txtWard});
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {radio1, radio2, radio3});
 
         pack();
         setLocationRelativeTo(null);
@@ -546,23 +530,80 @@ public class Manager_User_Add extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //if has unsave data: save
-//        if (hasUnsaveData()) {
-//            int ca = (int) boxCapacity.getValue();
-//            int oc = (int) boxOccupancy.getValue();
-//            String na = txtTreamentName.getText();
-//        
-//            String addressId = "DC0005";
-//            Location location = new Location(addressId, "a", "a", "a", "a");
-//            TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
-//            TreatmentLocationService.updOne(treatmentLocation);
-//        }
-        dispose();
-    }//GEN-LAST:event_btnSaveActionPerformed
+        //Init data
+        User user = new User();
+        user.setId(id);
+        user.setName(txtName.getText());
+        user.setNoID(txtID.getText());
+        user.setBirthYear((Integer.parseInt(txtYear.getSelectedItem().toString())));
+        user.setDebit(10000);
 
-    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSave1ActionPerformed
+        int status;
+        if (radio1.isSelected()) {
+            status = 0;
+        } else if (radio2.isSelected()) {
+            status = 1;
+        } else {
+            status = 2;
+        }
+        user.setStatus(status);
+
+        Location location = new Location();
+        int numLocation = LocationService.countAddress() + 1;
+        String idLocation = "DC" + String.format("%04d", numLocation);
+        location.setId(idLocation);
+        location.setAddress(txtAddress.getText());
+        location.setWard(txtWard.getSelectedItem().toString());
+        location.setDistrict(txtDistrict.getSelectedItem().toString());
+        location.setCity(txtCity.getSelectedItem().toString());
+        user.setAddress(location);
+
+        TreatmentLocation trtmentLocation = TreatmentLocationService.getByName(txtTreatment.getSelectedItem().toString());
+        user.setTrmtLoca(trtmentLocation);
+
+        List<TreatmentRecord> trtmentList = new ArrayList<TreatmentRecord>();
+        int numRecord = TreatmentRecordService.countTreatmentRecord() + 1;
+        String idRecord = "TR" + String.format("%04d", numRecord);
+        TreatmentRecord record = new TreatmentRecord();
+        record.setId(idRecord);
+        record.setUserID(id);
+        record.setStatus(status);
+        user.setTrmtRec(trtmentList);
+
+        //List user related
+        List<User> relatedUser = new ArrayList<User>();
+        for (int i = 0; i < relatedList.getRowCount(); i++) {
+            User userRelated = new User();
+            Object relatedObj = relatedList.getModel().getValueAt(i, 0);
+            String relatedName = relatedObj.toString();
+            if (relatedName.equals("Click to choose product")) {
+                JOptionPane.showConfirmDialog(null, "Please choose product name", "Warning", JOptionPane.CANCEL_OPTION);
+            } else {
+                userRelated = UserService.getUserByName(relatedName);
+            }
+            relatedUser.add(userRelated);
+        }
+        user.setRelatedList(relatedUser);
+
+        //add new location
+        LocationService.addOne(location);
+
+        if (UserService.addOne(user)) {
+            //add related 
+            for (int i = 0; i < relatedUser.size(); i++) {
+                if (relatedUser.get(i).getStatus() < status) {
+                    UserService.UpRelated(Integer.toString(relatedUser.get(i).getStatus()), id);
+                } else {
+                    UserService.UpRelated(id, Integer.toString(relatedUser.get(i).getStatus()));
+                }
+            }
+            //add record
+            TreatmentRecordService.addOne(record);
+            
+            //add account
+
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void txtDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDistrictActionPerformed
         // TODO add your handling code here:
@@ -640,6 +681,36 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtWardItemStateChanged
 
+    private void txtTreatmentItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_txtTreatmentItemStateChanged
+        String location = txtTreatment.getSelectedItem().toString();
+
+        TreatmentLocation treatmentlocation = new TreatmentLocation();
+        treatmentlocation = TreatmentLocationService.getByName(location);
+
+        int available = treatmentlocation.getCapacity() - treatmentlocation.getOccupancy();
+        txtAvailable.setText(Integer.toString(available));
+    }//GEN-LAST:event_txtTreatmentItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) relatedList.getModel();
+        JLabel del = new JLabel();
+        ImageIcon delIcon = new ImageIcon("U:\\Java\\TP\\management-covid\\src\\com\\kina\\icon\\delete.png");
+        del.setIcon(delIcon);
+        model.addRow(new Object[]{"Click to choose user", "F0", del});
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtIDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIDMouseClicked
+        txtID.setText("");
+    }//GEN-LAST:event_txtIDMouseClicked
+
+    private void txtNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNameMouseClicked
+        txtName.setText("");
+    }//GEN-LAST:event_txtNameMouseClicked
+
+    private void txtAddressMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAddressMouseClicked
+        txtAddress.setText("");
+    }//GEN-LAST:event_txtAddressMouseClicked
+
     private void handleClosing() {
         if (hasUnsaveData()) {
             int answer = showWarningMessage();
@@ -704,8 +775,9 @@ public class Manager_User_Add extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSave1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -722,6 +794,7 @@ public class Manager_User_Add extends javax.swing.JFrame {
     private javax.swing.JTable relatedList;
     private javax.swing.JLabel txt;
     private javax.swing.JTextField txtAddress;
+    private javax.swing.JLabel txtAvailable;
     private javax.swing.JComboBox<String> txtCity;
     private javax.swing.JComboBox<String> txtDistrict;
     private javax.swing.JTextField txtID;

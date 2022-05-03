@@ -35,6 +35,61 @@ public class LocationService {
         }
         return location;
     }
+    
+    public static Boolean addOne(Location location) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String query = "insert into LOCATION values(?, ?, ?)";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, location.getId());
+            ps.setString(2, location.getAddress());
+            String wardID = LocationService.getWardID(location.getWard());
+            ps.setString(3, wardID);
+          
+            ps.executeQuery();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int countAddress() {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT COUNT(*) FROM LOCATION";
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
 
     public static List<String> getAllCity() {
         List<String> res = new ArrayList<String>();
@@ -328,9 +383,9 @@ public class LocationService {
         }
         return res;
     }
-    
+
     public static List<String> getCityDistrictByWardName(String name) {
-         List<String> res = new ArrayList<String>();
+        List<String> res = new ArrayList<String>();
         connectDB cn = new connectDB();
         Connection connection = null;
         PreparedStatement ps = null;
@@ -343,7 +398,7 @@ public class LocationService {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 String rec = rs.getString("CityName");
-                
+
                 res.add(rec);
                 String rec1 = rs.getString("DistrictName");
                 System.out.println(rec1);
@@ -368,5 +423,41 @@ public class LocationService {
             }
         }
         return res;
+    }
+    
+    public static String getWardID(String name) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        String result = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM WARD where WardName = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getString("WardID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

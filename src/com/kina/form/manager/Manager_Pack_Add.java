@@ -380,7 +380,7 @@ public class Manager_Pack_Add extends javax.swing.JFrame {
         pack.setPackList(packList);
         pack.setPrice(price);
 
-        System.out.println(pack.toString());
+//        System.out.println(pack.toString());
 
         if (PackService.addPack(pack)) {
             //Update pack detail

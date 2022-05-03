@@ -111,7 +111,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Capacity:"/>
+        <Property name="text" type="java.lang.String" value="Occupancy"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblOccupancy">
@@ -122,7 +122,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Occupancy:"/>
+        <Property name="text" type="java.lang.String" value="Capacity"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="boxCapacity">

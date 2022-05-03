@@ -14,8 +14,8 @@ public class ManagementCovid {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
 //            LoginForm.main();
 //            Admin_Main.main();
-            Manager_Main.main();
-//              User_Main.main("010285900121");
+//            Manager_Main.main();
+              User_Main.main("010285900121");
 
             
             

@@ -47,6 +47,24 @@ public class UserService {
         }
         return false;
     }
+    
+    public static Boolean UpRelated(String user1,  String user2) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        String query = "insert into RELATED values(?, ?)";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, user1);
+            ps.setString(2, user2);
+
+            ps.executeQuery();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static List<TreatmentRecord> getTreatmentRecord(String id) {
         List<TreatmentRecord> res = new ArrayList<TreatmentRecord>();
@@ -215,9 +233,9 @@ public class UserService {
     
     public static Boolean addOne(User user) {
         connectDB cn = new connectDB();
-        Connection connection = null;
+        Connection connection = cn.getConnection();
         PreparedStatement ps = null;
-        String query = "insert into USER values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "insert into USERS values(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getId());
@@ -247,6 +265,56 @@ public class UserService {
             String sql = "SELECT * FROM USERS where UserID = ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {     
+                rec.setId(rs.getString("UserID"));
+                rec.setName(rs.getString("Username"));
+                rec.setNoID(rs.getString("NoID"));
+                rec.setBirthYear(rs.getInt("BirthYear"));
+                rec.setAddress(LocationService.getByID(rs.getString("AddressID")));
+                rec.setTrmtLoca(TreatmentLocationService.getByID(rs.getString("TrmtLocaID")));
+                rec.setDebit(rs.getInt("DebitBalance"));
+                rec.setStatus(rs.getInt("UserStatus"));
+
+                // list related List
+                List<User> relatedUserList = getAllRelatedUser(rec.getId());
+                rec.setRelatedList(relatedUserList);
+                // list treatment record
+                List<TreatmentRecord> trmRecList = getTreatmentRecord(rec.getId());
+                rec.setTrmtRec(trmRecList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return rec;
+    }
+    
+    public static User getUserByName(String name) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        User rec = new User();
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM USERS where Username = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {     
                 rec.setId(rs.getString("UserID"));

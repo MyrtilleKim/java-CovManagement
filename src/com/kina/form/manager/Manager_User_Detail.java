@@ -5,12 +5,14 @@ import com.kina.model.Location;
 import com.kina.model.LogIn;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
+import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
 import com.kina.model.TreatmentRecord;
 import com.kina.model.User;
 import com.kina.service.LocationService;
 import com.kina.service.LogInService;
 import com.kina.service.PackService;
+import com.kina.service.ProductService;
 import com.kina.service.TreatmentLocationService;
 import com.kina.service.TreatmentRecordService;
 import com.kina.service.UserService;
@@ -43,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -65,6 +68,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         init();
         initComponents();
         initComboBox();
+        initTable();
         initData(id);
     }
 
@@ -92,24 +96,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         }
         txtYear.setModel(new DefaultComboBoxModel<String>(years.toArray(new String[0])));
 
-//        //Init city
-//        List<String> city = new ArrayList<String>();
-//        city = LocationService.getAllCity();
-//        city.add(0, "--City--");
-//        txtCity.setModel(new DefaultComboBoxModel<String>(city.toArray(new String[0])));
-//
-//        //Init ward
-//        List<String> ward = new ArrayList<String>();
-//        ward = LocationService.getAllWard();
-//        ward.add(0, "--Ward--");
-//        txtWard.setModel(new DefaultComboBoxModel<String>(ward.toArray(new String[0])));
-//
-//        //Init district
-//        List<String> district = new ArrayList<String>();
-//        district = LocationService.getAllDistrict();
-//        district.add(0, "--District--");
-//        txtDistrict.setModel(new DefaultComboBoxModel<String>(district.toArray(new String[0])));
-        //Init treatment location
         List<TreatmentLocation> treatment = TreatmentLocationService.getAll();
         List<String> treatmentName = new ArrayList<String>();
         for (int i = 0; i < treatment.size(); i++) {
@@ -118,11 +104,24 @@ public class Manager_User_Detail extends javax.swing.JFrame {
 
         treatmentName.add(0, "--Treament Location--");
         txtTreatment.setModel(new DefaultComboBoxModel<String>(treatmentName.toArray(new String[0])));
+    }
 
-        treatmentList.removeAll();
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.addElement("There is no treatment record.");
-        treatmentList.setModel(listModel);
+    public void initTable() {
+        relatedTable.getTableHeader().setOpaque(false);
+        relatedTable.getTableHeader().setBackground(new Color(33, 105, 249));
+        relatedTable.getTableHeader().setForeground(new Color(255, 255, 255));
+        relatedTable.setForeground(Color.BLUE);
+        relatedTable.setAutoCreateRowSorter(true);
+        relatedTable.setCellSelectionEnabled(false);
+        jScrollPane2.setBorder(new EmptyBorder(1, 1, 1, 1));
+        
+        recordTable.getTableHeader().setOpaque(false);
+        recordTable.getTableHeader().setBackground(new Color(33, 105, 249));
+        recordTable.getTableHeader().setForeground(new Color(255, 255, 255));
+        recordTable.setForeground(Color.BLUE);
+        recordTable.setAutoCreateRowSorter(true);
+        recordTable.setCellSelectionEnabled(false);
+        jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
 
     }
 
@@ -143,9 +142,10 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             txtAvailable.setText(Integer.toString(available));
         }
 
+        //Init related table
         List<User> userList = new ArrayList<User>();
         userList = UserService.getAllRelatedUser(id);
-        DefaultTableModel model = (DefaultTableModel) relatedList.getModel();
+        DefaultTableModel model = (DefaultTableModel) relatedTable.getModel();
         Object[] row = new Object[2];
 
         for (int i = 0; i < userList.size(); i++) {
@@ -173,15 +173,26 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 break;
         }
 
-        treatmentList.removeAll();
+        //Init record table
         List<TreatmentRecord> logList = new ArrayList<TreatmentRecord>();
         logList = TreatmentRecordService.getAll(id);
-        DefaultListModel listModel = new DefaultListModel();
+        DefaultTableModel model1 = (DefaultTableModel) recordTable.getModel();
+        Object[] row1 = new Object[3];
 
         for (int i = 0; i < logList.size(); i++) {
-            listModel.addElement(logList.get(i).toString());
+            row1[0] = logList.get(i).getRecTimestamp();
+            if (logList.get(i).getTrmtLoca() == null) {
+                row1[1] = "Not go to treatment location";
+
+            } else {
+                row1[1] = logList.get(i).getTrmtLoca().getName();
+
+            }
+
+            String status1 = String.valueOf(logList.get(i).getStatus());
+            row1[2] = "F" + status;
+            model1.addRow(row1);
         }
-        treatmentList.setModel(listModel);
     }
 
     @SuppressWarnings("unchecked")
@@ -192,9 +203,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         txt = new javax.swing.JLabel();
         btnClose = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        relatedList = new javax.swing.JTable();
-        lblCapacity3 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtYear = new javax.swing.JComboBox<>();
@@ -204,8 +212,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblCapacity4 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        treatmentList = new javax.swing.JList<>();
         jLabel9 = new javax.swing.JLabel();
         radio1 = new javax.swing.JRadioButton();
         radio2 = new javax.swing.JRadioButton();
@@ -213,6 +219,12 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtAvailable = new javax.swing.JLabel();
         btnSave1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        relatedTable = new javax.swing.JTable();
+        lblCapacity3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        recordTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -246,42 +258,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Address:");
-
-        relatedList.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        relatedList.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "User Name", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        relatedList.setEnabled(false);
-        jScrollPane2.setViewportView(relatedList);
-        if (relatedList.getColumnModel().getColumnCount() > 0) {
-            relatedList.getColumnModel().getColumn(1).setMinWidth(80);
-            relatedList.getColumnModel().getColumn(1).setPreferredWidth(80);
-            relatedList.getColumnModel().getColumn(1).setMaxWidth(80);
-        }
-
-        lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        lblCapacity3.setForeground(new java.awt.Color(255, 255, 255));
-        lblCapacity3.setText("Related List");
 
         txtID.setEditable(false);
         txtID.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -318,6 +294,11 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 txtTreatmentItemStateChanged(evt);
             }
         });
+        txtTreatment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTreatmentActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -330,13 +311,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         lblCapacity4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity4.setForeground(new java.awt.Color(255, 255, 255));
         lblCapacity4.setText("Treament Record");
-
-        treatmentList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(treatmentList);
 
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -372,6 +346,85 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setOpaque(false);
+
+        relatedTable.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        relatedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User Name", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        relatedTable.setEnabled(false);
+        jScrollPane2.setViewportView(relatedTable);
+        if (relatedTable.getColumnModel().getColumnCount() > 0) {
+            relatedTable.getColumnModel().getColumn(1).setMinWidth(80);
+            relatedTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+            relatedTable.getColumnModel().getColumn(1).setMaxWidth(80);
+        }
+
+        lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        lblCapacity3.setForeground(new java.awt.Color(255, 255, 255));
+        lblCapacity3.setText("Related User");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lblCapacity3)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lblCapacity3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        recordTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Timestamp", "Treatment Location", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(recordTable);
+        if (recordTable.getColumnModel().getColumnCount() > 0) {
+            recordTable.getColumnModel().getColumn(2).setMinWidth(80);
+            recordTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+            recordTable.getColumnModel().getColumn(2).setMaxWidth(80);
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -381,28 +434,15 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(radio1)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio2)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio3))
-                            .addComponent(lblCapacity4, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtAddress))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -415,23 +455,33 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(txtID)))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(20, 20, 20))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCapacity3)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(242, 242, 242)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(radio1)
+                                        .addGap(14, 14, 14)
+                                        .addComponent(radio2)
+                                        .addGap(14, 14, 14)
+                                        .addComponent(radio3))
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCapacity4))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {radio1, radio2, radio3});
@@ -443,43 +493,44 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(txt)
-                    .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAvailable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radio1)
-                    .addComponent(radio2)
-                    .addComponent(radio3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(lblCapacity3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(lblCapacity4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(txt)
+                            .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAvailable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(radio1)
+                            .addComponent(radio2)
+                            .addComponent(radio3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblCapacity4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(btnSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {radio1, radio2, radio3});
@@ -511,7 +562,15 @@ public class Manager_User_Detail extends javax.swing.JFrame {
 //        Location location = new Location(addressId, "a", "a", "a", "a");
 //        TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
         String treatmentName = txtTreatment.getSelectedItem().toString();
+        
+
         TreatmentLocation location = TreatmentLocationService.getByName(treatmentName);
+        
+        int occupancy = location.getOccupancy();
+        if (!treatmentName.equals(this.treatment)) {
+            occupancy += 1;
+        }
+        
         int available = location.getCapacity() - location.getOccupancy();
         if (available == 0) {
             JOptionPane.showMessageDialog(null, "This treament location is full! Please try another");
@@ -521,16 +580,20 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             if (UserService.UpdTreatmentLocation(user)) {
                 System.out.println("Update treament location id");
             }
-            
+
             //Update capacity
-            location.setOccupancy(location.getOccupancy() + 1);
+            location.setOccupancy(occupancy);
             TreatmentLocationService.updOne(location);
-          
+
             dispose();
         }
 
 
     }//GEN-LAST:event_btnSave1ActionPerformed
+
+    private void txtTreatmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTreatmentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTreatmentActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -603,15 +666,16 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCapacity3;
     private javax.swing.JLabel lblCapacity4;
     private javax.swing.JRadioButton radio1;
     private javax.swing.JRadioButton radio2;
     private javax.swing.JRadioButton radio3;
-    private javax.swing.JTable relatedList;
-    private javax.swing.JList<String> treatmentList;
+    private javax.swing.JTable recordTable;
+    private javax.swing.JTable relatedTable;
     private javax.swing.JLabel txt;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JLabel txtAvailable;

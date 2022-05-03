@@ -88,11 +88,11 @@ public class Admin_Treatment_Detail extends javax.swing.JFrame {
 
         lblCapacity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblCapacity.setForeground(new java.awt.Color(255, 255, 255));
-        lblCapacity.setText("Capacity:");
+        lblCapacity.setText("Occupancy");
 
         lblOccupancy.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblOccupancy.setForeground(new java.awt.Color(255, 255, 255));
-        lblOccupancy.setText("Occupancy:");
+        lblOccupancy.setText("Capacity");
 
         boxCapacity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         boxCapacity.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));

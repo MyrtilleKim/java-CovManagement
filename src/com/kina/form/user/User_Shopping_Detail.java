@@ -301,7 +301,23 @@ public class User_Shopping_Detail extends javax.swing.JFrame {
         pack.setPrice(Integer.parseInt(txtID.getText()));
         
         //add to cart 
-        cartItem.add(pack);       
+        Boolean notExist = true;
+        for (int i = 0; i < cartItem.size(); i++) {
+            Pack newPack = cartItem.get(i);
+            if (newPack.getName().equals(pack.getName())) {
+                notExist = false;
+                int newBuy = newPack.getLimitQuantity() + buy;
+                if (newBuy > Integer.parseInt(quantity)) {
+                    JOptionPane.showConfirmDialog(null, "Quantity of this pack is higher than limited", "Error", JOptionPane.OK_OPTION);
+                } else {
+                    newPack.setLimitQuantity(newBuy);
+            }
+            }
+        }
+        if (notExist) {
+            cartItem.add(pack);
+        } 
+ 
         dispose();
     }//GEN-LAST:event_btnAddActionPerformed
 

@@ -3,6 +3,24 @@ package com.kina.model;
 import java.sql.Timestamp;
 
 public class TreatmentRecord {
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+    private String id;
+    private String userID;
     private TreatmentLocation trmtLoca;
     private int status;
     private Timestamp recTimestamp;
