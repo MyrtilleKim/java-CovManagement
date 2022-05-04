@@ -89,26 +89,4 @@ public class TreatmentRecordService {
         }
         return res;
     }
-    
-    public static Boolean addOne(TreatmentRecord record) {
-        connectDB cn = new connectDB();
-        Connection connection = null;
-        PreparedStatement ps = null;
-        String query = "insert into LOCATION values(?, ?, ?, ?)";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setString(1, record.getId());
-            ps.setString(2, record.getUserID());
-            if (record.getTrmtLoca() != null) {
-                ps.setString(3, record.getTrmtLoca().getId());
-            }
-            ps.setString(4, Integer.toString(record.getStatus()));
-            
-            ps.executeQuery();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

@@ -1,5 +1,6 @@
 package com.kina.form.user;
 
+import Networking.TCPClient;
 import com.kina.form.manager.*;
 import com.kina.form.admin.*;
 import com.kina.main.User_Main;
@@ -274,8 +275,15 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             ReceiptService.updateReceipt(receipt);
             
         } 
+        String amount = "0";
+        if(money != null)
+            amount = money;
+        TCPClient tcpClient;      
+        tcpClient = new TCPClient(User_Main.userID, amount);
+        tcpClient.connectServer();
+        tcpClient.start();
        //update receipt status
-               JOptionPane.showConfirmDialog(null, "Your payment is success!", "Successful", JOptionPane.OK_OPTION);
+//               JOptionPane.showConfirmDialog(null, "Your payment is success!", "Successful", JOptionPane.OK_OPTION);
                dispose();
 
     }//GEN-LAST:event_btnPaidActionPerformed

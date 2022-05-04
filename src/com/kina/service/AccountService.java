@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -81,5 +84,22 @@ public class AccountService {
         }
         return res;
     }
-    
+    public static Boolean addOne(Account acc){
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String query = "INSERT INTO ACCOUNT VALUES(?,?,?)";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, acc.getId());
+            String hash = BCrypt.hashpw(acc.getPass(), BCrypt.gensalt(13));
+            ps.setString(2, hash);
+            ps.setInt(3, acc.getRoles());
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

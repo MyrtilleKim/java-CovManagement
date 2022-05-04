@@ -1,5 +1,7 @@
 package com.kina.service;
 
+import com.kina.model.Account;
+import com.kina.model.Location;
 import com.kina.model.TreatmentRecord;
 import com.kina.model.User;
 import com.kina.sql.connectDB;
@@ -9,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
 
@@ -34,16 +39,41 @@ public class UserService {
         connectDB cn = new connectDB();
         Connection connection = null;
         PreparedStatement ps = null;
+        PreparedStatement ps0 = null;
+        PreparedStatement ps1 = null;
+        User preUser = getUserById(user.getId());
+        String query = "update USERS set TrmtLocaID = ? where UserID = ?";
+        String sql0 = "update TREATMENTLOCATION set Occupancy = Occupancy - 1 where TrmtLocaID = ? ";
+        String sql1 = "update TREATMENTLOCATION set Occupancy = Occupancy + 1 where TrmtLocaID = ? ";
         try {
             connection = cn.getConnection();
-            String query = "update USERS set TrmtLocaID = ? where UserID = ?";
+            connection.setAutoCommit(false);
+            ps0 = connection.prepareStatement(sql0);
+            ps0.setString(1, preUser.getTrmtLoca().getId());
+            ps1 = connection.prepareStatement(sql1);   
+            ps1.setString(2, user.getTrmtLoca().getId());
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getTrmtLoca().getId());
             ps.setString(2, user.getId());
+            ps0.execute();
+            ps1.execute();
             ps.execute();
+            connection.commit();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            try {
+                e.printStackTrace();
+                connection.rollback();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }finally{
+            try {
+                connection.setAutoCommit(true);                    
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return false;
     }
@@ -231,25 +261,74 @@ public class UserService {
         return result;
     }
     
-    public static Boolean addOne(User user) {
+    public static Boolean addOne(User user) throws SQLException {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
-        PreparedStatement ps = null;
-        String query = "insert into USERS values(?, ?, ?, ?, ?, ?, ?, ?)";
+        Account acc = new Account(user.getNoID(), "123456", 3);
+        PreparedStatement ps0 = null;
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
+        PreparedStatement ps3 = null;
+        PreparedStatement ps4 = null;
+        String query0 = "INSERT INTO ACCOUNT VALUES(?,?,?)";
+        String query2 = "insert into USERS values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String query1 = "insert into LOCATION values(?, ?, ?)";
+        String query3 = "update TREATMENTLOCATION set Occupancy = Occupancy + 1 where TrmtLocaID = ? ";
+        String query4 = "insert into RELATED(UserID_1, UserID_2) values(?, ?)";
         try {
-            ps = connection.prepareStatement(query);
-            ps.setString(1, user.getId());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getNoID());
-            ps.setInt(4, user.getBirthYear());
-            ps.setString(5, user.getAddress().getId());
-            ps.setString(6, user.getTrmtLoca().getId());
-            ps.setInt(7, user.getStatus());
-            ps.setInt(8, user.getDebit());
-            ps.executeQuery();
+            connection.setAutoCommit(false);
+            ps0 = connection.prepareStatement(query0);
+            ps0.setString(1, acc.getId());      
+            String hash = BCrypt.hashpw(acc.getPass(), BCrypt.gensalt(13));
+            ps0.setString(2, hash);
+            ps0.setInt(3, acc.getRoles());
+            
+            ps1 = connection.prepareStatement(query1);
+            ps1.setString(1, user.getAddress().getId());
+            ps1.setString(2, user.getAddress().getAddress());
+            String wardID = LocationService.getWardID(user.getAddress().getWard());
+            ps1.setString(3, wardID);
+            
+            ps2 = connection.prepareStatement(query2);
+            ps2.setString(1, user.getId());
+            ps2.setString(2, user.getName());
+            ps2.setString(3, user.getNoID());
+            ps2.setInt(4, user.getBirthYear());
+            ps2.setString(5, user.getAddress().getId());
+            ps2.setString(6, user.getTrmtLoca().getId());
+            ps2.setInt(7, user.getStatus());
+            ps2.setInt(8, user.getDebit());
+            
+            ps0.execute();
+            ps1.execute();
+            ps2.execute();
+            
+            if(user.getTrmtLoca() != null){
+                ps3 = connection.prepareStatement(query3);
+                ps3.setString(1, user.getTrmtLoca().getId());
+                ps3.execute();
+            }         
+                        
+            ps4 = connection.prepareStatement(query4);
+            List<User> relatedUser = user.getRelatedList();
+            for (int i = 0; i < relatedUser.size(); i++) {
+                if (relatedUser.get(i).getStatus() < user.getStatus()) {
+                    ps4.setString(1, relatedUser.get(i).getId());
+                    ps4.setString(2, user.getId());
+                } else {
+                    ps4.setString(2, relatedUser.get(i).getId());
+                    ps4.setString(1, user.getId());
+                }
+                ps4.execute();
+            }
+            connection.commit();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
+        }finally{
+            connection.setAutoCommit(true);
+            connection.close();                    
         }
         return false;
     }

@@ -2,6 +2,15 @@ package com.kina.model;
 
 public class Account {
 
+    public Account(String id, String pass, int roles) {
+        this.id = id;
+        this.pass = pass;
+        this.roles = roles;
+    }
+
+    public Account() {
+    }
+    
     /**
      * @return the id
      */

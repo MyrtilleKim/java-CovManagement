@@ -1,6 +1,9 @@
 package com.kina.form.manager;
 
+import Networking.TCPClient;
 import com.kina.form.admin.*;
+import com.kina.main.User_Main;
+import com.kina.model.Account;
 import com.kina.model.Location;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
@@ -8,6 +11,7 @@ import com.kina.model.Product;
 import com.kina.model.TreatmentLocation;
 import com.kina.model.TreatmentRecord;
 import com.kina.model.User;
+import com.kina.service.AccountService;
 import com.kina.service.LocationService;
 import com.kina.service.PackService;
 import com.kina.service.ProductService;
@@ -23,11 +27,15 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
@@ -262,10 +270,8 @@ public class Manager_User_Add extends javax.swing.JFrame {
         jLabel3.setText("City:");
 
         txtID.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        txtID.setForeground(new java.awt.Color(255, 255, 255));
         txtID.setText("No ID");
         txtID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtID.setOpaque(false);
         txtID.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtIDMouseClicked(evt);
@@ -279,10 +285,8 @@ public class Manager_User_Add extends javax.swing.JFrame {
         txtYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        txtName.setForeground(new java.awt.Color(255, 255, 255));
         txtName.setText("Full Name");
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtName.setOpaque(false);
         txtName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtNameMouseClicked(evt);
@@ -324,10 +328,8 @@ public class Manager_User_Add extends javax.swing.JFrame {
         });
 
         txtAddress.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        txtAddress.setForeground(new java.awt.Color(255, 255, 255));
         txtAddress.setText("Address");
         txtAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtAddress.setOpaque(false);
         txtAddress.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtAddressMouseClicked(evt);
@@ -347,6 +349,7 @@ public class Manager_User_Add extends javax.swing.JFrame {
         jLabel9.setText("Status:");
 
         txtTreatment.setEditable(true);
+        txtTreatment.setEnabled(false);
         txtTreatment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         txtTreatment.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -365,14 +368,29 @@ public class Manager_User_Add extends javax.swing.JFrame {
         radio1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         radio1.setForeground(new java.awt.Color(255, 255, 255));
         radio1.setText("F0");
+        radio1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio1ActionPerformed(evt);
+            }
+        });
 
         radio2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         radio2.setForeground(new java.awt.Color(255, 255, 255));
         radio2.setText("F1");
+        radio2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio2ActionPerformed(evt);
+            }
+        });
 
         radio3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         radio3.setForeground(new java.awt.Color(255, 255, 255));
         radio3.setText("F2");
+        radio3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio3ActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 0, 11)); // NOI18N
         jButton1.setText("Add People");
@@ -429,18 +447,15 @@ public class Manager_User_Add extends javax.swing.JFrame {
                         .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(radio1)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio2)
-                                .addGap(14, 14, 14)
-                                .addComponent(radio3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(radio1)
+                        .addGap(14, 14, 14)
+                        .addComponent(radio2)
+                        .addGap(14, 14, 14)
+                        .addComponent(radio3))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblCapacity3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -537,17 +552,19 @@ public class Manager_User_Add extends javax.swing.JFrame {
         user.setNoID(txtID.getText());
         user.setBirthYear((Integer.parseInt(txtYear.getSelectedItem().toString())));
         user.setDebit(10000);
-
         int status;
         if (radio1.isSelected()) {
             status = 0;
+            TreatmentLocation trtmentLocation = TreatmentLocationService.getByName(txtTreatment.getSelectedItem().toString());
+            user.setTrmtLoca(trtmentLocation);
         } else if (radio2.isSelected()) {
             status = 1;
+            user.setTrmtLoca(null);
         } else {
             status = 2;
+            user.setTrmtLoca(null);
         }
         user.setStatus(status);
-
         Location location = new Location();
         int numLocation = LocationService.countAddress() + 1;
         String idLocation = "DC" + String.format("%04d", numLocation);
@@ -558,17 +575,16 @@ public class Manager_User_Add extends javax.swing.JFrame {
         location.setCity(txtCity.getSelectedItem().toString());
         user.setAddress(location);
 
-        TreatmentLocation trtmentLocation = TreatmentLocationService.getByName(txtTreatment.getSelectedItem().toString());
-        user.setTrmtLoca(trtmentLocation);
+        
 
-        List<TreatmentRecord> trtmentList = new ArrayList<TreatmentRecord>();
-        int numRecord = TreatmentRecordService.countTreatmentRecord() + 1;
-        String idRecord = "TR" + String.format("%04d", numRecord);
-        TreatmentRecord record = new TreatmentRecord();
-        record.setId(idRecord);
-        record.setUserID(id);
-        record.setStatus(status);
-        user.setTrmtRec(trtmentList);
+//        List<TreatmentRecord> trtmentList = new ArrayList<TreatmentRecord>();
+//        int numRecord = TreatmentRecordService.countTreatmentRecord() + 1;
+//        String idRecord = "TR" + String.format("%04d", numRecord);
+//        TreatmentRecord record = new TreatmentRecord();
+//        record.setId(idRecord);
+//        record.setUserID(id);
+//        record.setStatus(status);
+//        user.setTrmtRec(trtmentList);
 
         //List user related
         List<User> relatedUser = new ArrayList<User>();
@@ -576,32 +592,29 @@ public class Manager_User_Add extends javax.swing.JFrame {
             User userRelated = new User();
             Object relatedObj = relatedList.getModel().getValueAt(i, 0);
             String relatedName = relatedObj.toString();
-            if (relatedName.equals("Click to choose product")) {
-                JOptionPane.showConfirmDialog(null, "Please choose product name", "Warning", JOptionPane.CANCEL_OPTION);
+            if (relatedName.equals("Click to choose user")) {
+                JOptionPane.showConfirmDialog(null, "Please choose user", "Warning", JOptionPane.CANCEL_OPTION);
             } else {
                 userRelated = UserService.getUserByName(relatedName);
             }
             relatedUser.add(userRelated);
         }
+        Set<User> dataset = new HashSet<>(relatedUser);
+        relatedUser = new ArrayList<User>(dataset);
         user.setRelatedList(relatedUser);
 
-        //add new location
-        LocationService.addOne(location);
-
-        if (UserService.addOne(user)) {
-            //add related 
-            for (int i = 0; i < relatedUser.size(); i++) {
-                if (relatedUser.get(i).getStatus() < status) {
-                    UserService.UpRelated(Integer.toString(relatedUser.get(i).getStatus()), id);
-                } else {
-                    UserService.UpRelated(id, Integer.toString(relatedUser.get(i).getStatus()));
-                }
-            }
-            //add record
-            TreatmentRecordService.addOne(record);
-            
-            //add account
-
+        try {
+            Boolean check = UserService.addOne(user);            
+            if(check){
+                TCPClient tcpClient;      
+                tcpClient = new TCPClient(id, null);
+                tcpClient.connectServer();
+                tcpClient.start();
+            } else
+                JOptionPane.showMessageDialog(this, "Add user failed", "Error", 1); 
+        } catch (SQLException ex) {            
+            Logger.getLogger(Manager_User_Add.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Add user failed", "Error", 1); 
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -710,6 +723,27 @@ public class Manager_User_Add extends javax.swing.JFrame {
     private void txtAddressMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAddressMouseClicked
         txtAddress.setText("");
     }//GEN-LAST:event_txtAddressMouseClicked
+
+    private void radio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio1ActionPerformed
+        // TODO add your handling code here:
+        if (radio1.isSelected()) {
+            txtTreatment.setEnabled(true);
+        }
+    }//GEN-LAST:event_radio1ActionPerformed
+
+    private void radio2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio2ActionPerformed
+        // TODO add your handling code here:
+        if (radio2.isSelected()) {
+            txtTreatment.setEnabled(false);
+        }
+    }//GEN-LAST:event_radio2ActionPerformed
+
+    private void radio3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio3ActionPerformed
+        // TODO add your handling code here:
+        if (radio3.isSelected()) {
+            txtTreatment.setEnabled(false);
+        }
+    }//GEN-LAST:event_radio3ActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
