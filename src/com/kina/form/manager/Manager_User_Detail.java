@@ -159,6 +159,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         buttonGroup.add(radio1);
         buttonGroup.add(radio2);
         buttonGroup.add(radio3);
+        buttonGroup.add(radio4);
 
         status = user.getStatus();
         switch (status) {
@@ -173,6 +174,9 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 break;
             case 2:
                 radio3.setSelected(true);
+                break;
+            case 4:
+                radio4.setSelected(true);
                 break;
         }
 
@@ -193,7 +197,12 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             }
 
             String status1 = String.valueOf(logList.get(i).getStatus());
-            row1[2] = "F" + status;
+            if (logList.get(i).getStatus() == 4) {
+                row1[2] = "No covid";
+            } else {
+                row1[2] = "F" + status1;
+
+            }
             model1.addRow(row1);
         }
     }
@@ -228,6 +237,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         lblCapacity3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         recordTable = new javax.swing.JTable();
+        radio4 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -267,7 +277,6 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         txtID.setForeground(new java.awt.Color(255, 255, 255));
         txtID.setText("jTextField1");
         txtID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtID.setOpaque(false);
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -281,14 +290,12 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         txtName.setForeground(new java.awt.Color(255, 255, 255));
         txtName.setText("txtName");
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtName.setOpaque(false);
 
         txtAddress.setEditable(false);
         txtAddress.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtAddress.setForeground(new java.awt.Color(255, 255, 255));
         txtAddress.setText("txtAddress");
         txtAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtAddress.setOpaque(false);
 
         txtTreatment.setEditable(true);
         txtTreatment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -428,6 +435,15 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             recordTable.getColumnModel().getColumn(2).setMaxWidth(80);
         }
 
+        radio4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        radio4.setForeground(new java.awt.Color(255, 255, 255));
+        radio4.setText("No covid");
+        radio4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radio4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -464,8 +480,11 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCapacity4)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(27, 27, 27)
@@ -473,11 +492,10 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                                         .addGap(14, 14, 14)
                                         .addComponent(radio2)
                                         .addGap(14, 14, 14)
-                                        .addComponent(radio3))
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblCapacity4))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1))
+                                        .addComponent(radio3)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(radio4)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -487,7 +505,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {radio1, radio2, radio3});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {radio1, radio2, radio3, radio4});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -526,7 +544,8 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(radio1)
                             .addComponent(radio2)
-                            .addComponent(radio3))
+                            .addComponent(radio3)
+                            .addComponent(radio4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblCapacity4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -536,7 +555,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
                         .addGap(22, 22, 22))))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {radio1, radio2, radio3});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {radio1, radio2, radio3, radio4});
 
         pack();
         setLocationRelativeTo(null);
@@ -570,9 +589,12 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             statuss = 0;
         } else if (radio2.isSelected()) {
             statuss = 1;
-        } else {
+        } else if (radio3.isSelected()){
             statuss = 2;
+        } else {
+            statuss = 4;
         }
+        
         if (status == 1 && statuss == 0){
             List<User> related = UserService.getAllRelatedUser(id); 
             for(User i : related){
@@ -606,6 +628,10 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     private void txtTreatmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTreatmentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTreatmentActionPerformed
+
+    private void radio4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radio4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radio4ActionPerformed
 
     private void handleClosing() {
         if (hasUnsaveData()) {
@@ -686,6 +712,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
     private javax.swing.JRadioButton radio1;
     private javax.swing.JRadioButton radio2;
     private javax.swing.JRadioButton radio3;
+    private javax.swing.JRadioButton radio4;
     private javax.swing.JTable recordTable;
     private javax.swing.JTable relatedTable;
     private javax.swing.JLabel txt;

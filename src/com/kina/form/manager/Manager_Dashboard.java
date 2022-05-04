@@ -1,15 +1,21 @@
 package com.kina.form.manager;
 
+import com.kina.model.Receipt;
+import com.kina.model.ReceiptDetail;
 import com.kina.model.User;
+import com.kina.service.ReceiptService;
+import com.kina.service.TreatmentRecordService;
 import com.kina.service.UserService;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
+import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -24,6 +30,8 @@ public class Manager_Dashboard extends javax.swing.JPanel {
         setOpaque(false);
         initStatus();
         initBalance();
+        initRecover();
+        initPack();
     }
 
     private void initStatus() {
@@ -66,8 +74,6 @@ public class Manager_Dashboard extends javax.swing.JPanel {
 
     private void initBalance() {
         //Get money 
-        
-        
         JFreeChart chart = createChart(createDataset());
         chart.getTitle().setFont(new java.awt.Font( "Century Gothic", java.awt.Font.BOLD, 14));
         ChartPanel chartpanel = new ChartPanel(chart) {
@@ -77,27 +83,111 @@ public class Manager_Dashboard extends javax.swing.JPanel {
             }
         };
         chartpanel.setFont(new java.awt.Font( "Century Gothic", java.awt.Font.PLAIN, 10 ));
+        
         pieChart.setLayout(new BorderLayout());
         pieChart.add(chartpanel, BorderLayout.CENTER);
     }
 
     private static PieDataset createDataset() {
+        int paid = ReceiptService.countTotalPayment();
+        int debit = ReceiptService.countTotalDebit();
         DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Total amount owed", new Double(20));
-        dataset.setValue("Total amount paid", new Double(20));
-       
+        dataset.setValue("Total amount debit", new Double(debit));
+        dataset.setValue("Total amount paid", new Double(paid));
+
         return dataset;
     }
 
     private static JFreeChart createChart(PieDataset dataset) {
         JFreeChart chart = ChartFactory.createPieChart(
-                "Statistique of debt balance", 
-                dataset, 
-                true, 
+                "Statistique of debt balance",
+                dataset,
+                true,
                 true,
                 false);
 
         return chart;
+    }
+
+    private void initRecover() {
+        JFreeChart chartPanel = createChartPanel();
+        ChartPanel chartpanel = new ChartPanel(chartPanel) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(pieChart.getWidth(), pieChart.getHeight());
+            }
+        };
+        pieChart1.setLayout(new BorderLayout());
+        pieChart1.add(chartpanel, BorderLayout.CENTER);
+    }
+
+    private CategoryDataset createDataset1() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String series1 = "Number of transitions";
+        String series2 = "Number of recover";
+ 
+        
+        dataset.addValue(5.0, series1, "Mar");
+        dataset.addValue(4.8, series1, "April");
+        dataset.addValue(4.5, series1, "May");
+
+        dataset.addValue(4.0, series2, "Mar");
+        dataset.addValue(4.2, series2, "April");
+        dataset.addValue(3.8, series2, "May");
+
+        return dataset;
+    }
+
+    private JFreeChart createChartPanel() {
+        String chartTitle = "Statistics on the status of covid-19 disease";
+        String categoryAxisLabel = "Time";
+        String valueAxisLabel = "Popularity";
+
+        CategoryDataset dataset = createDataset1();
+
+        JFreeChart chart = ChartFactory.createLineChart(chartTitle,
+                categoryAxisLabel, valueAxisLabel, dataset);
+
+        return (chart);
+    }
+
+    private void initPack() {
+        JFreeChart chartPanel = createChartPanel1();
+        ChartPanel chartpanel = new ChartPanel(chartPanel) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(pieChart.getWidth(), pieChart.getHeight());
+            }
+        };
+        pieChart2.setLayout(new BorderLayout());
+        pieChart2.add(chartpanel, BorderLayout.CENTER);
+    }
+
+    private CategoryDataset createDataset2() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String series1 = "Pack";
+        dataset.addValue(10.0, series1, "01/05");
+
+        dataset.addValue(9.0, series1, "02/05");
+
+        dataset.addValue(2.0, series1, "03/05");
+
+        dataset.addValue(4.0, series1, "04/05");
+
+        return dataset;
+    }
+
+    private JFreeChart createChartPanel1() {
+        String chartTitle = "Number of purchases per day";
+        String categoryAxisLabel = "By Time";
+        String valueAxisLabel = "Pack Quantity";
+
+        CategoryDataset dataset = createDataset2();
+
+        JFreeChart chart = ChartFactory.createLineChart(chartTitle,
+                categoryAxisLabel, valueAxisLabel, dataset);
+
+        return (chart);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,10 +210,9 @@ public class Manager_Dashboard extends javax.swing.JPanel {
         lblF9 = new javax.swing.JLabel();
         PanelPeople = new javax.swing.JPanel();
         pieChart = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        panelRecover = new javax.swing.JPanel();
+        pieChart1 = new javax.swing.JPanel();
+        pieChart2 = new javax.swing.JPanel();
 
         PanelState.setBackground(new java.awt.Color(255, 255, 255));
         PanelState.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 51, 255), 1, true));
@@ -276,7 +365,7 @@ public class Manager_Dashboard extends javax.swing.JPanel {
         pieChart.setLayout(pieChartLayout);
         pieChartLayout.setHorizontalGroup(
             pieChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 197, Short.MAX_VALUE)
         );
         pieChartLayout.setVerticalGroup(
             pieChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,48 +389,48 @@ public class Manager_Dashboard extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 255)));
+        panelRecover.setBackground(new java.awt.Color(255, 255, 255));
+        panelRecover.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+        javax.swing.GroupLayout pieChart1Layout = new javax.swing.GroupLayout(pieChart1);
+        pieChart1.setLayout(pieChart1Layout);
+        pieChart1Layout.setHorizontalGroup(
+            pieChart1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 261, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 121, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(278, Short.MAX_VALUE))
+        pieChart1Layout.setVerticalGroup(
+            pieChart1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 225, Short.MAX_VALUE)
         );
 
-        jScrollPane1.setViewportView(jPanel1);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+        javax.swing.GroupLayout pieChart2Layout = new javax.swing.GroupLayout(pieChart2);
+        pieChart2.setLayout(pieChart2Layout);
+        pieChart2Layout.setHorizontalGroup(
+            pieChart2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+        pieChart2Layout.setVerticalGroup(
+            pieChart2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 225, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelRecoverLayout = new javax.swing.GroupLayout(panelRecover);
+        panelRecover.setLayout(panelRecoverLayout);
+        panelRecoverLayout.setHorizontalGroup(
+            panelRecoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRecoverLayout.createSequentialGroup()
+                .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pieChart2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelRecoverLayout.setVerticalGroup(
+            panelRecoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRecoverLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(panelRecoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pieChart2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pieChart1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -352,7 +441,7 @@ public class Manager_Dashboard extends javax.swing.JPanel {
                 .addComponent(PanelState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelPeople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelRecover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,9 +449,8 @@ public class Manager_Dashboard extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(PanelState, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PanelPeople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelRecover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -371,26 +459,21 @@ public class Manager_Dashboard extends javax.swing.JPanel {
     private javax.swing.JPanel PanelPeople;
     private javax.swing.JPanel PanelState;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblF0;
-    private javax.swing.JLabel lblF4;
-    private javax.swing.JLabel lblF5;
     private javax.swing.JLabel lblF7;
     private javax.swing.JLabel lblF9;
     private javax.swing.JLabel numF0;
     private javax.swing.JLabel numF1;
     private javax.swing.JLabel numF2;
     private javax.swing.JPanel panelF0;
-    private javax.swing.JPanel panelF3;
     private javax.swing.JPanel panelF4;
     private javax.swing.JPanel panelF5;
+    private javax.swing.JPanel panelRecover;
     private javax.swing.JPanel pieChart;
+    private javax.swing.JPanel pieChart1;
+    private javax.swing.JPanel pieChart2;
     private com.kina.swing.progress.Progress prgF0;
     private com.kina.swing.progress.Progress prgF1;
     private com.kina.swing.progress.Progress prgF2;
-    private com.kina.swing.progress.Progress prgF3;
     // End of variables declaration//GEN-END:variables
 }

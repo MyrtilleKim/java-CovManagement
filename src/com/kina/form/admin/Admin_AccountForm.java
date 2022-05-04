@@ -37,8 +37,12 @@ public class Admin_AccountForm extends javax.swing.JPanel {
 
         for (int i = 0; i < accountList.size(); i++) {                 
             int role = accountList.get(i).getRoles();
-            if (role == 2) {
+            if (role == 2 || role == 0) {
                 row[0] = accountList.get(i).getId();
+                if (role == 0) {
+                    row[1] = "Locked";
+                } else 
+                    row[1] = "Manager";
                 model.addRow(row);
             }
             String roleString = new String();
@@ -56,7 +60,6 @@ public class Admin_AccountForm extends javax.swing.JPanel {
         btnRefresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         btnAdd3 = new javax.swing.JButton();
-        txtSearch3 = new javax.swing.JTextField();
 
         jTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -66,11 +69,11 @@ public class Admin_AccountForm extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Username"
+                "Username", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class
+                java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -88,6 +91,11 @@ public class Admin_AccountForm extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
+            jTable1.getColumnModel().getColumn(1).setMaxWidth(100);
+        }
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel1.setText("Account Management");
@@ -135,37 +143,17 @@ public class Admin_AccountForm extends javax.swing.JPanel {
             }
         });
 
-        txtSearch3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtSearch3.setText("Search");
-        txtSearch3.setSelectedTextColor(new java.awt.Color(153, 153, 255));
-        txtSearch3.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSearch3FocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtSearch3FocusLost(evt);
-            }
-        });
-        txtSearch3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearch3ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(txtSearch3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(450, Short.MAX_VALUE)
                 .addComponent(btnAdd3))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(btnAdd3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(txtSearch3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(btnAdd3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -202,23 +190,9 @@ public class Admin_AccountForm extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnAdd3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd3ActionPerformed
-        int tableSize = jTable1.getRowCount() + 1;
-        String id = "SP" + String.format("%04d", tableSize);
-        //        System.out.println(id);
-//        Manager_Product_Add.main(id);
+
+        Admin_Account_Add.main();
     }//GEN-LAST:event_btnAdd3ActionPerformed
-
-    private void txtSearch3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearch3FocusGained
-        txtSearch3.setText("");
-    }//GEN-LAST:event_txtSearch3FocusGained
-
-    private void txtSearch3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearch3FocusLost
-
-    }//GEN-LAST:event_txtSearch3FocusLost
-
-    private void txtSearch3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearch3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -229,6 +203,5 @@ public class Admin_AccountForm extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtSearch3;
     // End of variables declaration//GEN-END:variables
 }

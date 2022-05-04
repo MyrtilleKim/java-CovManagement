@@ -122,9 +122,12 @@ public class Manager_UserForm extends javax.swing.JPanel {
             row[2] = userList.get(i).getNoID();
             row[3] = userList.get(i).getBirthYear();
             String status = String.valueOf(userList.get(i).getStatus());
-            row[4] = "F" + status;
-
-            model.addRow(row);
+            if (userList.get(i).getStatus() == 4) {
+                row[4] = "No covid";
+            } else {
+                row[4] = "F" + status;
+            }
+             model.addRow(row);
         }
     }
 
@@ -181,6 +184,9 @@ public class Manager_UserForm extends javax.swing.JPanel {
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(180);
+            jTable1.getColumnModel().getColumn(4).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(100);
+            jTable1.getColumnModel().getColumn(4).setMaxWidth(100);
         }
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

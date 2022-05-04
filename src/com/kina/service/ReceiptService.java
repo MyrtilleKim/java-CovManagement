@@ -157,6 +157,76 @@ public class ReceiptService {
         return res;
     }
 
+    public static int countTotalPayment() {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM PAYMENTRECORD";
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res += rs.getInt("AmountOfMoney");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+    
+     public static int countTotalDebit() {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM USERS";
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res += rs.getInt("DebitBalance");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+    
     public static boolean addPayment(String id, Receipt receipt) {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
@@ -238,6 +308,49 @@ public class ReceiptService {
         }
         return res;
     }
+    
+        public static List<Receipt> getAll() {
+        List<Receipt> res = new ArrayList<Receipt>();
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String sql = "SELECT * FROM RECE";
+
+        try {
+            ps = connection.prepareStatement(sql);
+          
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Receipt rec = new Receipt();
+
+                rec.setId(rs.getString("ReceiptID"));
+                rec.setOrderDate(rs.getDate("OrderDate"));
+                rec.setStatus(rs.getBoolean("ReceiptStatus"));
+                rec.setRemainAmount(rs.getInt("RemainAmount"));
+
+                res.add(rec);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
 
     public static List<Pack> getAllPack(String id) {
         List<Pack> res = new ArrayList<Pack>();

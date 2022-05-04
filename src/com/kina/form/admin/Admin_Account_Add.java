@@ -31,12 +31,7 @@ public class Admin_Account_Add extends javax.swing.JFrame {
     public Admin_Account_Add() {
         init();
         initComponents();
-    }
-
-    public Admin_Account_Add(String id) {
-        init();
-        initComponents();
-        initData(id);
+        initData();
     }
 
     public void init() {
@@ -51,35 +46,13 @@ public class Admin_Account_Add extends javax.swing.JFrame {
         };
 
         setContentPane(panel);
-        txtUsername.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent ke) {
-                String value = txtUsername.getText();
-                int l = value.length();
-                if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
-                    txtUsername.setEditable(true);
-                    jLabel3.setText("");
-                } else {
-                    txtUsername.setEditable(false);
-                    jLabel3.setText("* Enter only numeric digits(0-9)");
-                }
-            }
-        });
+ 
     }
-
-    public void initData(String id) {
-        Account account = AccountService.getById(id);
-        System.out.println(account.toString());
-        txtUsername.setText(account.getId());
-//        txtPass.setText(account.getPass());
-        
-        //Role
+    
+    public void initData() {
         txtRole.removeAllItems();
         txtRole.addItem("Lock Account");
         txtRole.addItem("Manager");
-
-        txtRole.setSelectedIndex(account.getRoles() - 1);
-             
-  
 
     }
 
@@ -139,6 +112,7 @@ public class Admin_Account_Add extends javax.swing.JFrame {
         jLabel2.setText("Username:");
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("This account will have default password.");
 
@@ -221,9 +195,16 @@ public class Admin_Account_Add extends javax.swing.JFrame {
         user.setPass("123456");
         int role = txtRole.getSelectedIndex();
         
-//        if (role == )
-        user.setRoles(WIDTH);
+        if (role == 0) {
+            user.setRoles(0);
+        } else {
+            user.setRoles(2);
+        }   
         
+        if (AccountService.addOne(user)) {
+            JOptionPane.showConfirmDialog(null, "Add new manager account successul", "Success", JOptionPane.OK_OPTION);
+            dispose();
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void handleClosing() {
@@ -279,10 +260,10 @@ public class Admin_Account_Add extends javax.swing.JFrame {
         return false;
     }
 
-    public static void main(String id) {
+    public static void main() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_Account_Add(id).setVisible(true);
+                new Admin_Account_Add().setVisible(true);
             }
         });
     }
