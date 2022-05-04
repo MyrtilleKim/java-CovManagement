@@ -30,35 +30,18 @@ public class Admin_AccountForm extends javax.swing.JPanel {
         jScrollPane1.setBorder(new EmptyBorder(1, 1, 1, 1));
     }
 
-    public void initTableData() {
-        
+    public void initTableData() {        
         List<Account> accountList = AccountService.getAllAccount();
-
-//        System.out.println(treatmentLocationList.size());
-//        System.out.println(treatmentLocationList.get(1));
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object[] row = new Object[4];
 
-        for (int i = 0; i < accountList.size(); i++) {
-            row[0] = accountList.get(i).getId();
-           
+        for (int i = 0; i < accountList.size(); i++) {                 
             int role = accountList.get(i).getRoles();
-            String roleString = new String();
-            switch(role) {
-                case 1:
-                    roleString = "Admin";
-                    break;
-                case 2:
-                    roleString = "Manager";
-                    break;
-                case 3:
-                    roleString = "User";
-                    break;
+            if (role == 2) {
+                row[0] = accountList.get(i).getId();
+                model.addRow(row);
             }
-            row[1] = roleString;
-            
-
-            model.addRow(row);
+            String roleString = new String();
         }
     }
 
@@ -83,22 +66,15 @@ public class Admin_AccountForm extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Username", "Account", "Role"
+                "Username"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, true, false
+                java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
         });
         jTable1.setFocusable(false);
@@ -112,11 +88,6 @@ public class Admin_AccountForm extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(2).setMinWidth(100);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(100);
-        }
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel1.setText("Account Management");
@@ -238,7 +209,7 @@ public class Admin_AccountForm extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAdd3ActionPerformed
 
     private void txtSearch3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearch3FocusGained
-        txtSearch.setText("");
+        txtSearch3.setText("");
     }//GEN-LAST:event_txtSearch3FocusGained
 
     private void txtSearch3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearch3FocusLost
@@ -251,22 +222,13 @@ public class Admin_AccountForm extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnAdd1;
-    private javax.swing.JButton btnAdd2;
     private javax.swing.JButton btnAdd3;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtSearch1;
-    private javax.swing.JTextField txtSearch2;
     private javax.swing.JTextField txtSearch3;
     // End of variables declaration//GEN-END:variables
 }

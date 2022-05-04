@@ -85,12 +85,13 @@ public class ReceiptService {
         PreparedStatement ps = null;
 
         try {
-            String query = "insert into RECEIPT values(?, ?, ?, ?)";
+            String query = "insert into RECEIPT values(?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(query);
             ps.setString(1, receipt.getId());
             ps.setString(2, receipt.getUserID());
             ps.setDate(3, receipt.getOrderDate());
             ps.setBoolean(4, receipt.getStatus());
+            ps.setInt(5, receipt.getTotalAmount());
 
             ps.execute();
             return true;
@@ -107,11 +108,12 @@ public class ReceiptService {
         PreparedStatement ps = null;
         try {
             String query
-                    = "update RECEIPT set ReceiptStatus = ? where ReceiptID = ?";
+                    = "update RECEIPT set ReceiptStatus = ?, RemainAmount =? where ReceiptID = ?";
             ps = connection.prepareStatement(query);
             
             ps.setBoolean(1, receipt.getStatus());
-            ps.setString(2, receipt.getId());
+            ps.setInt(2, receipt.getRemainAmount());
+            ps.setString(3, receipt.getId());
             ps.execute();
             return true;
         } catch (Exception e) {
@@ -119,7 +121,6 @@ public class ReceiptService {
         }
         return false;
     }
-
 
     public static int countPayment() {
         int res = 0;
@@ -213,6 +214,7 @@ public class ReceiptService {
                 rec.setId(rs.getString("ReceiptID"));
                 rec.setOrderDate(rs.getDate("OrderDate"));
                 rec.setStatus(rs.getBoolean("ReceiptStatus"));
+                rec.setRemainAmount(rs.getInt("RemainAmount"));
 
                 res.add(rec);
             }
@@ -271,6 +273,26 @@ public class ReceiptService {
                     ex.printStackTrace();
                 }
             }
+        }
+        return res;
+    }
+    
+    public static int getAmount(String id) {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "SELECT * FROM RECEIPT WHERE ReceiptID = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res = rs.getInt("RemainAmount");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return res;
     }

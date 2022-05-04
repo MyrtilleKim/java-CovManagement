@@ -75,6 +75,15 @@ public class Receipt {
     private String userID;
     private Date orderDate;
     private int totalAmount;
+    private int remainAmount;
+
+    public int getRemainAmount() {
+        return remainAmount;
+    }
+
+    public void setRemainAmount(int remainAmount) {
+        this.remainAmount = remainAmount;
+    }
     private Boolean status;
     private List<ReceiptDetail> packList;
 }

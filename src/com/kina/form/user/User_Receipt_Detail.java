@@ -22,6 +22,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,6 +99,7 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         List<Pack> packList = new ArrayList<Pack>();
         packList = ReceiptService.getAllPack(id);
         int total = 0;
+        int remain = ReceiptService.getAmount(id);
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object[] row = new Object[5];
@@ -111,8 +114,23 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             total += money;
             model.addRow(row);
         }
-        txtTotal.setText("Total = " + total);
+        txtTotal.setText(Integer.toString(total));
+        txtRemain.setText(Integer.toString(remain));
         this.id = id;
+        txtPay.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent ke) {
+                String value = txtPay.getText();
+                int l = value.length();
+                if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
+                    txtPay.setEditable(true);
+                    lblWarning.setText("");
+                } else {
+                    txtPay.setEditable(false);
+                    lblWarning.setText("* Enter only numeric digits(0-9)");
+                }
+            }
+        });
+        //set total have to pay 
    }
 
     @SuppressWarnings("unchecked")
@@ -124,7 +142,15 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         btnPaid = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        lblTotal = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtPay = new javax.swing.JTextField();
+        lblWarning = new javax.swing.JLabel();
+        lblRemain = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         txtTotal = new javax.swing.JLabel();
+        txtRemain = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -189,7 +215,6 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         });
         jTable1.setFocusable(false);
         jTable1.setOpaque(false);
-        jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jTable1.setShowGrid(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -199,30 +224,87 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable1);
 
-        txtTotal.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        lblTotal.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotal.setText("Total Receipt:");
+
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("You want to pay:");
+
+        txtPay.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtPay.setText("0");
+
+        lblWarning.setBackground(new java.awt.Color(255, 255, 255));
+        lblWarning.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        lblWarning.setForeground(new java.awt.Color(255, 51, 51));
+
+        lblRemain.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        lblRemain.setForeground(new java.awt.Color(255, 255, 255));
+        lblRemain.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblRemain.setText("Remain:");
+
+        jList1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        txtTotal.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         txtTotal.setForeground(new java.awt.Color(255, 255, 255));
         txtTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        txtTotal.setText("Total:");
+        txtTotal.setText("0");
+
+        txtRemain.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        txtRemain.setForeground(new java.awt.Color(255, 255, 255));
+        txtRemain.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        txtRemain.setText("0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtTotal)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(102, 102, 102)
+                                .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(txtPay)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblRemain)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(txtRemain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblTotal)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txtTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))
+                                        .addGap(10, 10, 10)))))))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(229, 229, 229)
-                .addComponent(btnPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(251, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(236, 236, 236))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -235,16 +317,31 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
-                .addComponent(txtTotal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTotal)
+                            .addComponent(txtTotal))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRemain)
+                            .addComponent(txtRemain))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(32, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(68, 68, 68)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(78, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(257, Short.MAX_VALUE)))
         );
 
         pack();
@@ -261,30 +358,49 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
        //Init data
        Receipt receipt = new Receipt();
-       receipt.setId(this.id);
-       receipt.setUserID(User_Main.userID);
-       receipt.setStatus(Boolean.TRUE);
-       String money = txtTotal.getText().substring(8);
-       receipt.setTotalAmount(Integer.parseInt(money));
-       //update paymentrecord
-        int countPayment = ReceiptService.countPayment() + 1;
-        String idPayment = "PM" + String.format("%04d", countPayment);
+        receipt.setId(this.id);
+        receipt.setUserID(User_Main.userID);
+        receipt.setStatus(Boolean.FALSE);
+        String money = lblTotal.getText().substring(8);
         
-        if (ReceiptService.addPayment(idPayment, receipt)) {
+
+
+        int payment = Integer.parseInt(txtPay.getText());
+        int total = Integer.parseInt(txtTotal.getText());
+        int remain = Integer.parseInt(txtRemain.getText());
+        int moneyLimit = (int)((remain * 25.0f) / 100);
+      
+        if (payment > remain || payment < moneyLimit ) {
+            JOptionPane.showConfirmDialog(null, "Your money must lower than " + remain +" and higher than " + moneyLimit, "Warning", JOptionPane.OK_OPTION);
+        } else {
+            //update paymentrecord
+            receipt.setTotalAmount(payment);
+            int countPayment = ReceiptService.countPayment() + 1;
+            String idPayment = "PM" + String.format("%04d", countPayment);
+            ReceiptService.addPayment(idPayment, receipt);
+
             //update receipt status
+            if (remain - payment == 0) {                  
+                receipt.setStatus(Boolean.TRUE);
+            } 
+            receipt.setRemainAmount(remain - payment);
             ReceiptService.updateReceipt(receipt);
-            
-        } 
-        String amount = "0";
-        if(money != null)
-            amount = money;
-        TCPClient tcpClient;      
-        tcpClient = new TCPClient(User_Main.userID, amount);
-        tcpClient.connectServer();
-        tcpClient.start();
-       //update receipt status
+
+
+            String amount = "0";
+            if (money != null) {
+                amount = money;
+            }
+//            TCPClient tcpClient;
+//            tcpClient = new TCPClient(User_Main.userID, amount);
+//            tcpClient.connectServer();
+//            tcpClient.start();
+            //update receipt status
 //               JOptionPane.showConfirmDialog(null, "Your payment is success!", "Successful", JOptionPane.OK_OPTION);
-               dispose();
+            dispose();
+        }
+
+        
 
     }//GEN-LAST:event_btnPaidActionPerformed
 
@@ -364,8 +480,16 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnPaid;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblRemain;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblWarning;
+    private javax.swing.JTextField txtPay;
+    private javax.swing.JLabel txtRemain;
     private javax.swing.JLabel txtTotal;
     // End of variables declaration//GEN-END:variables
 
