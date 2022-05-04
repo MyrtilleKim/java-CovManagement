@@ -52,18 +52,18 @@ public class UserService {
             ps0.setString(1, user.getTrmtLoca().getId());
             ps0.execute();
             System.out.println("hi");
-            
-            if(preUser.getTrmtLoca()!= null){
-                ps1 = connection.prepareStatement(sql1);   
+
+            if (preUser.getTrmtLoca() != null) {
+                ps1 = connection.prepareStatement(sql1);
                 ps1.setString(1, preUser.getTrmtLoca().getId());
                 ps1.execute();
                 System.out.println("ha");
             }
-            
+
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getTrmtLoca().getId());
             ps.setInt(2, user.getStatus());
-            ps.setString(3, user.getId());                     
+            ps.setString(3, user.getId());
             ps.execute();
             System.out.println("hu");
             connection.commit();
@@ -74,10 +74,10 @@ public class UserService {
                 connection.rollback();
             } catch (SQLException ex) {
                 Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-            }  
-        }finally{
+            }
+        } finally {
             try {
-                connection.setAutoCommit(true);                    
+                connection.setAutoCommit(true);
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,8 +85,8 @@ public class UserService {
         }
         return false;
     }
-  
-    public static Boolean UpRelated(String user1,  String user2) {
+
+    public static Boolean UpRelated(String user1, String user2) {
         connectDB cn = new connectDB();
         Connection connection = null;
         PreparedStatement ps = null;
@@ -95,7 +95,7 @@ public class UserService {
             ps = connection.prepareStatement(query);
             ps.setString(1, user1);
             ps.setString(2, user2);
-            
+
             ps.executeQuery();
             return true;
         } catch (SQLException e) {
@@ -268,7 +268,43 @@ public class UserService {
         }
         return result;
     }
-    
+
+    public static String getName(String id) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        String result = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT * FROM USERS where NoID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getString("Username");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
     public static Boolean addOne(User user) throws SQLException {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
@@ -286,40 +322,39 @@ public class UserService {
         try {
             connection.setAutoCommit(false);
             ps0 = connection.prepareStatement(query0);
-            ps0.setString(1, acc.getId());      
+            ps0.setString(1, acc.getId());
             String hash = BCrypt.hashpw(acc.getPass(), BCrypt.gensalt(13));
             ps0.setString(2, hash);
             ps0.setInt(3, acc.getRoles());
-            
+
             ps1 = connection.prepareStatement(query1);
             ps1.setString(1, user.getAddress().getId());
             ps1.setString(2, user.getAddress().getAddress());
             String wardID = LocationService.getWardID(user.getAddress().getWard());
             ps1.setString(3, wardID);
-            
+
             ps2 = connection.prepareStatement(query2);
-            
-            if(user.getTrmtLoca() != null){
+
+            if (user.getTrmtLoca() != null) {
                 ps3 = connection.prepareStatement(query3);
                 ps3.setString(1, user.getTrmtLoca().getId());
                 ps3.execute();
                 ps2.setString(6, user.getTrmtLoca().getId());
-            } else
+            } else {
                 ps2.setString(6, null);
+            }
             ps2.setString(1, user.getId());
             ps2.setString(2, user.getName());
             ps2.setString(3, user.getNoID());
             ps2.setInt(4, user.getBirthYear());
-            ps2.setString(5, user.getAddress().getId());          
+            ps2.setString(5, user.getAddress().getId());
             ps2.setInt(7, user.getStatus());
             ps2.setInt(8, user.getDebit());
-            
+
             ps0.execute();
             ps1.execute();
             ps2.execute();
-            
-                  
-                        
+
             ps4 = connection.prepareStatement(query4);
             List<User> relatedUser = user.getRelatedList();
             for (int i = 0; i < relatedUser.size(); i++) {
@@ -337,13 +372,13 @@ public class UserService {
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
-        }finally{
+        } finally {
             connection.setAutoCommit(true);
-            connection.close();                    
+            connection.close();
         }
         return false;
     }
-    
+
     public static User getUserById(String id) {
         connectDB cn = new connectDB();
         Connection connection = null;
@@ -356,7 +391,7 @@ public class UserService {
             ps = connection.prepareStatement(sql);
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {     
+            if (rs.next()) {
                 rec.setId(rs.getString("UserID"));
                 rec.setName(rs.getString("Username"));
                 rec.setNoID(rs.getString("NoID"));
@@ -393,7 +428,7 @@ public class UserService {
         }
         return rec;
     }
-    
+
     public static User getUserByName(String name) {
         connectDB cn = new connectDB();
         Connection connection = null;
@@ -406,7 +441,7 @@ public class UserService {
             ps = connection.prepareStatement(sql);
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {     
+            if (rs.next()) {
                 rec.setId(rs.getString("UserID"));
                 rec.setName(rs.getString("Username"));
                 rec.setNoID(rs.getString("NoID"));

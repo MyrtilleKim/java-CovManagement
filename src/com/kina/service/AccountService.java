@@ -5,6 +5,7 @@
 package com.kina.service;
 
 import com.kina.model.Account;
+import com.kina.model.Pack;
 import com.kina.model.Product;
 import com.kina.sql.connectDB;
 import java.sql.Connection;
@@ -101,5 +102,61 @@ public class AccountService {
             Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    public static boolean updatePwd(String id, String pwd) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query
+                    = "update ACCOUNT set Pass = ?, Roles = ? where NoID = ?";
+            ps = connection.prepareStatement(query);
+            String hash = BCrypt.hashpw(pwd, BCrypt.gensalt(13));
+            ps.setString(1, hash);
+            ps.setString(2, "4");
+            ps.setString(3, id);
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+     public static int countAccount() {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT COUNT(*) FROM account";
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
     }
 }
