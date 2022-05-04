@@ -11,6 +11,7 @@ import com.kina.form.manager.Manager_Dashboard;
 import com.kina.form.manager.Manager_PackForm;
 import com.kina.form.manager.Manager_ProductForm;
 import com.kina.form.manager.Manager_UserForm;
+import com.kina.form.user.User_Receipt;
 import com.kina.form.user.User_Shopping;
 import com.kina.form.user.User_Shopping_Cart;
 import java.awt.event.ActionEvent;
@@ -101,7 +102,7 @@ public class User_Main extends javax.swing.JFrame {
                         main.showForm(new User_Shopping_Cart());
                         break;
                     case 3:
-                        main.showForm(new Manager_ProductForm());
+                        main.showForm(new User_Receipt());
                         break;
 
                 }

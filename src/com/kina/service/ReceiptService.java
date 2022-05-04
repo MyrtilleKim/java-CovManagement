@@ -6,6 +6,7 @@ package com.kina.service;
 
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
+import com.kina.model.Product;
 import com.kina.model.Receipt;
 import com.kina.model.ReceiptDetail;
 import com.kina.sql.connectDB;
@@ -13,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -96,7 +99,7 @@ public class ReceiptService {
         }
         return false;
     }
-    
+
     public static void addReceiptDetail(String id, ReceiptDetail rcDetail) {
         connectDB cn = new connectDB();
         Connection connection = cn.getConnection();
@@ -115,4 +118,84 @@ public class ReceiptService {
             e.printStackTrace();
         }
     }
+
+    public static List<Receipt> getAllReceipt(String userID) {
+        List<Receipt> res = new ArrayList<Receipt>();
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String sql = "SELECT * FROM Receipt where userid = ?";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, userID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Receipt rec = new Receipt();
+
+                rec.setId(rs.getString("ReceiptID"));
+                rec.setOrderDate(rs.getDate("OrderDate"));
+                rec.setStatus(rs.getBoolean("ReceiptStatus"));
+
+                res.add(rec);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
+    public static List<Pack> getAllPack(String id) {
+        List<Pack> res = new ArrayList<Pack>();
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String sql = "SELECT * FROM Receipt_detail where receiptID = ?";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Pack rec = new Pack();
+                rec = PackService.getPackById(rs.getString("PackID"));
+                rec.setLimitQuantity(rs.getInt("Quantity"));
+                res.add(rec);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
 }
