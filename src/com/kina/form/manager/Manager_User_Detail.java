@@ -160,13 +160,16 @@ public class Manager_User_Detail extends javax.swing.JFrame {
         buttonGroup.add(radio2);
         buttonGroup.add(radio3);
 
-        int status = user.getStatus();
+        status = user.getStatus();
         switch (status) {
             case 0:
                 radio1.setSelected(true);
+                radio2.setEnabled(false);
+                radio3.setEnabled(false);
                 break;
             case 1:
                 radio2.setSelected(true);
+                radio3.setEnabled(false);
                 break;
             case 2:
                 radio3.setSelected(true);
@@ -562,29 +565,34 @@ public class Manager_User_Detail extends javax.swing.JFrame {
 //        Location location = new Location(addressId, "a", "a", "a", "a");
 //        TreatmentLocation treatmentLocation = new TreatmentLocation(id, na, location, oc, ca);
         String treatmentName = txtTreatment.getSelectedItem().toString();
-        
-
-        TreatmentLocation location = TreatmentLocationService.getByName(treatmentName);
-        
-        int occupancy = location.getOccupancy();
-        if (!treatmentName.equals(this.treatment)) {
-            occupancy += 1;
+        int statuss;
+        if (radio1.isSelected()) {
+            statuss = 0;
+        } else if (radio2.isSelected()) {
+            statuss = 1;
+        } else {
+            statuss = 2;
         }
+        if (status == 1 && statuss == 0){
+            List<User> related = UserService.getAllRelatedUser(id); 
+            for(User i : related){
+                if(i.getStatus() == 2){
+                    i.setStatus(1);
+                    UserService.UpdStatus(i);
+                }
+            }
+        }
+        TreatmentLocation location = TreatmentLocationService.getByName(treatmentName);
         
         int available = location.getCapacity() - location.getOccupancy();
         if (available == 0) {
             JOptionPane.showMessageDialog(null, "This treament location is full! Please try another");
         } else {
-            //update user
+            user.setStatus(statuss);
             user.setTrmtLoca(location);
             if (UserService.UpdTreatmentLocation(user)) {
                 System.out.println("Update treament location id");
             }
-
-            //Update capacity
-            location.setOccupancy(occupancy);
-            TreatmentLocationService.updOne(location);
-
             dispose();
         }
 
@@ -655,7 +663,7 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             }
         });
     }
-
+    private int status;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave1;

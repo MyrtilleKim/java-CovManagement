@@ -42,21 +42,25 @@ public class UserService {
         PreparedStatement ps0 = null;
         PreparedStatement ps1 = null;
         User preUser = getUserById(user.getId());
-        String query = "update USERS set TrmtLocaID = ? where UserID = ?";
+        String query = "update USERS set TrmtLocaID = ?, UserStatus = ? where UserID = ?";
         String sql0 = "update TREATMENTLOCATION set Occupancy = Occupancy - 1 where TrmtLocaID = ? ";
         String sql1 = "update TREATMENTLOCATION set Occupancy = Occupancy + 1 where TrmtLocaID = ? ";
         try {
             connection = cn.getConnection();
             connection.setAutoCommit(false);
             ps0 = connection.prepareStatement(sql0);
-            ps0.setString(1, preUser.getTrmtLoca().getId());
-            ps1 = connection.prepareStatement(sql1);   
-            ps1.setString(2, user.getTrmtLoca().getId());
+            ps0.setString(1, user.getTrmtLoca().getId());
+            
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getTrmtLoca().getId());
-            ps.setString(2, user.getId());
+            ps.setInt(2, user.getStatus());
+            ps.setString(3, user.getId());
             ps0.execute();
-            ps1.execute();
+            if(preUser.getTrmtLoca().getId() == null){
+                ps1 = connection.prepareStatement(sql1);   
+                ps1.setString(1, preUser.getTrmtLoca().getId());
+                ps1.execute();
+            }
             ps.execute();
             connection.commit();
             return true;
@@ -77,7 +81,7 @@ public class UserService {
         }
         return false;
     }
-    
+  
     public static Boolean UpRelated(String user1,  String user2) {
         connectDB cn = new connectDB();
         Connection connection = null;
@@ -87,10 +91,10 @@ public class UserService {
             ps = connection.prepareStatement(query);
             ps.setString(1, user1);
             ps.setString(2, user2);
-
+            
             ps.executeQuery();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -153,7 +157,7 @@ public class UserService {
                 rec = getUserById(rs.getString("UserID_2"));
                 res.add(rec);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (ps != null) {

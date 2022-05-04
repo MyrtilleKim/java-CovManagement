@@ -551,7 +551,7 @@ public class Manager_User_Add extends javax.swing.JFrame {
         user.setName(txtName.getText());
         user.setNoID(txtID.getText());
         user.setBirthYear((Integer.parseInt(txtYear.getSelectedItem().toString())));
-        user.setDebit(10000);
+        user.setDebit(0);
         int status;
         if (radio1.isSelected()) {
             status = 0;
