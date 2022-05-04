@@ -118,6 +118,11 @@ public class LoginForm extends javax.swing.JFrame {
 
         pwdUser.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         pwdUser.setText("jPasswordField1");
+        pwdUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pwdUserMouseClicked(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(65, 105, 225));
@@ -130,6 +135,11 @@ public class LoginForm extends javax.swing.JFrame {
 
         txtUser.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtUser.setText("identity number ");
+        txtUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtUserMouseClicked(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(65, 105, 225));
@@ -224,6 +234,16 @@ public class LoginForm extends javax.swing.JFrame {
         }
        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUserMouseClicked
+        // TODO add your handling code here:
+        txtUser.setText("");
+    }//GEN-LAST:event_txtUserMouseClicked
+
+    private void pwdUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pwdUserMouseClicked
+        // TODO add your handling code here:
+        pwdUser.setText("");
+    }//GEN-LAST:event_pwdUserMouseClicked
 
     public static void main() {
         /* Set the Nimbus look and feel */
