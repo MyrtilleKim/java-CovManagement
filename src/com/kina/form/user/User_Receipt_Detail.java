@@ -2,10 +2,12 @@ package com.kina.form.user;
 
 import com.kina.form.manager.*;
 import com.kina.form.admin.*;
+import com.kina.main.User_Main;
 import com.kina.model.Location;
 import com.kina.model.Pack;
 import com.kina.model.PackDetail;
 import com.kina.model.Product;
+import com.kina.model.Receipt;
 import com.kina.model.TreatmentLocation;
 import com.kina.service.PackService;
 import com.kina.service.ProductService;
@@ -93,6 +95,7 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
     public void initData(String id) {
         List<Pack> packList = new ArrayList<Pack>();
         packList = ReceiptService.getAllPack(id);
+        int total = 0;
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object[] row = new Object[5];
@@ -102,10 +105,13 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             row[1] = packList.get(i).getName();
             row[2] = packList.get(i).getLimitQuantity();
             row[3] = packList.get(i).getPrice();
-            row[4] = packList.get(i).getLimitQuantity() * packList.get(i).getPrice();
-            
+            int money = packList.get(i).getLimitQuantity() * packList.get(i).getPrice();
+            row[4] = money;
+            total += money;
             model.addRow(row);
         }
+        txtTotal.setText("Total = " + total);
+        this.id = id;
    }
 
     @SuppressWarnings("unchecked")
@@ -193,6 +199,7 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable1);
 
         txtTotal.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        txtTotal.setForeground(new java.awt.Color(255, 255, 255));
         txtTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtTotal.setText("Total:");
 
@@ -251,7 +258,26 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnPaidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaidActionPerformed
-       
+       //Init data
+       Receipt receipt = new Receipt();
+       receipt.setId(this.id);
+       receipt.setUserID(User_Main.userID);
+       receipt.setStatus(Boolean.TRUE);
+       String money = txtTotal.getText().substring(8);
+       receipt.setTotalAmount(Integer.parseInt(money));
+       //update paymentrecord
+        int countPayment = ReceiptService.countPayment() + 1;
+        String idPayment = "PM" + String.format("%04d", countPayment);
+        
+        if (ReceiptService.addPayment(idPayment, receipt)) {
+            //update receipt status
+            ReceiptService.updateReceipt(receipt);
+            
+        } 
+       //update receipt status
+               JOptionPane.showConfirmDialog(null, "Your payment is success!", "Successful", JOptionPane.OK_OPTION);
+               dispose();
+
     }//GEN-LAST:event_btnPaidActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked

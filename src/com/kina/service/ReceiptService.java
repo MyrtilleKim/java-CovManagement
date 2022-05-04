@@ -99,6 +99,83 @@ public class ReceiptService {
         }
         return false;
     }
+    
+    public static boolean updateReceipt(Receipt receipt) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query
+                    = "update RECEIPT set ReceiptStatus = ? where ReceiptID = ?";
+            ps = connection.prepareStatement(query);
+            
+            ps.setBoolean(1, receipt.getStatus());
+            ps.setString(2, receipt.getId());
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static int countPayment() {
+        int res = 0;
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        PreparedStatement ps = null;
+
+        try {
+            connection = cn.getConnection();
+            String sql = "SELECT COUNT(*) FROM PAYMENTRECORD";
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                res = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
+    public static boolean addPayment(String id, Receipt receipt) {
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+
+        try {
+            String query = "insert into PAYMENTRECORD values(?, ?, ?, ?)";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            ps.setString(2, receipt.getUserID());
+            ps.setInt(3, receipt.getTotalAmount());
+            ps.setBoolean(4, receipt.getStatus());
+
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static void addReceiptDetail(String id, ReceiptDetail rcDetail) {
         connectDB cn = new connectDB();
