@@ -34,18 +34,19 @@ public class UserService {
         }
         return false;
     }
-     public static Boolean UpdDebit(int deb, Boolean paid){
+     public static Boolean UpdDebit(String id, int deb, Boolean paid){
         connectDB cn = new connectDB();
         Connection connection = null;
         PreparedStatement ps = null;
         connection = cn.getConnection();
-        String pay = "UPDATE USERS SET DebitBalance = DebitBalance - ?";
-        String buy = "UPDATE USERS SET DebitBalance = DebitBalance + ?";
+        String pay = "UPDATE USERS SET DebitBalance = DebitBalance - ? WHERE UserId = ? ";
+        String buy = "UPDATE USERS SET DebitBalance = DebitBalance + ? WHERE UserId = ?";
         try {
             if(paid){
                 ps = connection.prepareStatement(pay);
             } else ps = connection.prepareStatement(buy);
             ps.setInt(1, deb);
+            ps.setString(2, id);
             ps.execute();
             return true;
         } catch (SQLException ex) {

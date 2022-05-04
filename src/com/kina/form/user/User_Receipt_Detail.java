@@ -403,7 +403,7 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             } 
             receipt.setRemainAmount(remain - payment);
             ReceiptService.updateReceipt(receipt);
-            UserService.UpdDebit(payment, Boolean.TRUE);
+            UserService.UpdDebit(User_Main.userID, payment, Boolean.TRUE);
 
             TCPClient tcpClient;
             tcpClient = new TCPClient(User_Main.userID+"@"+txtPay.getText());

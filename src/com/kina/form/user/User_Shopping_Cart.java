@@ -265,7 +265,7 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             for (int i = 0; i < rcList.size(); i++) {
                 ReceiptService.addReceiptDetail(receipt.getId(), rcList.get(i));
             }
-            UserService.UpdDebit(Integer.parseInt(money), Boolean.FALSE);
+            UserService.UpdDebit(User_Main.userID, Integer.parseInt(money), Boolean.FALSE);
             //update pack quantity
 //            for (int i = 0; i < rcList.size(); i++) {
 //                int quantity = rcList.get(i).getQuantity() - 1;

@@ -226,6 +226,7 @@ public class ProductService {
             ps.setString(2, ele.getUnit());
             ps.setInt(3, ele.getPrice());
             // ps.setImage(5, );
+//            ele.setImage("D:\\a.png");
             if (ele.getImage() != null) {
 
                 FileInputStream fin = new FileInputStream(ele.getImage());
