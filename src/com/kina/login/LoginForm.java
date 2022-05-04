@@ -5,6 +5,7 @@ package com.kina.login;
 import com.kina.main.Admin_Main;
 import com.kina.main.Manager_Main;
 import com.kina.main.User_Main;
+import com.kina.service.UserService;
 import com.kina.sql.connectDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -202,10 +203,13 @@ public class LoginForm extends javax.swing.JFrame {
                             this.setVisible(false);
                             Manager_Main.main();
                             break;
-                        case "3":
+                        case "3": // Login for first tiem
                             this.setVisible(false);
-                            User_Main.main(username);
+//                            User_Main.main(username);
                             break;
+                        case "4":
+                            this.setVisible(false);
+                            User_Main.main(UserService.getUserID(username));
                         default:
                           JOptionPane.showMessageDialog(this, "Your account has been disabled. Please contact admin to reactivate !", "Error", 1);
                     }
