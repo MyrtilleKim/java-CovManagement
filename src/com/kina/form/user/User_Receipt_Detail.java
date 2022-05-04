@@ -404,15 +404,11 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             ReceiptService.updateReceipt(receipt);
 
 
-            String amount = "0";
-            if (money != null) {
-                amount = money;
-            }
-//            TCPClient tcpClient;
-//            tcpClient = new TCPClient(User_Main.userID, amount);
-//            tcpClient.connectServer();
-//            tcpClient.start();
-            //update receipt status
+            TCPClient tcpClient;
+            tcpClient = new TCPClient(User_Main.userID+"@"+txtPay.getText());
+            tcpClient.connectServer();
+            tcpClient.start();
+//            update receipt status
 //               JOptionPane.showConfirmDialog(null, "Your payment is success!", "Successful", JOptionPane.OK_OPTION);
             dispose();
         }

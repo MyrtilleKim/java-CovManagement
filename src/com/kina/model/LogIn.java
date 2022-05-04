@@ -1,7 +1,7 @@
 package com.kina.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
-import jdk.jfr.Timestamp;
 
 
 
@@ -31,9 +31,9 @@ public class LogIn {
     /**
      * @param time the time to set
      */
-    public void setTime(Date time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
     private String Id;
-    private Date time;
+    private Timestamp time;
 }

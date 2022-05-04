@@ -12,15 +12,7 @@ public class TreatmentRecord {
         this.id = id;
     }
 
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
     private String id;
-    private String userID;
     private TreatmentLocation trmtLoca;
     private int status;
     private Timestamp recTimestamp;

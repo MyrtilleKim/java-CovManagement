@@ -31,11 +31,9 @@ import javax.swing.JTextArea;
 public class TCPClient extends Thread{
     private Socket client;
     private final int port = 1234;
-    private String id;
-    private String money;
-    public TCPClient(String id, String money) {
-        this.id = id;
-        this.money = money;
+    private String str;
+    public TCPClient(String str) {
+        this.str = str;
     }
     public void connectServer() {
         try {
@@ -96,7 +94,6 @@ public class TCPClient extends Thread{
             // make greeting
             outToServer = new DataOutputStream(client.getOutputStream());
             pw = new PrintWriter(outToServer, true);
-            String str = id + "@" + money;
             try {
                 pw.println(encryptedStr(str));
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {

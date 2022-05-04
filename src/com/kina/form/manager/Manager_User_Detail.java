@@ -583,14 +583,12 @@ public class Manager_User_Detail extends javax.swing.JFrame {
             }
         }
         TreatmentLocation location = TreatmentLocationService.getByName(treatmentName);
-
-        user.setStatus(statuss);
         if (location != null) {
             int available = location.getCapacity() - location.getOccupancy();
             if (available == 0) {
                 JOptionPane.showMessageDialog(null, "This treament location is full! Please try another");
             } else {
-
+                user.setStatus(statuss);
                 user.setTrmtLoca(location);
                 if (UserService.UpdTreatmentLocation(user)) {
                     System.out.println("Update treament location id");

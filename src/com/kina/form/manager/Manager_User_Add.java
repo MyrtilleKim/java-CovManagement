@@ -596,7 +596,7 @@ public class Manager_User_Add extends javax.swing.JFrame {
             Boolean check = UserService.addOne(user);            
             if(check){
                 TCPClient tcpClient;      
-                tcpClient = new TCPClient(id, null);
+                tcpClient = new TCPClient(id + "@");
                 tcpClient.connectServer();
                 tcpClient.start();
             } else

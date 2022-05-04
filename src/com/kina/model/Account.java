@@ -57,13 +57,7 @@ public class Account {
     public String toString() {
         return "Account{" + "id=" + id + ", pass=" + pass + ", roles=" + roles + '}';
     }
-    
-    
-
     private String id;
     private String pass;
     private int roles;
-   
-
-  
 }

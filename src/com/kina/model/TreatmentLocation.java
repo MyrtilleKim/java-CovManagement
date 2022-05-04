@@ -82,7 +82,9 @@ public class TreatmentLocation {
 
     @Override
     public String toString() {
-        return getName();
+        return "TreatmentLocation{" + "id=" + id + ", name=" + name + ", address=" + address + ", capacity=" + capacity + ", occupancy=" + occupancy + '}';
     }
+
+   
 
 }

@@ -38,6 +38,7 @@ public class UserService {
     public static Boolean UpdTreatmentLocation(User user) {
         connectDB cn = new connectDB();
         Connection connection = null;
+        connection = cn.getConnection();
         PreparedStatement ps = null;
         PreparedStatement ps0 = null;
         PreparedStatement ps1 = null;
@@ -46,22 +47,25 @@ public class UserService {
         String sql0 = "update TREATMENTLOCATION set Occupancy = Occupancy - 1 where TrmtLocaID = ? ";
         String sql1 = "update TREATMENTLOCATION set Occupancy = Occupancy + 1 where TrmtLocaID = ? ";
         try {
-            connection = cn.getConnection();
             connection.setAutoCommit(false);
             ps0 = connection.prepareStatement(sql0);
             ps0.setString(1, user.getTrmtLoca().getId());
+            ps0.execute();
+            System.out.println("hi");
+            
+            if(preUser.getTrmtLoca()!= null){
+                ps1 = connection.prepareStatement(sql1);   
+                ps1.setString(1, preUser.getTrmtLoca().getId());
+                ps1.execute();
+                System.out.println("ha");
+            }
             
             ps = connection.prepareStatement(query);
             ps.setString(1, user.getTrmtLoca().getId());
             ps.setInt(2, user.getStatus());
-            ps.setString(3, user.getId());
-            ps0.execute();
-            if(preUser.getTrmtLoca().getId() == null){
-                ps1 = connection.prepareStatement(sql1);   
-                ps1.setString(1, preUser.getTrmtLoca().getId());
-                ps1.execute();
-            }
+            ps.setString(3, user.getId());                     
             ps.execute();
+            System.out.println("hu");
             connection.commit();
             return true;
         } catch (SQLException e) {
@@ -70,7 +74,7 @@ public class UserService {
                 connection.rollback();
             } catch (SQLException ex) {
                 Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }  
         }finally{
             try {
                 connection.setAutoCommit(true);                    
@@ -294,12 +298,19 @@ public class UserService {
             ps1.setString(3, wardID);
             
             ps2 = connection.prepareStatement(query2);
+            
+            if(user.getTrmtLoca() != null){
+                ps3 = connection.prepareStatement(query3);
+                ps3.setString(1, user.getTrmtLoca().getId());
+                ps3.execute();
+                ps2.setString(6, user.getTrmtLoca().getId());
+            } else
+                ps2.setString(6, null);
             ps2.setString(1, user.getId());
             ps2.setString(2, user.getName());
             ps2.setString(3, user.getNoID());
             ps2.setInt(4, user.getBirthYear());
-            ps2.setString(5, user.getAddress().getId());
-            ps2.setString(6, user.getTrmtLoca().getId());
+            ps2.setString(5, user.getAddress().getId());          
             ps2.setInt(7, user.getStatus());
             ps2.setInt(8, user.getDebit());
             
@@ -307,11 +318,7 @@ public class UserService {
             ps1.execute();
             ps2.execute();
             
-            if(user.getTrmtLoca() != null){
-                ps3 = connection.prepareStatement(query3);
-                ps3.setString(1, user.getTrmtLoca().getId());
-                ps3.execute();
-            }         
+                  
                         
             ps4 = connection.prepareStatement(query4);
             List<User> relatedUser = user.getRelatedList();
