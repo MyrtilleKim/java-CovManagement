@@ -31,6 +31,7 @@ import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -93,6 +94,9 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
         jTable1.setCellSelectionEnabled(false);
         jScrollPane3.setBorder(new EmptyBorder(1, 1, 1, 1));
         
+        DefaultListModel<String> model = new DefaultListModel<>();
+        model.addElement("There is no payment record");
+        jList1.setModel(model);
     }
 
     public void initData(String id) {
@@ -131,7 +135,20 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             }
         });
         //set total have to pay 
-   }
+
+        //show list 
+        List<Receipt> paymentList = ReceiptService.getAllPaymentRecord(id);
+        if (paymentList.size() != 0) {
+            DefaultListModel<String> model1 = new DefaultListModel<>();
+            for (int i = 0; i < paymentList.size(); i++) {
+                String text = paymentList.get(i).getOrderDate().toString() + " You have already paid: "
+                        + paymentList.get(i).getRemainAmount();
+                model1.addElement(text);
+            }
+            jList1.setModel(model1);
+        }
+
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

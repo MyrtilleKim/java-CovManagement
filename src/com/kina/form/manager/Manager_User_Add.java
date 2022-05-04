@@ -230,25 +230,14 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
             },
             new String [] {
-                "User Name", "Status", "Delete"
+                "User Name", "Delete"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        ));
         jScrollPane2.setViewportView(relatedList);
         if (relatedList.getColumnModel().getColumnCount() > 0) {
             relatedList.getColumnModel().getColumn(1).setMinWidth(80);
             relatedList.getColumnModel().getColumn(1).setPreferredWidth(80);
             relatedList.getColumnModel().getColumn(1).setMaxWidth(80);
-            relatedList.getColumnModel().getColumn(2).setMinWidth(80);
-            relatedList.getColumnModel().getColumn(2).setPreferredWidth(80);
-            relatedList.getColumnModel().getColumn(2).setMaxWidth(80);
         }
 
         lblCapacity3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N

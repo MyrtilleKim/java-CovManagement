@@ -266,7 +266,10 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             }
             
             //update pack quantity
-            
+//            for (int i = 0; i < rcList.size(); i++) {
+//                int quantity = rcList.get(i).getQuantity() - 1;
+//                PackService.updatePackQuantity(rcList.get(i).getPack().getId(), quantity);
+//            }
 
         } else {
             JOptionPane.showConfirmDialog(null, "Please confirm there is no empty field", "Warning", JOptionPane.CANCEL_OPTION);

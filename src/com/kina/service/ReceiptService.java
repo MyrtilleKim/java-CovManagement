@@ -163,12 +163,12 @@ public class ReceiptService {
         PreparedStatement ps = null;
 
         try {
-            String query = "insert into PAYMENTRECORD values(?, ?, ?, ?)";
+            String query = "insert into PAYMENTRECORD(UserID, ReceiptID, AmountOfMoney) values(?, ?, ?)";
             ps = connection.prepareStatement(query);
-            ps.setString(1, id);
-            ps.setString(2, receipt.getUserID());
+            
+            ps.setString(1, receipt.getUserID());
+            ps.setString(2, receipt.getId());
             ps.setInt(3, receipt.getTotalAmount());
-            ps.setBoolean(4, receipt.getStatus());
 
             ps.execute();
             return true;
@@ -296,5 +296,47 @@ public class ReceiptService {
         }
         return res;
     }
+    
+        public static List<Receipt> getAllPaymentRecord(String id) {
+        List<Receipt> res = new ArrayList<Receipt>();
+        connectDB cn = new connectDB();
+        Connection connection = cn.getConnection();
+        PreparedStatement ps = null;
+        String sql = "SELECT * FROM PAYMENTRECORD where ReceiptID = ?";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Receipt rec = new Receipt();
+
+                rec.setId(rs.getString("ReceiptID"));
+                rec.setOrderDate(rs.getDate("PayTimestamp"));
+                rec.setRemainAmount(rs.getInt("AmountOfMoney"));
+
+                res.add(rec);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return res;
+    }
+
 
 }

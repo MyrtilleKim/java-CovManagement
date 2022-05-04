@@ -231,4 +231,25 @@ public class PackService {
         }
         return false;
     }
+    
+        public static boolean updatePackQuantity(String id, int num) {
+        connectDB cn = new connectDB();
+        Connection connection = null;
+        connection = cn.getConnection();
+        PreparedStatement ps = null;
+        try {
+            String query
+                    = "update PACK set LimitedQuantity = ? where PackID = ?";
+            ps = connection.prepareStatement(query);
+            
+            ps.setInt(1, num);
+            ps.setString(2, id);
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
