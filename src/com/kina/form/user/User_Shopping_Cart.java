@@ -11,6 +11,7 @@ import com.kina.model.ReceiptDetail;
 import com.kina.service.PackService;
 import com.kina.service.ProductService;
 import com.kina.service.ReceiptService;
+import com.kina.service.UserService;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -264,7 +265,7 @@ public class User_Shopping_Cart extends javax.swing.JPanel {
             for (int i = 0; i < rcList.size(); i++) {
                 ReceiptService.addReceiptDetail(receipt.getId(), rcList.get(i));
             }
-            
+            UserService.UpdDebit(Integer.parseInt(money), Boolean.FALSE);
             //update pack quantity
 //            for (int i = 0; i < rcList.size(); i++) {
 //                int quantity = rcList.get(i).getQuantity() - 1;

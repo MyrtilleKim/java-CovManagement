@@ -14,6 +14,7 @@ import com.kina.service.PackService;
 import com.kina.service.ProductService;
 import com.kina.service.ReceiptService;
 import com.kina.service.TreatmentLocationService;
+import com.kina.service.UserService;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -402,7 +403,7 @@ public class User_Receipt_Detail extends javax.swing.JFrame {
             } 
             receipt.setRemainAmount(remain - payment);
             ReceiptService.updateReceipt(receipt);
-
+            UserService.UpdDebit(payment, Boolean.TRUE);
 
             TCPClient tcpClient;
             tcpClient = new TCPClient(User_Main.userID+"@"+txtPay.getText());

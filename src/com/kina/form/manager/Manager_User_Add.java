@@ -26,6 +26,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -154,7 +156,17 @@ public class Manager_User_Add extends javax.swing.JFrame {
         relatedList.getColumn("Delete").setCellRenderer(new ButtonCellRenderer());
         relatedList.getColumn("Delete").setCellEditor(new ButtonCellEditor());
         this.id = id;
-
+        txtID.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent ke) {
+                String value = txtID.getText();
+                int l = value.length();
+                if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
+                    txtID.setEditable(true);
+                } else {
+                    txtID.setEditable(false);
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -535,76 +547,72 @@ public class Manager_User_Add extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         //Init data
-        User user = new User();
-        user.setId(id);
-        user.setName(txtName.getText());
-        user.setNoID(txtID.getText());
-        user.setBirthYear((Integer.parseInt(txtYear.getSelectedItem().toString())));
-        user.setDebit(0);
-        int status;
-        if (radio1.isSelected()) {
-            status = 0;
-            TreatmentLocation trtmentLocation = TreatmentLocationService.getByName(txtTreatment.getSelectedItem().toString());
-            user.setTrmtLoca(trtmentLocation);
-        } else if (radio2.isSelected()) {
-            status = 1;
-            user.setTrmtLoca(null);
-        } else {
-            status = 2;
-            user.setTrmtLoca(null);
-        }
-        user.setStatus(status);
-        Location location = new Location();
-        int numLocation = LocationService.countAddress() + 1;
-        String idLocation = "DC" + String.format("%04d", numLocation);
-        location.setId(idLocation);
-        location.setAddress(txtAddress.getText());
-        location.setWard(txtWard.getSelectedItem().toString());
-        location.setDistrict(txtDistrict.getSelectedItem().toString());
-        location.setCity(txtCity.getSelectedItem().toString());
-        user.setAddress(location);
-
-        
-
-//        List<TreatmentRecord> trtmentList = new ArrayList<TreatmentRecord>();
-//        int numRecord = TreatmentRecordService.countTreatmentRecord() + 1;
-//        String idRecord = "TR" + String.format("%04d", numRecord);
-//        TreatmentRecord record = new TreatmentRecord();
-//        record.setId(idRecord);
-//        record.setUserID(id);
-//        record.setStatus(status);
-//        user.setTrmtRec(trtmentList);
-
-        //List user related
-        List<User> relatedUser = new ArrayList<User>();
-        for (int i = 0; i < relatedList.getRowCount(); i++) {
-            User userRelated = new User();
-            Object relatedObj = relatedList.getModel().getValueAt(i, 0);
-            String relatedName = relatedObj.toString();
-            if (relatedName.equals("Click to choose user")) {
-                JOptionPane.showConfirmDialog(null, "Please choose user", "Warning", JOptionPane.CANCEL_OPTION);
+        String name = txtName.getText();
+        String idno = txtID.getText();
+        String addr = txtAddress.getText();
+        String year = txtYear.getSelectedItem().toString();
+        if(!name.isEmpty() && !name.equals("Full Name")&& !idno.isEmpty() && !idno.equals("No ID") && !addr.isEmpty() && !addr.equals("Address") && !year.equals("--Year--")){
+            User user = new User();
+            user.setId(id);
+            user.setName(name);
+            user.setNoID(idno);
+            user.setBirthYear((Integer.parseInt(year)));
+            user.setDebit(0);
+            int status;
+            if (radio1.isSelected()) {
+                status = 0;
+                TreatmentLocation trtmentLocation = TreatmentLocationService.getByName(txtTreatment.getSelectedItem().toString());
+                user.setTrmtLoca(trtmentLocation);
+            } else if (radio2.isSelected()) {
+                status = 1;
+                user.setTrmtLoca(null);
             } else {
-                userRelated = UserService.getUserByName(relatedName);
+                status = 2;
+                user.setTrmtLoca(null);
             }
-            relatedUser.add(userRelated);
-        }
-        Set<User> dataset = new HashSet<>(relatedUser);
-        relatedUser = new ArrayList<User>(dataset);
-        user.setRelatedList(relatedUser);
+            user.setStatus(status);
+            Location location = new Location();
+            int numLocation = LocationService.countAddress() + 1;
+            String idLocation = "DC" + String.format("%04d", numLocation);
+            location.setId(idLocation);
+            location.setAddress(addr);
+            location.setWard(txtWard.getSelectedItem().toString());
+            location.setDistrict(txtDistrict.getSelectedItem().toString());
+            location.setCity(txtCity.getSelectedItem().toString());
+            user.setAddress(location);
 
-        try {
-            Boolean check = UserService.addOne(user);            
-            if(check){
-                TCPClient tcpClient;      
-                tcpClient = new TCPClient(id + "@");
-                tcpClient.connectServer();
-                tcpClient.start();
-            } else
+            //List user related
+            List<User> relatedUser = new ArrayList<User>();
+            for (int i = 0; i < relatedList.getRowCount(); i++) {
+                User userRelated = new User();
+                Object relatedObj = relatedList.getModel().getValueAt(i, 0);
+                String relatedName = relatedObj.toString();
+                if (relatedName.equals("Click to choose user")) {
+                    JOptionPane.showConfirmDialog(null, "Please choose user", "Warning", JOptionPane.CANCEL_OPTION);
+                } else {
+                    userRelated = UserService.getUserByName(relatedName);
+                }
+                relatedUser.add(userRelated);
+            }
+            Set<User> dataset = new HashSet<>(relatedUser);
+            relatedUser = new ArrayList<User>(dataset);
+            user.setRelatedList(relatedUser);
+
+            try {
+                Boolean check = UserService.addOne(user);            
+                if(check){
+                    TCPClient tcpClient;      
+                    tcpClient = new TCPClient(id + "@");
+                    tcpClient.connectServer();
+                    tcpClient.start();
+                } else
+                    JOptionPane.showMessageDialog(this, "Add user failed", "Error", 1);
+            } catch (SQLException ex) {            
+                Logger.getLogger(Manager_User_Add.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Add user failed", "Error", 1); 
-        } catch (SQLException ex) {            
-            Logger.getLogger(Manager_User_Add.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Add user failed", "Error", 1); 
-        }
+            }
+        }else
+            JOptionPane.showMessageDialog(this, "Fill all fields", "Error", 1); 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void txtDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDistrictActionPerformed
