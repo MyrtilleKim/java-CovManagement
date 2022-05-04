@@ -11,6 +11,7 @@ import com.kina.form.manager.Manager_Dashboard;
 import com.kina.form.manager.Manager_PackForm;
 import com.kina.form.manager.Manager_ProductForm;
 import com.kina.form.manager.Manager_UserForm;
+import com.kina.form.user.User_Information;
 import com.kina.form.user.User_Receipt;
 import com.kina.form.user.User_Shopping;
 import com.kina.form.user.User_Shopping_Cart;
@@ -92,7 +93,7 @@ public class User_Main extends javax.swing.JFrame {
                 System.out.println("Menu Index : " + menuIndex);
                 switch (menuIndex) {
                     case 0:
-                        main.showForm(new Manager_Dashboard());
+                        main.showForm(new User_Information());
                         break;
                     case 1:
                         main.showForm(new User_Shopping());
@@ -111,7 +112,7 @@ public class User_Main extends javax.swing.JFrame {
         );
         menu.initMenuItem();
 
-        main.showForm(new Manager_Dashboard());
+        main.showForm(new User_Information());
     }
 
     @SuppressWarnings("unchecked")

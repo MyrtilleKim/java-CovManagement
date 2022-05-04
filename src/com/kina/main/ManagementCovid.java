@@ -23,8 +23,8 @@ public class ManagementCovid {
 //            }
                            
 //            Admin_Main.main();
-            Manager_Main.main();
-//            User_Main.main("BN0001");           
+//            Manager_Main.main();
+            User_Main.main("BN0001");           
           
         } catch (Exception e) {
             e.printStackTrace();
